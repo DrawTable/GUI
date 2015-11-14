@@ -5,6 +5,7 @@
 #include "../controller/ellipsecontroller.h"
 #include <QDebug>
 #include <QApplication>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
@@ -19,6 +20,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     menu->addAction(save);
     menu->addAction(quit);
 
+    connect(open, SIGNAL(triggered()), this, SLOT(onOpenTriggered());
     connect(save, SIGNAL(triggered()), this, SLOT(onSaveTriggered()));
     connect(quit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
 
@@ -138,4 +140,17 @@ void MainWindow::onSaveTriggered(){
     // enregistrement
     pixmap.save("image.png");
     painter.end();
+}
+
+void MainWindow::onOpenTriggered(){
+    qDebug() << "Function:" << Q_FUNC_INFO << "called";
+
+    QFileDialog dialog(this);
+    dialog.setNameFilter(tr("Images (*.png *.xpm *.jpg)"));
+    dialog.setViewMode(QFileDialog::Detail);
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+                                                    "C:/",
+                                                    tr("Images (*.png *.bmp *.jpg)"));
+    QPixmap img(fileName);
+    table->scene()->addPixmap(img);
 }

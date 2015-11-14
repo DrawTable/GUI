@@ -26,6 +26,7 @@ private slots:
     void onEllipseTriggered(bool checked = false);
     void onRectangleTriggered(bool checked = false);
     void onSaveTriggered();
+    void onOpenTriggered();
 
 private:
     QMenu* menu;
