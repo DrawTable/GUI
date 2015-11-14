@@ -13,6 +13,13 @@ GeneralController::~GeneralController()
 
 }
 
+void GeneralController::undo(){
+    view->scene()->removeItem(lastActions.takeLast);
+}
+
+void GeneralController::redo(){
+
+}
 
 void GeneralController::mouseDoubleClickEvent(QMouseEvent* event){
     drawController->mouseDoubleClickEvent(view->scene(), event);
@@ -31,6 +38,10 @@ void GeneralController::mousePressEvent(QMouseEvent* event){
 void GeneralController::mouseReleaseEvent(QMouseEvent* event){
     lastActions.append(drawController->mouseReleaseEvent(view->scene(), event));
 }
+
+//------------------------------------------------------------
+//------------------- GETTERS AND SETTERS --------------------
+//------------------------------------------------------------
 
 void GeneralController::setPen(QPen* pen){
     this->pen = pen;

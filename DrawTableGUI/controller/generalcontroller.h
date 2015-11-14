@@ -18,7 +18,8 @@ public:
     void setBrush(QBrush* brush);
     QBrush* getBrush();
 
-
+    void undo();
+    void redo();
     virtual void mouseDoubleClickEvent(QMouseEvent* event);
     virtual void mouseMoveEvent(QMouseEvent* event);
     virtual void mousePressEvent(QMouseEvent* event);
