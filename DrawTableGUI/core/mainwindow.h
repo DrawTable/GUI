@@ -9,6 +9,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include "../view/table.h"
+#include "../controller/generalcontroller.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -30,9 +31,13 @@ private slots:
 private:
     QMenu* menu;
     Table* table;
+
     QAction* open;
     QAction* save;
     QAction* quit;
+
+    GeneralController* controller;
+
     QAction* cursor;
     QAction* pen;
     QAction* dash;

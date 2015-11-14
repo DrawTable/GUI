@@ -12,7 +12,7 @@ public:
     static PenController* getInstance();
     virtual void mouseDoubleClickEvent(QGraphicsScene* scene, QMouseEvent* event);
     virtual void mouseMoveEvent(QGraphicsScene* scene, QMouseEvent* event);
-    virtual void mousePressEvent(QGraphicsScene* scene, QMouseEvent* event);
+    virtual void mousePressEvent(QGraphicsScene* scene, QMouseEvent* event, QPen* pen);
     virtual QGraphicsItem* mouseReleaseEvent(QGraphicsScene* scene, QMouseEvent* event);
 
 private:

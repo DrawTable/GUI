@@ -3,6 +3,7 @@
 #include "../controller/dashcontroller.h"
 #include "../controller/rectanglecontroller.h"
 #include "../controller/ellipsecontroller.h"
+#include "../controller/generalcontroller.h"
 #include <QDebug>
 #include <QApplication>
 
@@ -25,7 +26,9 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     QBrush bgColor(Qt::white);
     table = new Table(this);
     table->setBackgroundBrush(bgColor);
-    table->setController(PenController::getInstance());
+
+    //table->setController(PenController::getInstance());
+
     table->scene()->setSceneRect(0, 0, maximumWidth(), maximumHeight());
 
     cursor = new QAction(this);
@@ -69,6 +72,8 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     connect(toolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(updateToolBarActions(QAction*)));
     addToolBar(Qt::RightToolBarArea, toolBar);
 
+    controller = new GeneralController(table);
+    controller->setPen(new QPen(Qt::red));
 
 
     setCentralWidget(table);
@@ -96,13 +101,13 @@ void MainWindow::onCursorTriggered(bool checked) {
 
 void MainWindow::onPenTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    if (checked) { table->setController(PenController::getInstance()); }
+    if (checked) { controller->setDrawController(PenController::getInstance()); }
     else {pen->setChecked(true);}
 }
 
 void MainWindow::onDashTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    if (checked) { table->setController(DashController::getInstance()); }
+    if (checked) { controller->setDrawController(DashController::getInstance()); }
     else {dash->setChecked(true);}
 }
 
@@ -114,13 +119,13 @@ void MainWindow::onEraserTriggered(bool checked) {
 
 void MainWindow::onEllipseTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    if (checked) { table->setController(EllipseController::getInstance()); }
+    if (checked) { controller->setDrawController(EllipseController::getInstance()); }
     else {ellipse->setChecked(true);}
 }
 
 void MainWindow::onRectangleTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    if (checked) { table->setController(RectangleController::getInstance()); }
+    if (checked) { controller->setDrawController(RectangleController::getInstance()); }
     else {rectangle->setChecked(true);}
 }
 
