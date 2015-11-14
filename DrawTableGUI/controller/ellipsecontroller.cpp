@@ -44,14 +44,15 @@ void EllipseController::mousePressEvent(QGraphicsScene *scene, QMouseEvent *even
     qDebug() << "x:" << event->x() << " y: " << event->y();
     origin.setX(event->x());
     origin.setY(event->y());
-    item = scene->addEllipse(event->x(), event->y(), 0, 0);
+    item = scene->addEllipse(event->x(), event->y(), 0, 0,QPen(Qt::red), QBrush(Qt::yellow));
 }
 
-void EllipseController::mouseReleaseEvent(QGraphicsScene *scene, QMouseEvent *event) {
+QGraphicsItem* EllipseController::mouseReleaseEvent(QGraphicsScene *scene, QMouseEvent *event) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
     qDebug() << "x:" << event->x() << " y: " << event->y();
     Q_UNUSED(scene)
-    item = nullptr;
+
     origin.setX(0);
     origin.setY(0);
+    return item;
 }

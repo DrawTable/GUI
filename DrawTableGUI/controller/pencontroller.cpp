@@ -45,8 +45,9 @@ void PenController::mousePressEvent(QGraphicsScene *scene, QMouseEvent *event) {
     //Q_UNUSED(scene)
 }
 
-void PenController::mouseReleaseEvent(QGraphicsScene *scene, QMouseEvent *event) {
+QGraphicsItem* PenController::mouseReleaseEvent(QGraphicsScene *scene, QMouseEvent *event) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
     qDebug() << "x:" << event->x() << " y: " << event->y();
     Q_UNUSED(scene)
+    return pathItem;
 }
