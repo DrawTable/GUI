@@ -6,6 +6,7 @@ GeneralController::GeneralController(Table* view)
     this->view = view;
     this->drawController = PenController::getInstance();
     this->pen = new QPen(Qt::black);
+    view->setController(this);
 }
 
 GeneralController::~GeneralController()
@@ -14,7 +15,9 @@ GeneralController::~GeneralController()
 }
 
 void GeneralController::undo(){
-    view->scene()->removeItem(lastActions.takeLast);
+    if(!lastActions.isEmpty()){
+        view->scene()->removeItem(lastActions.takeLast);
+    }
 }
 
 void GeneralController::redo(){

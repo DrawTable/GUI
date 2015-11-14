@@ -5,6 +5,7 @@
 #include <QAction>
 #include <QToolBar>
 #include "../view/table.h"
+#include "../controller/generalcontroller.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -24,6 +25,7 @@ private slots:
 
 private:
     Table* table;
+    GeneralController* controller;
     QAction* cursor;
     QAction* pen;
     QAction* dash;

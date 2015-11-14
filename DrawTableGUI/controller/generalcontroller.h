@@ -2,15 +2,17 @@
 #define GENERALCONTROLLER_H
 
 #include "abstractcontroller.h"
-#include "view/table.h"
+#include "../view/table.h"
 #include <QGraphicsItem>
 
 
 class GeneralController
 {
 public:
+
     GeneralController(Table* view);
     ~GeneralController();
+
     void setDrawController(AbstractController* drawController);
     AbstractController* getDrawController();
     void setPen(QPen* pen);

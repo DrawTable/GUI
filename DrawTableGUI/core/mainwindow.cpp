@@ -3,6 +3,7 @@
 #include "../controller/dashcontroller.h"
 #include "../controller/rectanglecontroller.h"
 #include "../controller/ellipsecontroller.h"
+#include "../controller/generalcontroller.h"
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
@@ -53,6 +54,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     connect(toolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(updateToolBarActions(QAction*)));
     addToolBar(Qt::RightToolBarArea, toolBar);
 
+    controller = new GeneralController(table);
 
 
     setCentralWidget(table);
@@ -80,13 +82,13 @@ void MainWindow::onCursorTriggered(bool checked) {
 
 void MainWindow::onPenTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    if (checked) { table->setController(PenController::getInstance()); }
+    if (checked) { controller->setController(PenController::getInstance()); }
     else {pen->setChecked(true);}
 }
 
 void MainWindow::onDashTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    if (checked) { table->setController(DashController::getInstance()); }
+    if (checked) { controller->setController(DashController::getInstance()); }
     else {dash->setChecked(true);}
 }
 
@@ -98,12 +100,12 @@ void MainWindow::onEraserTriggered(bool checked) {
 
 void MainWindow::onEllipseTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    if (checked) { table->setController(EllipseController::getInstance()); }
+    if (checked) { controller->setController(EllipseController::getInstance()); }
     else {ellipse->setChecked(true);}
 }
 
 void MainWindow::onRectangleTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    if (checked) { table->setController(RectangleController::getInstance()); }
+    if (checked) { controller->setController(RectangleController::getInstance()); }
     else {rectangle->setChecked(true);}
 }

@@ -4,7 +4,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QMouseEvent>
-#include "../controller/abstractcontroller.h"
+#include "../controller/generalcontroller.h"
 
 class Table : public QGraphicsView {
     Q_OBJECT
@@ -12,8 +12,8 @@ class Table : public QGraphicsView {
 public:
     Table(QWidget* parent = 0);
 
-    AbstractController* getController() const;
-    void setController(AbstractController* controller);
+    GeneralController* getController() const;
+    void setController(GeneralController* controller);
 
 protected:
     virtual void mouseDoubleClickEvent(QMouseEvent* event);
@@ -22,7 +22,7 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent* event);
 
 private:
-    AbstractController* controller;
+    GeneralController* controller;
 };
 
 #endif // TABLE_H
