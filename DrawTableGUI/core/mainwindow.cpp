@@ -4,6 +4,7 @@
 #include "../controller/rectanglecontroller.h"
 #include "../controller/ellipsecontroller.h"
 #include "../controller/generalcontroller.h"
+#include "../controller/erasercontroller.h"
 #include <QDebug>
 #include <QApplication>
 #include <QFileDialog>
@@ -123,7 +124,7 @@ void MainWindow::onDashTriggered(bool checked) {
 
 void MainWindow::onEraserTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    if (checked) {}
+    if (checked) { controller->setDrawController(EraserController::getInstance()); }
     else {eraser->setChecked(true);}
 }
 
