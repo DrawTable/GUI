@@ -46,11 +46,12 @@ void RectangleController::mousePressEvent(QGraphicsScene *scene, QMouseEvent *ev
     item = scene->addRect(event->x(), event->y(), 0, 0);
 }
 
-void RectangleController::mouseReleaseEvent(QGraphicsScene *scene, QMouseEvent *event) {
+QGraphicsItem* RectangleController::mouseReleaseEvent(QGraphicsScene *scene, QMouseEvent *event) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
     qDebug() << "x:" << event->x() << " y: " << event->y();
     Q_UNUSED(scene)
-    item = nullptr;
+
     origin.setX(0);
     origin.setY(0);
+    return item;
 }

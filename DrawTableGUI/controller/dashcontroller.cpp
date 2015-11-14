@@ -38,10 +38,11 @@ void DashController::mousePressEvent(QGraphicsScene *scene, QMouseEvent *event) 
     item = scene->addLine(event->x(), event->y(), event->x(), event->y());
 }
 
-void DashController::mouseReleaseEvent(QGraphicsScene *scene, QMouseEvent *event) {
+QGraphicsItem* DashController::mouseReleaseEvent(QGraphicsScene *scene, QMouseEvent *event) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
     qDebug() << "x:" << event->x() << " y: " << event->y();
     Q_UNUSED(scene)
-    item = nullptr;
+    return item;
+
 }
 

@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     controller/pencontroller.cpp \
     controller/dashcontroller.cpp \
     controller/rectanglecontroller.cpp \
-    controller/ellipsecontroller.cpp
+    controller/ellipsecontroller.cpp \
+    controller/generalcontroller.cpp
 
 HEADERS  += core/mainwindow.h \
     view/table.h \
@@ -27,7 +28,8 @@ HEADERS  += core/mainwindow.h \
     controller/dashcontroller.h \
     controller/rectanglecontroller.h \
     controller/abstractcontroller.h \
-    controller/ellipsecontroller.h
+    controller/ellipsecontroller.h \
+    controller/generalcontroller.h
 
 RESOURCES += \
     icons.qrc

@@ -69,6 +69,8 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     connect(toolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(updateToolBarActions(QAction*)));
     addToolBar(Qt::RightToolBarArea, toolBar);
 
+
+
     setCentralWidget(table);
 
     showFullScreen();
