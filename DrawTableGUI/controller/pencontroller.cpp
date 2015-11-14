@@ -30,8 +30,9 @@ void PenController::mouseMoveEvent(QGraphicsScene *scene, QMouseEvent *event) {
         double rad = 1;
         QPointF point = event->pos();
         //scene->addEllipse(point.x()-rad, point.y()-rad, rad*2.0, rad*2.0, QPen(), QBrush(Qt::SolidPattern));
+
         path->lineTo(point);
-        scene->addPath(*path);
+        pathItem->setPath(*path);
     }
 }
 
@@ -40,7 +41,7 @@ void PenController::mousePressEvent(QGraphicsScene *scene, QMouseEvent *event) {
     qDebug() << "x:" << event->x() << " y: " << event->y();
 
     path = new QPainterPath(event->pos());
-    scene->addPath(*path);
+    pathItem = scene->addPath(*path);
     //Q_UNUSED(scene)
 }
 

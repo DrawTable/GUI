@@ -2,6 +2,8 @@
 #define PENCONTROLLER_H
 
 #include "abstractcontroller.h"
+#include <QGraphicsPathItem>
+#include <QPainterPath>
 
 class PenController : public AbstractController {
 
@@ -14,7 +16,8 @@ public:
     virtual void mouseReleaseEvent(QGraphicsScene* scene, QMouseEvent* event);
 
 private:
-    QPainterPath * path;
+    QPainterPath* path;
+    QGraphicsPathItem* pathItem;
     static PenController* instance;
     PenController();
 
