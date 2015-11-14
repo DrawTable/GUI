@@ -6,6 +6,7 @@ GeneralController::GeneralController(Table* view)
     this->view = view;
     this->drawController = PenController::getInstance();
     this->pen = new QPen(Qt::black);
+    view->setController(this);
 }
 
 GeneralController::~GeneralController()
@@ -14,7 +15,10 @@ GeneralController::~GeneralController()
 }
 
 void GeneralController::undo(){
-    view->scene()->removeItem(lastActions.takeLast);
+    if(!lastActions.isEmpty()){
+        QGraphicsItem* temp = lastActions.takeLast();
+        view->scene()->removeItem(temp);
+    }
 }
 
 void GeneralController::redo(){
@@ -26,13 +30,13 @@ void GeneralController::mouseDoubleClickEvent(QMouseEvent* event){
 }
 
 void GeneralController::mouseMoveEvent(QMouseEvent* event){
-    if(event->button() == Qt::LeftButton){
+    if(event->buttons() == Qt::LeftButton){
         drawController->mouseMoveEvent(view->scene(), event);
     }
 }
 
 void GeneralController::mousePressEvent(QMouseEvent* event){
-    drawController->mousePressEvent(view->scene(), event);
+    drawController->mousePressEvent(view->scene(), event, pen);
 }
 
 void GeneralController::mouseReleaseEvent(QMouseEvent* event){
