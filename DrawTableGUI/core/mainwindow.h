@@ -28,11 +28,13 @@ private slots:
     void onRectangleTriggered(bool checked = false);
     void onSaveTriggered();
     void onOpenTriggered();
+    void onNewTriggered();
 
 private:
     QMenu* menu;
     Table* table;
 
+    QAction* newImg;
     QAction* open;
     QAction* save;
     QAction* quit;

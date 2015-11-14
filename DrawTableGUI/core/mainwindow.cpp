@@ -12,16 +12,19 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
 
     // Creation des actions du menu
+    newImg = new QAction("&New", this);
     open = new QAction("&Open", this);
     save = new QAction("&Save", this);
     quit = new QAction("&Quit", this);
     // Creation du menu et ajout des actions a ce dernier
     menu = menuBar()->addMenu("&File");
+    menu->addAction(newImg);
     menu->addAction(open);
     menu->addAction(save);
     menu->addAction(quit);
 
-    connect(open, SIGNAL(triggered()), this, SLOT(onOpenTriggered());
+    connect(newImg, SIGNAL(triggered()), this, SLOT(onNewTriggered()));
+    connect(open, SIGNAL(triggered()), this, SLOT(onOpenTriggered()));
     connect(save, SIGNAL(triggered()), this, SLOT(onSaveTriggered()));
     connect(quit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
 
@@ -134,6 +137,11 @@ void MainWindow::onRectangleTriggered(bool checked) {
 void MainWindow::onSaveTriggered(){
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
 
+    QFileDialog dialog(this);
+    dialog.setNameFilter(tr("Images (*.png *.xpm *.jpg)"));
+    dialog.setViewMode(QFileDialog::Detail);
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "C:/", tr("Images (*.png)"));
+
     // creation du conteneur
     QPixmap pixmap(table->width(), table->height());
     // creation du painter allant servir à effectuer notre rendu
@@ -143,7 +151,7 @@ void MainWindow::onSaveTriggered(){
     // generation du rendu
     table->render(&painter);
     // enregistrement
-    pixmap.save("image.png");
+    pixmap.save(fileName);
     painter.end();
 }
 
@@ -158,4 +166,9 @@ void MainWindow::onOpenTriggered(){
                                                     tr("Images (*.png *.bmp *.jpg)"));
     QPixmap img(fileName);
     table->scene()->addPixmap(img);
+}
+
+void MainWindow::onNewTriggered(){
+    qDebug() << "Function:" << Q_FUNC_INFO << "called";
+    table->scene()->clear();
 }
