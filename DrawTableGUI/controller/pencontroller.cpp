@@ -26,22 +26,21 @@ void PenController::mouseDoubleClickEvent(QGraphicsScene *scene, QMouseEvent *ev
 void PenController::mouseMoveEvent(QGraphicsScene *scene, QMouseEvent *event) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
     qDebug() << "x:" << event->x() << " y: " << event->y();
-    if (event->buttons() == Qt::LeftButton) {
-        double rad = 1;
-        QPointF point = event->pos();
-        //scene->addEllipse(point.x()-rad, point.y()-rad, rad*2.0, rad*2.0, QPen(), QBrush(Qt::SolidPattern));
 
-        path->lineTo(point);
-        pathItem->setPath(*path);
-    }
+
+    QPointF point = event->pos();
+
+    path->lineTo(point);
+    pathItem->setPath(*path);
+
 }
 
-void PenController::mousePressEvent(QGraphicsScene *scene, QMouseEvent *event) {
+void PenController::mousePressEvent(QGraphicsScene *scene, QMouseEvent *event, QPen* pen) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
     qDebug() << "x:" << event->x() << " y: " << event->y();
 
     path = new QPainterPath(event->pos());
-    pathItem = scene->addPath(*path);
+    pathItem = scene->addPath(*path, *pen);
     //Q_UNUSED(scene)
 }
 

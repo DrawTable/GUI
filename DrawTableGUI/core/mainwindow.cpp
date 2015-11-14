@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
 
     table = new Table(this);
-    table->setController(PenController::getInstance());
+    //table->setController(PenController::getInstance());
     table->scene()->setSceneRect(0, 0, maximumWidth(), maximumHeight());
 
     cursor = new QAction(this);
@@ -55,6 +55,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     addToolBar(Qt::RightToolBarArea, toolBar);
 
     controller = new GeneralController(table);
+    controller->setPen(new QPen(Qt::red));
 
 
     setCentralWidget(table);
@@ -82,13 +83,13 @@ void MainWindow::onCursorTriggered(bool checked) {
 
 void MainWindow::onPenTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    if (checked) { controller->setController(PenController::getInstance()); }
+    if (checked) { controller->setDrawController(PenController::getInstance()); }
     else {pen->setChecked(true);}
 }
 
 void MainWindow::onDashTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    if (checked) { controller->setController(DashController::getInstance()); }
+    if (checked) { controller->setDrawController(DashController::getInstance()); }
     else {dash->setChecked(true);}
 }
 
@@ -100,12 +101,12 @@ void MainWindow::onEraserTriggered(bool checked) {
 
 void MainWindow::onEllipseTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    if (checked) { controller->setController(EllipseController::getInstance()); }
+    if (checked) { controller->setDrawController(EllipseController::getInstance()); }
     else {ellipse->setChecked(true);}
 }
 
 void MainWindow::onRectangleTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    if (checked) { controller->setController(RectangleController::getInstance()); }
+    if (checked) { controller->setDrawController(RectangleController::getInstance()); }
     else {rectangle->setChecked(true);}
 }

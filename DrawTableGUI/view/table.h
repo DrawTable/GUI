@@ -6,6 +6,8 @@
 #include <QMouseEvent>
 #include "../controller/generalcontroller.h"
 
+class GeneralController;
+
 class Table : public QGraphicsView {
     Q_OBJECT
 

@@ -27,15 +27,15 @@ void DashController::mouseMoveEvent(QGraphicsScene *scene, QMouseEvent *event) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
     qDebug() << "x:" << event->x() << " y: " << event->y();
     Q_UNUSED(scene)
-    if (event->buttons() == Qt::LeftButton) {
-        if (item) { item->setLine(item->line().x1(), item->line().y1(), event->x(), event->y()); }
-    }
+
+    if (item) { item->setLine(item->line().x1(), item->line().y1(), event->x(), event->y()); }
+
 }
 
-void DashController::mousePressEvent(QGraphicsScene *scene, QMouseEvent *event) {
+void DashController::mousePressEvent(QGraphicsScene *scene, QMouseEvent *event, QPen* pen) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
     qDebug() << "x:" << event->x() << " y: " << event->y();
-    item = scene->addLine(event->x(), event->y(), event->x(), event->y());
+    item = scene->addLine(event->x(), event->y(), event->x(), event->y(), *pen);
 }
 
 QGraphicsItem* DashController::mouseReleaseEvent(QGraphicsScene *scene, QMouseEvent *event) {

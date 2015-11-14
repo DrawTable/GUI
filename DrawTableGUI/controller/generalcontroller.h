@@ -5,6 +5,7 @@
 #include "../view/table.h"
 #include <QGraphicsItem>
 
+class Table;
 
 class GeneralController
 {
