@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui printsupport
 CONFIG   += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     controller/dashcontroller.cpp \
     controller/rectanglecontroller.cpp \
     controller/ellipsecontroller.cpp \
-    controller/generalcontroller.cpp
+    controller/generalcontroller.cpp \
+    controller/erasercontroller.cpp
 
 HEADERS  += core/mainwindow.h \
     view/table.h \
@@ -29,7 +30,8 @@ HEADERS  += core/mainwindow.h \
     controller/rectanglecontroller.h \
     controller/abstractcontroller.h \
     controller/ellipsecontroller.h \
-    controller/generalcontroller.h
+    controller/generalcontroller.h \
+    controller/erasercontroller.h
 
 RESOURCES += \
     icons.qrc

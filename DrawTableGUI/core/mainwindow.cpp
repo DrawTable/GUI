@@ -4,28 +4,34 @@
 #include "../controller/rectanglecontroller.h"
 #include "../controller/ellipsecontroller.h"
 #include "../controller/generalcontroller.h"
+#include "../controller/erasercontroller.h"
 #include <QDebug>
 #include <QApplication>
 #include <QFileDialog>
+#include <QPrinter>
+#include <QPrintDialog>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
 
     // Creation des actions du menu
-    newImg = new QAction("&New", this);
-    open = new QAction("&Open", this);
-    save = new QAction("&Save", this);
-    quit = new QAction("&Quit", this);
+    newImg = new QAction(tr("&New"), this);
+    open = new QAction(tr("&Open"), this);
+    save = new QAction(tr("&Save"), this);
+    print = new QAction(tr("&Print"), this);
+    quit = new QAction(tr("&Quit"), this);
     // Creation du menu et ajout des actions a ce dernier
     menu = menuBar()->addMenu("&File");
     menu->addAction(newImg);
     menu->addAction(open);
     menu->addAction(save);
+    menu->addAction(print);
     menu->addAction(quit);
 
     connect(newImg, SIGNAL(triggered()), this, SLOT(onNewTriggered()));
     connect(open, SIGNAL(triggered()), this, SLOT(onOpenTriggered()));
     connect(save, SIGNAL(triggered()), this, SLOT(onSaveTriggered()));
+    connect(print, SIGNAL(triggered()), this, SLOT(onPrintTriggered()));
     connect(quit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
 
     QBrush bgColor(Qt::white);
@@ -38,33 +44,33 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
 
     cursor = new QAction(this);
     cursor->setCheckable(true);
-    cursor->setIcon(QIcon(":/svg/cursor.svg"));
+    cursor->setIcon(QIcon(":/svg/icons/cursor.svg"));
     connect(cursor, SIGNAL(triggered(bool)), this, SLOT(onCursorTriggered(bool)));
 
     pen = new QAction(this);
     pen->setCheckable(true);
     pen->setChecked(true);
-    pen->setIcon(QIcon(":/svg/pen.svg"));
+    pen->setIcon(QIcon(":/svg/icons/pen.svg"));
     connect(pen, SIGNAL(triggered(bool)), this, SLOT(onPenTriggered(bool)));
 
     dash = new QAction(this);
     dash->setCheckable(true);
-    dash->setIcon(QIcon(":/svg/dash.svg"));
+    dash->setIcon(QIcon(":/svg/icons/dash.svg"));
     connect(dash, SIGNAL(triggered(bool)), this, SLOT(onDashTriggered(bool)));
 
     eraser = new QAction(this);
     eraser->setCheckable(true);
-    eraser->setIcon(QIcon(":/svg/eraser.svg"));
+    eraser->setIcon(QIcon(":/svg/icons/eraser.svg"));
     connect(eraser, SIGNAL(triggered(bool)), this, SLOT(onEraserTriggered(bool)));
 
     ellipse = new QAction(this);
     ellipse->setCheckable(true);
-    ellipse->setIcon(QIcon(":/svg/ellipse.svg"));
+    ellipse->setIcon(QIcon(":/svg/icons/ellipse.svg"));
     connect(ellipse, SIGNAL(triggered(bool)), this, SLOT(onEllipseTriggered(bool)));
 
     rectangle = new QAction(this);
     rectangle->setCheckable(true);
-    rectangle->setIcon(QIcon(":/svg/rectangle.svg"));
+    rectangle->setIcon(QIcon(":/svg/icons/rectangle.svg"));
     connect(rectangle, SIGNAL(triggered(bool)), this, SLOT(onRectangleTriggered(bool)));
 
     toolBar = new QToolBar(tr("Tools"));
@@ -116,7 +122,7 @@ void MainWindow::onDashTriggered(bool checked) {
 
 void MainWindow::onEraserTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    if (checked) {}
+    if (checked) { controller->setDrawController(EraserController::getInstance()); }
     else {eraser->setChecked(true);}
 }
 
@@ -169,4 +175,17 @@ void MainWindow::onOpenTriggered(){
 void MainWindow::onNewTriggered(){
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
     table->scene()->clear();
+}
+
+void MainWindow::onPrintTriggered() {
+    qDebug() << "Function:" << Q_FUNC_INFO << "called";
+    QPrinter printer;
+    printer.setPageSize(QPrinter::A4);
+    printer.setOrientation(QPrinter::Landscape);
+    if (QPrintDialog(&printer).exec() == QDialog::Accepted) {
+        QPainter painter(&printer);
+        painter.setRenderHint(QPainter::Antialiasing);
+        table->render(&painter);
+        painter.end();
+    }
 }
