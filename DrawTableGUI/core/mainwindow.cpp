@@ -7,25 +7,30 @@
 #include <QDebug>
 #include <QApplication>
 #include <QFileDialog>
+#include <QPrinter>
+#include <QPrintDialog>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
 
     // Creation des actions du menu
-    newImg = new QAction("&New", this);
-    open = new QAction("&Open", this);
-    save = new QAction("&Save", this);
-    quit = new QAction("&Quit", this);
+    newImg = new QAction(tr("&New"), this);
+    open = new QAction(tr("&Open"), this);
+    save = new QAction(tr("&Save"), this);
+    print = new QAction(tr("&Print"), this);
+    quit = new QAction(tr("&Quit"), this);
     // Creation du menu et ajout des actions a ce dernier
     menu = menuBar()->addMenu("&File");
     menu->addAction(newImg);
     menu->addAction(open);
     menu->addAction(save);
+    menu->addAction(print);
     menu->addAction(quit);
 
     connect(newImg, SIGNAL(triggered()), this, SLOT(onNewTriggered()));
     connect(open, SIGNAL(triggered()), this, SLOT(onOpenTriggered()));
     connect(save, SIGNAL(triggered()), this, SLOT(onSaveTriggered()));
+    connect(print, SIGNAL(triggered()), this, SLOT(onPrintTriggered()));
     connect(quit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
 
     QBrush bgColor(Qt::white);
@@ -171,4 +176,17 @@ void MainWindow::onOpenTriggered(){
 void MainWindow::onNewTriggered(){
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
     table->scene()->clear();
+}
+
+void MainWindow::onPrintTriggered() {
+    qDebug() << "Function:" << Q_FUNC_INFO << "called";
+    QPrinter printer;
+    printer.setPageSize(QPrinter::A4);
+    printer.setOrientation(QPrinter::Landscape);
+    if (QPrintDialog(&printer).exec() == QDialog::Accepted) {
+        QPainter painter(&printer);
+        painter.setRenderHint(QPainter::Antialiasing);
+        table->render(&painter);
+        painter.end();
+    }
 }

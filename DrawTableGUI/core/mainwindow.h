@@ -29,6 +29,7 @@ private slots:
     void onSaveTriggered();
     void onOpenTriggered();
     void onNewTriggered();
+    void onPrintTriggered();
 
 private:
     QMenu* menu;
@@ -37,6 +38,7 @@ private:
     QAction* newImg;
     QAction* open;
     QAction* save;
+    QAction* print;
     QAction* quit;
 
     GeneralController* controller;
