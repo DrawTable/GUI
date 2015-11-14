@@ -1,5 +1,5 @@
-#ifndef ICONTROLLER
-#define ICONTROLLER
+#ifndef ABSTRACTCONTROLLER_H
+#define ABSTRACTCONTROLLER_H
 
 #include <QMouseEvent>
 #include <QGraphicsScene>
@@ -13,5 +13,5 @@ public:
     virtual void mouseReleaseEvent(QGraphicsScene* scene, QMouseEvent* event) = 0;
 };
 
-#endif // ICONTROLLER
+#endif // ABSTRACTCONTROLLER_H
 

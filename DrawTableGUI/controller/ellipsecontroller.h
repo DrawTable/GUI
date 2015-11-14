@@ -1,5 +1,5 @@
-#ifndef CIRCLECONTROLLER_H
-#define CIRCLECONTROLLER_H
+#ifndef ELLIPSECONTROLLER_H
+#define ELLIPSECONTROLLER_H
 
 #include "abstractcontroller.h"
 #include <QPoint>
@@ -22,4 +22,4 @@ private:
     EllipseController();
 };
 
-#endif // CIRCLECONTROLLER_H
+#endif // ELLIPSECONTROLLER_H
