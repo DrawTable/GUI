@@ -4,6 +4,10 @@
 #include <QMainWindow>
 #include <QAction>
 #include <QToolBar>
+#include <QMenu>
+#include <QMenuBar>
+#include <QPainter>
+#include <QPixmap>
 #include "../view/table.h"
 
 class MainWindow : public QMainWindow {
@@ -21,9 +25,14 @@ private slots:
     void onEraserTriggered(bool checked = false);
     void onEllipseTriggered(bool checked = false);
     void onRectangleTriggered(bool checked = false);
+    void onSaveTriggered();
 
 private:
+    QMenu* menu;
     Table* table;
+    QAction* open;
+    QAction* save;
+    QAction* quit;
     QAction* cursor;
     QAction* pen;
     QAction* dash;

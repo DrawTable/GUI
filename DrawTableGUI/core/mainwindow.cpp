@@ -4,11 +4,27 @@
 #include "../controller/rectanglecontroller.h"
 #include "../controller/ellipsecontroller.h"
 #include <QDebug>
+#include <QApplication>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
 
+    // Creation des actions du menu
+    open = new QAction("&Open", this);
+    save = new QAction("&Save", this);
+    quit = new QAction("&Quit", this);
+    // Creation du menu et ajout des actions a ce dernier
+    menu = menuBar()->addMenu("&File");
+    menu->addAction(open);
+    menu->addAction(save);
+    menu->addAction(quit);
+
+    connect(save, SIGNAL(triggered()), this, SLOT(onSaveTriggered()));
+    connect(quit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
+
+    QBrush bgColor(Qt::white);
     table = new Table(this);
+    table->setBackgroundBrush(bgColor);
     table->setController(PenController::getInstance());
     table->scene()->setSceneRect(0, 0, maximumWidth(), maximumHeight());
 
@@ -104,4 +120,20 @@ void MainWindow::onRectangleTriggered(bool checked) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
     if (checked) { table->setController(RectangleController::getInstance()); }
     else {rectangle->setChecked(true);}
+}
+
+void MainWindow::onSaveTriggered(){
+    qDebug() << "Function:" << Q_FUNC_INFO << "called";
+
+    // creation du conteneur
+    QPixmap pixmap(table->width(), table->height());
+    // creation du painter allant servir à effectuer notre rendu
+    QPainter painter(&pixmap);
+    // selection qualite
+    painter.setRenderHint(QPainter::Antialiasing);
+    // generation du rendu
+    table->render(&painter);
+    // enregistrement
+    pixmap.save("image.png");
+    painter.end();
 }
