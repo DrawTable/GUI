@@ -78,8 +78,6 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     addToolBar(Qt::RightToolBarArea, toolBar);
 
     controller = new GeneralController(table);
-    controller->setPen(new QPen(Qt::red));
-
 
     setCentralWidget(table);
 
@@ -138,9 +136,9 @@ void MainWindow::onSaveTriggered(){
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
 
     QFileDialog dialog(this);
-    dialog.setNameFilter(tr("Images (*.png *.xpm *.jpg)"));
+    dialog.setNameFilter(tr("Images (*.png *.bmp *.jpg)"));
     dialog.setViewMode(QFileDialog::Detail);
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "C:/", tr("Images (*.png)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "C:/", tr("Images (*.png *.bmp *.jpg)"));
 
     // creation du conteneur
     QPixmap pixmap(table->width(), table->height());
@@ -159,7 +157,7 @@ void MainWindow::onOpenTriggered(){
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
 
     QFileDialog dialog(this);
-    dialog.setNameFilter(tr("Images (*.png *.xpm *.jpg)"));
+    dialog.setNameFilter(tr("Images (*.png *.bmp *.jpg)"));
     dialog.setViewMode(QFileDialog::Detail);
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
                                                     "C:/",
