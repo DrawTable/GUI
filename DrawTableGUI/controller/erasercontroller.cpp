@@ -26,6 +26,7 @@ void EraserController::mouseDoubleClickEvent(QGraphicsScene *scene, QMouseEvent 
 void EraserController::mouseMoveEvent(QGraphicsScene *scene, QMouseEvent *event) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
     qDebug() << "x:" << event->x() << " y: " << event->y();
+    Q_UNUSED(scene)
     QPointF point = event->pos();
     path->lineTo(point);
     pathItem->setPath(*path);

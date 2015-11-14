@@ -44,33 +44,33 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
 
     cursor = new QAction(this);
     cursor->setCheckable(true);
-    cursor->setIcon(QIcon(":/svg/cursor.svg"));
+    cursor->setIcon(QIcon(":/svg/icons/cursor.svg"));
     connect(cursor, SIGNAL(triggered(bool)), this, SLOT(onCursorTriggered(bool)));
 
     pen = new QAction(this);
     pen->setCheckable(true);
     pen->setChecked(true);
-    pen->setIcon(QIcon(":/svg/pen.svg"));
+    pen->setIcon(QIcon(":/svg/icons/pen.svg"));
     connect(pen, SIGNAL(triggered(bool)), this, SLOT(onPenTriggered(bool)));
 
     dash = new QAction(this);
     dash->setCheckable(true);
-    dash->setIcon(QIcon(":/svg/dash.svg"));
+    dash->setIcon(QIcon(":/svg/icons/dash.svg"));
     connect(dash, SIGNAL(triggered(bool)), this, SLOT(onDashTriggered(bool)));
 
     eraser = new QAction(this);
     eraser->setCheckable(true);
-    eraser->setIcon(QIcon(":/svg/eraser.svg"));
+    eraser->setIcon(QIcon(":/svg/icons/eraser.svg"));
     connect(eraser, SIGNAL(triggered(bool)), this, SLOT(onEraserTriggered(bool)));
 
     ellipse = new QAction(this);
     ellipse->setCheckable(true);
-    ellipse->setIcon(QIcon(":/svg/ellipse.svg"));
+    ellipse->setIcon(QIcon(":/svg/icons/ellipse.svg"));
     connect(ellipse, SIGNAL(triggered(bool)), this, SLOT(onEllipseTriggered(bool)));
 
     rectangle = new QAction(this);
     rectangle->setCheckable(true);
-    rectangle->setIcon(QIcon(":/svg/rectangle.svg"));
+    rectangle->setIcon(QIcon(":/svg/icons/rectangle.svg"));
     connect(rectangle, SIGNAL(triggered(bool)), this, SLOT(onRectangleTriggered(bool)));
 
     toolBar = new QToolBar(tr("Tools"));
