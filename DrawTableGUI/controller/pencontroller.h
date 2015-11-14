@@ -14,8 +14,10 @@ public:
     virtual void mouseReleaseEvent(QGraphicsScene* scene, QMouseEvent* event);
 
 private:
+    QPainterPath * path;
     static PenController* instance;
     PenController();
+
 };
 
 #endif // PENCONTROLLER_H

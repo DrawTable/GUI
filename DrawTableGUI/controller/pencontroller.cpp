@@ -29,14 +29,19 @@ void PenController::mouseMoveEvent(QGraphicsScene *scene, QMouseEvent *event) {
     if (event->buttons() == Qt::LeftButton) {
         double rad = 1;
         QPointF point = event->pos();
-        scene->addEllipse(point.x()-rad, point.y()-rad, rad*2.0, rad*2.0, QPen(), QBrush(Qt::SolidPattern));
+        //scene->addEllipse(point.x()-rad, point.y()-rad, rad*2.0, rad*2.0, QPen(), QBrush(Qt::SolidPattern));
+        path->lineTo(point);
+        scene->addPath(*path);
     }
 }
 
 void PenController::mousePressEvent(QGraphicsScene *scene, QMouseEvent *event) {
     qDebug() << "Function:" << Q_FUNC_INFO << "called";
     qDebug() << "x:" << event->x() << " y: " << event->y();
-    Q_UNUSED(scene)
+
+    path = new QPainterPath(event->pos());
+    scene->addPath(*path);
+    //Q_UNUSED(scene)
 }
 
 void PenController::mouseReleaseEvent(QGraphicsScene *scene, QMouseEvent *event) {
