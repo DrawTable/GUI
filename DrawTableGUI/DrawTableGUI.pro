@@ -1,10 +1,11 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2015-11-11T14:17:32
+# Project created by QtCreator 2015-11-13T22:15:08
 #
 #-------------------------------------------------
 
 QT       += core gui
+CONFIG   += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,8 +14,20 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        core/mainwindow.cpp \
+    view/table.cpp \
+    controller/pencontroller.cpp \
+    controller/dashcontroller.cpp \
+    controller/rectanglecontroller.cpp \
+    controller/ellipsecontroller.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += core/mainwindow.h \
+    view/table.h \
+    controller/pencontroller.h \
+    controller/dashcontroller.h \
+    controller/rectanglecontroller.h \
+    controller/abstractcontroller.h \
+    controller/ellipsecontroller.h
 
-FORMS    += mainwindow.ui
+RESOURCES += \
+    icons.qrc

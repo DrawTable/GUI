@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/svg">
+        <file>ellipse.svg</file>
+        <file>cursor.svg</file>
+        <file>dash.svg</file>
+        <file>eraser.svg</file>
+        <file>pen.svg</file>
+        <file>rectangle.svg</file>
+    </qresource>
+</RCC>
