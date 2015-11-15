@@ -20,7 +20,6 @@ private:
     QGraphicsPathItem* pathItem;
     static PenController* instance;
     PenController();
-
 };
 
 #endif // PENCONTROLLER_H

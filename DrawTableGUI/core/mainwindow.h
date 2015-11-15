@@ -5,9 +5,6 @@
 #include <QAction>
 #include <QToolBar>
 #include <QMenu>
-#include <QMenuBar>
-#include <QPainter>
-#include <QPixmap>
 #include "../view/table.h"
 #include "../controller/generalcontroller.h"
 
@@ -33,6 +30,7 @@ private slots:
 
 private:
     QMenu* menu;
+    QToolBar* toolBar;
     Table* table;
 
     QAction* newImg;
@@ -40,16 +38,14 @@ private:
     QAction* save;
     QAction* print;
     QAction* quit;
-
-    GeneralController* controller;
-
     QAction* cursor;
     QAction* pen;
     QAction* dash;
     QAction* eraser;
     QAction* ellipse;
     QAction* rectangle;
-    QToolBar* toolBar;
+
+    GeneralController* controller;
 };
 
 #endif // MAINWINDOW_H

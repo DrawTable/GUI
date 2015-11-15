@@ -7,10 +7,9 @@
 
 class Table;
 
-class GeneralController
-{
-public:
+class GeneralController {
 
+public:
     GeneralController(Table* view);
     ~GeneralController();
 
@@ -29,14 +28,11 @@ public:
     virtual void mouseReleaseEvent(QMouseEvent* event);
 
 private:
-
     AbstractController* drawController;
     Table* view;
     QPen* pen;
     QBrush* brush;
     QList<QGraphicsItem*> lastActions;
 };
-
-
 
 #endif // GENERALCONTROLLER_H

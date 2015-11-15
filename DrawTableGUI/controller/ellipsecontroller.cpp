@@ -1,32 +1,24 @@
 #include "ellipsecontroller.h"
 
-#include <QDebug>
-
 EllipseController* EllipseController::instance = nullptr;
 
 EllipseController::EllipseController() : AbstractController(), origin(), item(nullptr) {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
 }
 
 EllipseController::~EllipseController() {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
 }
 
 EllipseController* EllipseController::getInstance() {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
     if (!instance) { instance = new EllipseController; }
     return instance;
 }
 
 void EllipseController::mouseDoubleClickEvent(QGraphicsScene *scene, QMouseEvent *event) {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    qDebug() << "x:" << event->x() << " y: " << event->y();
     Q_UNUSED(scene)
+    Q_UNUSED(event)
 }
 
 void EllipseController::mouseMoveEvent(QGraphicsScene *scene, QMouseEvent *event) {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    qDebug() << "x:" << event->x() << " y: " << event->y();
     Q_UNUSED(scene)
     if (item) {
         int x = origin.x() > event->x() ? event->x() : origin.x();
@@ -39,19 +31,13 @@ void EllipseController::mouseMoveEvent(QGraphicsScene *scene, QMouseEvent *event
 }
 
 void EllipseController::mousePressEvent(QGraphicsScene *scene, QMouseEvent *event, QPen* pen) {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    qDebug() << "x:" << event->x() << " y: " << event->y();
     origin.setX(event->x());
     origin.setY(event->y());
     item = scene->addEllipse(event->x(), event->y(), 0, 0,*pen);
 }
 
 QGraphicsItem* EllipseController::mouseReleaseEvent(QGraphicsScene *scene, QMouseEvent *event) {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
-    qDebug() << "x:" << event->x() << " y: " << event->y();
     Q_UNUSED(scene)
-
-    origin.setX(0);
-    origin.setY(0);
+    Q_UNUSED(event)
     return item;
 }

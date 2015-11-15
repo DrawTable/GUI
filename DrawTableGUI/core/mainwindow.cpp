@@ -5,21 +5,22 @@
 #include "../controller/ellipsecontroller.h"
 #include "../controller/generalcontroller.h"
 #include "../controller/erasercontroller.h"
-#include <QDebug>
 #include <QApplication>
 #include <QFileDialog>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QPainter>
+#include <QPixmap>
+#include <QMenuBar>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
-
     // Creation des actions du menu
     newImg = new QAction(tr("&New"), this);
     open = new QAction(tr("&Open"), this);
     save = new QAction(tr("&Save"), this);
     print = new QAction(tr("&Print"), this);
     quit = new QAction(tr("&Quit"), this);
+
     // Creation du menu et ajout des actions a ce dernier
     menu = menuBar()->addMenu("&File");
     menu->addAction(newImg);
@@ -37,9 +38,6 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     QBrush bgColor(Qt::white);
     table = new Table(this);
     table->setBackgroundBrush(bgColor);
-
-    //table->setController(PenController::getInstance());
-
     table->scene()->setSceneRect(0, 0, maximumWidth(), maximumHeight());
 
     cursor = new QAction(this);
@@ -91,11 +89,9 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
 }
 
 MainWindow::~MainWindow() {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
 }
 
 void MainWindow::updateToolBarActions(QAction* action) {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
     const QList<QAction*>& actions = toolBar->actions();
     foreach(QAction* a, actions) {
         if (a != action) { a->setChecked(false); }
@@ -103,44 +99,36 @@ void MainWindow::updateToolBarActions(QAction* action) {
 }
 
 void MainWindow::onCursorTriggered(bool checked) {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
     if (checked) {}
-    else {cursor->setChecked(true);}
+    else { cursor->setChecked(true); }
 }
 
 void MainWindow::onPenTriggered(bool checked) {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
     if (checked) { controller->setDrawController(PenController::getInstance()); }
-    else {pen->setChecked(true);}
+    else { pen->setChecked(true); }
 }
 
 void MainWindow::onDashTriggered(bool checked) {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
     if (checked) { controller->setDrawController(DashController::getInstance()); }
-    else {dash->setChecked(true);}
+    else { dash->setChecked(true); }
 }
 
 void MainWindow::onEraserTriggered(bool checked) {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
     if (checked) { controller->setDrawController(EraserController::getInstance()); }
-    else {eraser->setChecked(true);}
+    else { eraser->setChecked(true); }
 }
 
 void MainWindow::onEllipseTriggered(bool checked) {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
     if (checked) { controller->setDrawController(EllipseController::getInstance()); }
-    else {ellipse->setChecked(true);}
+    else { ellipse->setChecked(true); }
 }
 
 void MainWindow::onRectangleTriggered(bool checked) {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
     if (checked) { controller->setDrawController(RectangleController::getInstance()); }
-    else {rectangle->setChecked(true);}
+    else { rectangle->setChecked(true);}
 }
 
-void MainWindow::onSaveTriggered(){
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
-
+void MainWindow::onSaveTriggered() {
     QFileDialog dialog(this);
     dialog.setNameFilter(tr("Images (*.png *.bmp *.jpg)"));
     dialog.setViewMode(QFileDialog::Detail);
@@ -159,9 +147,7 @@ void MainWindow::onSaveTriggered(){
     painter.end();
 }
 
-void MainWindow::onOpenTriggered(){
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
-
+void MainWindow::onOpenTriggered() {
     QFileDialog dialog(this);
     dialog.setNameFilter(tr("Images (*.png *.bmp *.jpg)"));
     dialog.setViewMode(QFileDialog::Detail);
@@ -172,13 +158,11 @@ void MainWindow::onOpenTriggered(){
     table->scene()->addPixmap(img);
 }
 
-void MainWindow::onNewTriggered(){
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
+void MainWindow::onNewTriggered() {
     table->scene()->clear();
 }
 
 void MainWindow::onPrintTriggered() {
-    qDebug() << "Function:" << Q_FUNC_INFO << "called";
     QPrinter printer;
     printer.setPageSize(QPrinter::A4);
     printer.setOrientation(QPrinter::Landscape);
