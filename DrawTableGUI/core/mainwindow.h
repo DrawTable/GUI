@@ -23,6 +23,7 @@ private slots:
     void onEraserTriggered(bool checked = false);
     void onEllipseTriggered(bool checked = false);
     void onRectangleTriggered(bool checked = false);
+    void onColorTriggered();
     void onSaveTriggered();
     void onOpenTriggered();
     void onNewTriggered();
@@ -41,6 +42,7 @@ private:
     QAction* save;
     QAction* print;
     QAction* quit;
+
     QAction* cursor;
     QAction* pen;
     QAction* dash;
@@ -49,6 +51,7 @@ private:
     QAction* rectangle;
     QAction* undo;
     QAction* redo;
+    QAction* color;
 
     GeneralController* controller;
 };

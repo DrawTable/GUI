@@ -12,16 +12,17 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QMenuBar>
+#include <QColorDialog>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
-    // Creation des actions du menu
+    // Creation des actions du menu principale
     newImg = new QAction(tr("&New"), this);
     open = new QAction(tr("&Open"), this);
     save = new QAction(tr("&Save"), this);
     print = new QAction(tr("&Print"), this);
     quit = new QAction(tr("&Quit"), this);
 
-    // Creation du menu et ajout des actions a ce dernier
+    // Creation du menu et ajout des actions liees a ce dernier
     menu = menuBar()->addMenu("&File");
     menu->addAction(newImg);
     menu->addAction(open);
@@ -29,9 +30,17 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     menu->addAction(print);
     menu->addAction(quit);
 
+    connect(newImg, SIGNAL(triggered()), this, SLOT(onNewTriggered()));
+    connect(open, SIGNAL(triggered()), this, SLOT(onOpenTriggered()));
+    connect(save, SIGNAL(triggered()), this, SLOT(onSaveTriggered()));
+    connect(print, SIGNAL(triggered()), this, SLOT(onPrintTriggered()));
+    connect(quit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
+
+    // Creation des actions du menu d'edition
     undo = new QAction(tr("&Undo"), this);
     redo = new QAction(tr("&redo"), this);
 
+    // Creation du menu edit et ajout des actions liees a ce dernier
     edit = menuBar()->addMenu("&Edit");
     edit->addAction(undo);
     edit->addAction(redo);
@@ -39,17 +48,13 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     connect(undo, SIGNAL(triggered()), this, SLOT(onUndoTriggered()));
     connect(redo, SIGNAL(triggered()), this, SLOT(onRedoTriggered()));
 
-    connect(newImg, SIGNAL(triggered()), this, SLOT(onNewTriggered()));
-    connect(open, SIGNAL(triggered()), this, SLOT(onOpenTriggered()));
-    connect(save, SIGNAL(triggered()), this, SLOT(onSaveTriggered()));
-    connect(print, SIGNAL(triggered()), this, SLOT(onPrintTriggered()));
-    connect(quit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
-
+    // Creation de la vue
     QBrush bgColor(Qt::white);
     table = new Table(this);
     table->setBackgroundBrush(bgColor);
     table->scene()->setSceneRect(0, 0, maximumWidth(), maximumHeight());
 
+    // Creation des actions de la toolbar
     cursor = new QAction(this);
     cursor->setCheckable(true);
     cursor->setIcon(QIcon(":/svg/icons/cursor.svg"));
@@ -81,6 +86,12 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     rectangle->setIcon(QIcon(":/svg/icons/rectangle.svg"));
     connect(rectangle, SIGNAL(triggered(bool)), this, SLOT(onRectangleTriggered(bool)));
 
+    color = new QAction(this);
+    //color->setCheckable(true);
+    color->setIcon(QIcon(":/svg/icons/color.svg"));
+    connect(color, SIGNAL(triggered()), this, SLOT(onColorTriggered()));
+
+    // Creation de la toolbar et integration des actions
     toolBar = new QToolBar(tr("Tools"));
     toolBar->addAction(cursor);
     toolBar->addAction(pen);
@@ -88,14 +99,15 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     toolBar->addAction(dash);
     toolBar->addAction(ellipse);
     toolBar->addAction(rectangle);
+    toolBar->addAction(color);
     connect(toolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(updateToolBarActions(QAction*)));
     addToolBar(Qt::RightToolBarArea, toolBar);
 
+    // Creation du controleur principale
     controller = new GeneralController(table);
 
-
+    // Integration de la vue a la GUI
     setCentralWidget(table);
-
     showFullScreen();
 }
 
@@ -103,9 +115,11 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::updateToolBarActions(QAction* action) {
-    const QList<QAction*>& actions = toolBar->actions();
-    foreach(QAction* a, actions) {
-        if (a != action) { a->setChecked(false); }
+    if (action != color){
+        const QList<QAction*>& actions = toolBar->actions();
+        foreach(QAction* a, actions) {
+            if (a != action) { a->setChecked(false); }
+        }
     }
 }
 
@@ -191,4 +205,11 @@ void MainWindow::onUndoTriggered(){
 
 void MainWindow::onRedoTriggered(){
     controller->redo();
+}
+
+void MainWindow::onColorTriggered(){
+    QPen* pen = controller->getPen();
+    QColorDialog* colorDialog = new QColorDialog(this);
+    QColor selectedColor = colorDialog->getColor(pen->color(),this);
+    pen->setColor(selectedColor);
 }
