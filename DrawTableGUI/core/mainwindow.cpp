@@ -29,6 +29,16 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     menu->addAction(print);
     menu->addAction(quit);
 
+    undo = new QAction(tr("&Undo"), this);
+    redo = new QAction(tr("&redo"), this);
+
+    edit = menuBar()->addMenu("&Edit");
+    edit->addAction(undo);
+    edit->addAction(redo);
+
+    connect(undo, SIGNAL(triggered()), this, SLOT(onUndoTriggered()));
+    connect(redo, SIGNAL(triggered()), this, SLOT(onRedoTriggered()));
+
     connect(newImg, SIGNAL(triggered()), this, SLOT(onNewTriggered()));
     connect(open, SIGNAL(triggered()), this, SLOT(onOpenTriggered()));
     connect(save, SIGNAL(triggered()), this, SLOT(onSaveTriggered()));
@@ -82,6 +92,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     addToolBar(Qt::RightToolBarArea, toolBar);
 
     controller = new GeneralController(table);
+
 
     setCentralWidget(table);
 
@@ -172,4 +183,12 @@ void MainWindow::onPrintTriggered() {
         table->render(&painter);
         painter.end();
     }
+}
+
+void MainWindow::onUndoTriggered(){
+    controller->undo();
+}
+
+void MainWindow::onRedoTriggered(){
+    controller->redo();
 }

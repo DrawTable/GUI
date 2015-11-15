@@ -1,5 +1,6 @@
 #include "generalcontroller.h"
 #include "pencontroller.h"
+#include <QDebug>
 
 GeneralController::GeneralController(Table* view) {
     this->view = view;
@@ -12,13 +13,19 @@ GeneralController::~GeneralController() {
 }
 
 void GeneralController::undo() {
-    if (!lastActions.isEmpty()) {
+    if (canUndo()) {
         QGraphicsItem* temp = lastActions.takeLast();
+        nextActions.append(temp);
         view->scene()->removeItem(temp);
     }
 }
 
 void GeneralController::redo() {
+    if(canRedo()){
+        QGraphicsItem* temp = nextActions.takeLast();
+        lastActions.append(temp);
+        view->scene()->addItem(temp);
+    }
 }
 
 void GeneralController::mouseDoubleClickEvent(QMouseEvent* event) {
@@ -37,6 +44,18 @@ void GeneralController::mousePressEvent(QMouseEvent* event) {
 
 void GeneralController::mouseReleaseEvent(QMouseEvent* event) {
     lastActions.append(drawController->mouseReleaseEvent(view->scene(), event));
+    nextActions.clear();
+
+}
+
+bool GeneralController::canRedo(){
+    qDebug() << nextActions.size();
+    return !nextActions.isEmpty();
+}
+
+bool GeneralController::canUndo(){
+    qDebug() << lastActions.size();
+    return !lastActions.isEmpty();
 }
 
 //------------------------------------------------------------

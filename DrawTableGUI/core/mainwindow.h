@@ -27,9 +27,12 @@ private slots:
     void onOpenTriggered();
     void onNewTriggered();
     void onPrintTriggered();
+    void onUndoTriggered();
+    void onRedoTriggered();
 
 private:
     QMenu* menu;
+    QMenu* edit;
     QToolBar* toolBar;
     Table* table;
 
@@ -44,6 +47,8 @@ private:
     QAction* eraser;
     QAction* ellipse;
     QAction* rectangle;
+    QAction* undo;
+    QAction* redo;
 
     GeneralController* controller;
 };

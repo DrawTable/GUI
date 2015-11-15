@@ -29,5 +29,5 @@ void Table::mousePressEvent(QMouseEvent* event) {
 }
 
 void Table::mouseReleaseEvent(QMouseEvent* event) {
-    controller->mouseDoubleClickEvent(event);
+    controller->mouseReleaseEvent(event);
 }
