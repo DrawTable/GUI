@@ -17,10 +17,15 @@
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     // Creation des actions du menu principale
     newImg = new QAction(tr("&New"), this);
+    newImg->setShortcut(QKeySequence::New);
     open = new QAction(tr("&Open"), this);
+    open->setShortcut(QKeySequence::Open);
     save = new QAction(tr("&Save"), this);
+    save->setShortcut(QKeySequence::Save);
     print = new QAction(tr("&Print"), this);
+    print->setShortcut(QKeySequence::Print);
     quit = new QAction(tr("&Quit"), this);
+    quit->setShortcut(QKeySequence::Quit);
 
     // Creation du menu et ajout des actions liees a ce dernier
     menu = menuBar()->addMenu("&File");
@@ -38,7 +43,9 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
 
     // Creation des actions du menu d'edition
     undo = new QAction(tr("&Undo"), this);
+    undo->setShortcut(QKeySequence::Undo);
     redo = new QAction(tr("&redo"), this);
+    redo->setShortcut(QKeySequence::Redo);
 
     // Creation du menu edit et ajout des actions liees a ce dernier
     edit = menuBar()->addMenu("&Edit");
@@ -87,18 +94,44 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     connect(rectangle, SIGNAL(triggered(bool)), this, SLOT(onRectangleTriggered(bool)));
 
     color = new QAction(this);
-    //color->setCheckable(true);
     color->setIcon(QIcon(":/svg/icons/color.svg"));
     connect(color, SIGNAL(triggered()), this, SLOT(onColorTriggered()));
+
+    QList<QIcon> icons;
+    for (int i = 0; i < 6; ++i) {
+        icons << QIcon(QString(":/svg/icons/thickness%1.svg").arg(i + 1));
+    }
+
+    QStringList thicknesses;
+    thicknesses << "1 px"  << "3 px" << "5 px"  << "7 px" << "10 px" << "15 px";
+
+    QMenu* thicknessMenu = new QMenu(this);
+    for (int i = 0; i < thicknesses.count(); ++i) {
+        QAction *action = new QAction(icons.at(i), thicknesses.at(i), this);
+        action->setData(thicknesses.at(i).split(" ")[0].toInt());
+        action->setCheckable(true);
+        connect(action, SIGNAL(triggered()), this, SLOT(onThicknessChanged()));
+        thicknessMenu->addAction(action);
+    }
+    thicknessMenu->actions().at(0)->setChecked(true);
+
+    thickness = new QToolButton(this);
+    thickness->setIcon(QIcon(":/svg/icons/thickness.svg"));
+    thickness->setPopupMode(QToolButton::MenuButtonPopup);
+    thickness->setMenu(thicknessMenu);
 
     // Creation de la toolbar et integration des actions
     toolBar = new QToolBar(tr("Tools"));
     toolBar->addAction(cursor);
+    toolBar->addSeparator();
     toolBar->addAction(pen);
     toolBar->addAction(eraser);
     toolBar->addAction(dash);
+    toolBar->addWidget(thickness);
+    toolBar->addSeparator();
     toolBar->addAction(ellipse);
     toolBar->addAction(rectangle);
+    toolBar->addSeparator();
     toolBar->addAction(color);
     connect(toolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(updateToolBarActions(QAction*)));
     addToolBar(Qt::RightToolBarArea, toolBar);
@@ -199,12 +232,23 @@ void MainWindow::onPrintTriggered() {
     }
 }
 
-void MainWindow::onUndoTriggered(){
+void MainWindow::onUndoTriggered() {
     controller->undo();
 }
 
-void MainWindow::onRedoTriggered(){
+void MainWindow::onRedoTriggered() {
     controller->redo();
+}
+
+void MainWindow::onThicknessChanged() {
+    const QList<QAction*>& actions = thickness->menu()->actions();
+    foreach(QAction* a, actions) {
+        a->setChecked(false);
+    }
+    QAction* action = qobject_cast<QAction*>(sender());
+    action->setChecked(true);
+    QPen* pen = controller->getPen();
+    pen->setWidth(qvariant_cast<int>(action->data()));
 }
 
 void MainWindow::onColorTriggered(){

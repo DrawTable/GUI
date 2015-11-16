@@ -7,5 +7,12 @@
         <file>icons/pen.svg</file>
         <file>icons/rectangle.svg</file>
         <file>icons/color.svg</file>
+        <file>icons/thickness.svg</file>
+        <file>icons/thickness1.svg</file>
+        <file>icons/thickness2.svg</file>
+        <file>icons/thickness3.svg</file>
+        <file>icons/thickness4.svg</file>
+        <file>icons/thickness5.svg</file>
+        <file>icons/thickness6.svg</file>
     </qresource>
 </RCC>
