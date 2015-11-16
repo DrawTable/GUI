@@ -28,7 +28,7 @@ void EraserController::mouseMoveEvent(QGraphicsScene *scene, QMouseEvent *event)
 void EraserController::mousePressEvent(QGraphicsScene *scene, QMouseEvent *event, QPen* pen) {
     Q_UNUSED(pen);
     path = new QPainterPath(event->pos());
-    pathItem = scene->addPath(*path, QPen(QBrush(Qt::white), 10));
+    pathItem = scene->addPath(*path, QPen(QBrush(Qt::white), pen->width()));
 }
 
 QGraphicsItem* EraserController::mouseReleaseEvent(QGraphicsScene *scene, QMouseEvent *event) {

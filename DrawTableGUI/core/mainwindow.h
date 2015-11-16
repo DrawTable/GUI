@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QAction>
 #include <QToolBar>
+#include <QToolButton>
 #include <QMenu>
 #include "../view/table.h"
 #include "../controller/generalcontroller.h"
@@ -30,11 +31,13 @@ private slots:
     void onPrintTriggered();
     void onUndoTriggered();
     void onRedoTriggered();
+    void onThicknessChanged();
 
 private:
     QMenu* menu;
     QMenu* edit;
     QToolBar* toolBar;
+    QToolButton* thickness;
     Table* table;
 
     QAction* newImg;
@@ -42,7 +45,6 @@ private:
     QAction* save;
     QAction* print;
     QAction* quit;
-
     QAction* cursor;
     QAction* pen;
     QAction* dash;
