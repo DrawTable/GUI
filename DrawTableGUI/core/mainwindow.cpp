@@ -17,10 +17,15 @@
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     // Creation des actions du menu principale
     newImg = new QAction(tr("&New"), this);
+    newImg->setShortcut(QKeySequence::New);
     open = new QAction(tr("&Open"), this);
+    open->setShortcut(QKeySequence::Open);
     save = new QAction(tr("&Save"), this);
+    save->setShortcut(QKeySequence::Save);
     print = new QAction(tr("&Print"), this);
+    print->setShortcut(QKeySequence::Print);
     quit = new QAction(tr("&Quit"), this);
+    quit->setShortcut(QKeySequence::Quit);
 
     // Creation du menu et ajout des actions liees a ce dernier
     menu = menuBar()->addMenu("&File");
@@ -38,7 +43,9 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
 
     // Creation des actions du menu d'edition
     undo = new QAction(tr("&Undo"), this);
+    undo->setShortcut(QKeySequence::Undo);
     redo = new QAction(tr("&redo"), this);
+    redo->setShortcut(QKeySequence::Redo);
 
     // Creation du menu edit et ajout des actions liees a ce dernier
     edit = menuBar()->addMenu("&Edit");
