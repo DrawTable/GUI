@@ -45,16 +45,13 @@ void GeneralController::mousePressEvent(QMouseEvent* event) {
 void GeneralController::mouseReleaseEvent(QMouseEvent* event) {
     lastActions.append(drawController->mouseReleaseEvent(view->scene(), event));
     nextActions.clear();
-
 }
 
 bool GeneralController::canRedo(){
-    qDebug() << nextActions.size();
     return !nextActions.isEmpty();
 }
 
 bool GeneralController::canUndo(){
-    qDebug() << lastActions.size();
     return !lastActions.isEmpty();
 }
 
