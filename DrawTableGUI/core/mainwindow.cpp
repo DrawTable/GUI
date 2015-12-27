@@ -142,9 +142,26 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     // Integration de la vue a la GUI
     setCentralWidget(table);
     showFullScreen();
+
+    startTrackingManager();
 }
 
 MainWindow::~MainWindow() {
+}
+
+// Crée et démarre un thread qui gère le tracking du stylet
+void MainWindow::startTrackingManager() {
+    QThread* thread = new QThread;
+    TrackingManager* worker = new TrackingManager();
+    worker->moveToThread(thread);
+
+    connect(worker, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
+    connect(thread, SIGNAL(started()), worker, SLOT(process()));
+    connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
+    connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
+    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+
+    thread->start();
 }
 
 void MainWindow::updateToolBarActions(QAction* action) {

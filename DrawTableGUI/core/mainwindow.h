@@ -6,8 +6,11 @@
 #include <QToolBar>
 #include <QToolButton>
 #include <QMenu>
+#include <QThread>
+
 #include "../view/table.h"
 #include "../controller/generalcontroller.h"
+#include "../controller/trackingmanager.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -56,6 +59,8 @@ private:
     QAction* color;
 
     GeneralController* controller;
+
+    void startTrackingManager();
 };
 
 #endif // MAINWINDOW_H
