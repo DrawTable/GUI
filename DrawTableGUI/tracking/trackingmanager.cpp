@@ -30,6 +30,7 @@ void TrackingManager::onStratCalibration() {
     // Lecture d'une image
     if (!cap->read(frame)) {
         // Erreur: la lecture de la frame a échoué
+        emit calibrationError(1);
         cerr << "la lecture de la frame a échoué" << endl;
         return;
     }
@@ -39,12 +40,12 @@ void TrackingManager::onStratCalibration() {
     ScreenDetector::Error err;
 
     // Récupération de la matrice de transformation
-    Mat transformMatrix = sd.getTransformationMatrix(err);
+    transformMatrix = sd.getTransformationMatrix(err);
 
     // always check error before using the transformatrix
     if(err.hasError()){
         cerr << err.getErrorTitle() << ":\n" << err.getErrorMessage() << endl;
-        emit calibrationError(1);
+        emit calibrationError(2);
         return;
     }
 
@@ -64,16 +65,28 @@ void TrackingManager::onStratCalibration() {
     } else {
         int errorCode = -1;
         emit calibrationError(errorCode);
+        return;
     }
-
-    // Commencer le tracking (simule en lançant la webcam et en lisant les frame, jusqu’a ce que l’on arrête le programme)
-
-    // TODO envoyer les coordonnées avec un signal-slot
 }
 
+// Boucle principal du thread
 void TrackingManager::mainLoop() {
     forever {
+        Mat frame;
+
+        if(!cap->read(frame)) {
+            // TODO send error to the Main Window (frame cannot be read from the webcam)
+            cerr << "frame cannot be read from the webcam" << endl;
+            return;
+        }
+
+        // TODO get the stylus position (x; y) from the `frame` Mat.
+        int x = 0;
+        int y = 0;
+        Point stylusPoint(x, y);
+        Point screenPoint = ScreenDetector::transformPoint(stylusPoint, transformMatrix);
+
         // Envoie les coordonnées du stylet afin de bouger la souris
-        emit mouseMove(0, 0);
+        emit mouseMove(screenPoint.x, screenPoint.y);
     }
 }

@@ -13,6 +13,7 @@ public:
 
 private:
     VideoCapture* cap;
+    Mat transformMatrix;
 
     void mainLoop();
 
