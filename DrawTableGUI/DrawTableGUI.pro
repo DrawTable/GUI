@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     controller/rectanglecontroller.cpp \
     controller/ellipsecontroller.cpp \
     controller/generalcontroller.cpp \
-    controller/erasercontroller.cpp
+    controller/erasercontroller.cpp \
+    controller/trackingmanager.cpp
 
 HEADERS  += core/mainwindow.h \
     view/table.h \
@@ -31,7 +32,8 @@ HEADERS  += core/mainwindow.h \
     controller/abstractcontroller.h \
     controller/ellipsecontroller.h \
     controller/generalcontroller.h \
-    controller/erasercontroller.h
+    controller/erasercontroller.h \
+    controller/trackingmanager.h
 
 RESOURCES += \
     icons.qrc
