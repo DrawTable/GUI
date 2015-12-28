@@ -10,6 +10,9 @@ class TrackingManager : public QObject
 public:
     explicit TrackingManager(QObject *parent = 0);
 
+private:
+    void mainLoop();
+
 public slots:
     void process();
     void onStratCalibration();
@@ -18,6 +21,11 @@ signals:
     void showGreenScreen();
     void calibrationSuccess();
     void calibrationError(int errorCode);
+
+    void mouseMove(int x, int y);
+    void mousePress();
+    void mouseRelease();
+
     void finished();
 };
 

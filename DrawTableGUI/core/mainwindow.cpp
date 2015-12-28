@@ -180,12 +180,12 @@ void MainWindow::onShowGreenScreen() {
 
 // Quand la calibration a réussie
 void MainWindow::onCalibrationSuccess() {
-
+    // TODO implementation
 }
 
 // Quand la calibration a échouée
 void MainWindow::onCalibrationError(int errorCode) {
-
+    // TODO implementation
 }
 
 void MainWindow::updateToolBarActions(QAction* action) {
