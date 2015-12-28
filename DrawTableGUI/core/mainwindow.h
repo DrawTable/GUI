@@ -35,7 +35,10 @@ private slots:
     void onUndoTriggered();
     void onRedoTriggered();
     void onThicknessChanged();
-
+    void onQuitTriggered();
+    void openFile();
+signals:
+    quitProg();
 private:
     QMenu* menu;
     QMenu* edit;
@@ -57,6 +60,8 @@ private:
     QAction* undo;
     QAction* redo;
     QAction* color;
+
+
 
     GeneralController* controller;
 

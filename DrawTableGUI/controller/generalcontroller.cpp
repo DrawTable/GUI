@@ -17,6 +17,7 @@ void GeneralController::undo() {
         QGraphicsItem* temp = lastActions.takeLast();
         nextActions.append(temp);
         view->scene()->removeItem(temp);
+        modifToSave = true;
     }
 }
 
@@ -25,6 +26,7 @@ void GeneralController::redo() {
         QGraphicsItem* temp = nextActions.takeLast();
         lastActions.append(temp);
         view->scene()->addItem(temp);
+        modifToSave = true;
     }
 }
 
@@ -45,11 +47,14 @@ void GeneralController::mousePressEvent(QMouseEvent* event) {
 void GeneralController::mouseReleaseEvent(QMouseEvent* event) {
     lastActions.append(drawController->mouseReleaseEvent(view->scene(), event));
     nextActions.clear();
+    modifToSave = true;
 }
 
 bool GeneralController::canRedo(){
     return !nextActions.isEmpty();
 }
+
+
 
 bool GeneralController::canUndo(){
     return !lastActions.isEmpty();
@@ -81,4 +86,14 @@ void GeneralController::setDrawController(AbstractController* drawController) {
 
 AbstractController* GeneralController::getDrawController() {
     return drawController;
+}
+
+bool GeneralController::toSave()
+{
+    return modifToSave;
+}
+
+bool GeneralController::setToSave(bool toSave)
+{
+    this->modifToSave = toSave;
 }

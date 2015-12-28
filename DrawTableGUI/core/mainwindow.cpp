@@ -13,6 +13,7 @@
 #include <QPixmap>
 #include <QMenuBar>
 #include <QColorDialog>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     // Creation des actions du menu principale
@@ -39,7 +40,8 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     connect(open, SIGNAL(triggered()), this, SLOT(onOpenTriggered()));
     connect(save, SIGNAL(triggered()), this, SLOT(onSaveTriggered()));
     connect(print, SIGNAL(triggered()), this, SLOT(onPrintTriggered()));
-    connect(quit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
+    connect(quit, SIGNAL(triggered()), this, SLOT(onQuitTriggered()));
+    connect(this, SIGNAL(quitProg()), QApplication::instance(), SLOT(quit()));
 
     // Creation des actions du menu d'edition
     undo = new QAction(tr("&Undo"), this);
@@ -139,6 +141,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     // Creation du controleur principale
     controller = new GeneralController(table);
 
+
     // Integration de la vue a la GUI
     setCentralWidget(table);
     showFullScreen();
@@ -220,21 +223,65 @@ void MainWindow::onSaveTriggered() {
     // enregistrement
     pixmap.save(fileName);
     painter.end();
+    controller->setToSave(false);
 }
 
 void MainWindow::onOpenTriggered() {
-    QFileDialog dialog(this);
-    dialog.setNameFilter(tr("Images (*.png *.bmp *.jpg)"));
-    dialog.setViewMode(QFileDialog::Detail);
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
-                                                    "C:/",
-                                                    tr("Images (*.png *.bmp *.jpg)"));
-    QPixmap img(fileName);
-    table->scene()->addPixmap(img);
+    if(controller->toSave()){
+        QMessageBox msgBox;
+        msgBox.setText("The document has been modified.");
+        msgBox.setInformativeText("Do you want to save your changes?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+
+        switch (ret) {
+          case QMessageBox::Save:
+              onSaveTriggered();
+              openFile();
+          case QMessageBox::Discard:
+              openFile();
+              break;
+          case QMessageBox::Cancel:
+              // Nothing Happend
+              break;
+          default:
+              // should never be reached
+              break;
+        }
+
+    }else{
+        openFile();
+    }
 }
 
 void MainWindow::onNewTriggered() {
-    table->scene()->clear();
+    if(controller->toSave()){
+        QMessageBox msgBox;
+        msgBox.setText("The document has been modified.");
+        msgBox.setInformativeText("Do you want to save your changes?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+
+        switch (ret) {
+          case QMessageBox::Save:
+              onSaveTriggered();
+              table->scene()->clear();
+          case QMessageBox::Discard:
+              table->scene()->clear();
+              break;
+          case QMessageBox::Cancel:
+              // Nothing Happend
+              break;
+          default:
+              // should never be reached
+              break;
+        }
+
+    }else{
+        table->scene()->clear();
+    }
 }
 
 void MainWindow::onPrintTriggered() {
@@ -266,6 +313,48 @@ void MainWindow::onThicknessChanged() {
     action->setChecked(true);
     QPen* pen = controller->getPen();
     pen->setWidth(qvariant_cast<int>(action->data()));
+}
+
+void MainWindow::onQuitTriggered()
+{
+    if(controller->toSave()){
+        QMessageBox msgBox;
+        msgBox.setText("The document has been modified.");
+        msgBox.setInformativeText("Do you want to save your changes?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+
+        switch (ret) {
+          case QMessageBox::Save:
+              onSaveTriggered();
+              emit quitProg();
+          case QMessageBox::Discard:
+              emit quitProg();
+              break;
+          case QMessageBox::Cancel:
+              // Nothing Happend
+              break;
+          default:
+              // should never be reached
+              break;
+        }
+
+    }else{
+        emit quitProg();
+    }
+}
+
+void MainWindow::openFile()
+{
+    QFileDialog dialog(this);
+    dialog.setNameFilter(tr("Images (*.png *.bmp *.jpg)"));
+    dialog.setViewMode(QFileDialog::Detail);
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+                                                    "C:/",
+                                                    tr("Images (*.png *.bmp *.jpg)"));
+    QPixmap img(fileName);
+    table->scene()->addPixmap(img);
 }
 
 void MainWindow::onColorTriggered(){

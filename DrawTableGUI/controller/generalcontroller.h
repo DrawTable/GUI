@@ -21,6 +21,8 @@ public:
     QBrush* getBrush();
     bool canUndo();
     bool canRedo();
+    bool toSave();
+    bool setToSave(bool toSave);
 
     void undo();
     void redo();
@@ -36,6 +38,8 @@ private:
     QBrush* brush;
     QList<QGraphicsItem*> lastActions;
     QList<QGraphicsItem*> nextActions;
+    bool modifToSave;
+
 };
 
 #endif // GENERALCONTROLLER_H
