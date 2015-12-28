@@ -10,7 +10,7 @@
 
 #include "../view/table.h"
 #include "../controller/generalcontroller.h"
-#include "../controller/trackingmanager.h"
+#include "../tracking/trackingmanager.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -35,6 +35,14 @@ private slots:
     void onUndoTriggered();
     void onRedoTriggered();
     void onThicknessChanged();
+
+    // Communication Main Window <--> Tracking Manager
+    void onShowGreenScreen();
+    void onCalibrationSuccess();
+    void onCalibrationError(int errorCode);
+
+signals:
+    void stratCalibration();
 
 private:
     QMenu* menu;

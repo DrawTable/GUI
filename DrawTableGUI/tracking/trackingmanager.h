@@ -2,6 +2,7 @@
 #define TRACKINGMANAGER_H
 
 #include <QObject>
+#include "screendetector.h"
 
 class TrackingManager : public QObject
 {
@@ -11,10 +12,13 @@ public:
 
 public slots:
     void process();
+    void onStratCalibration();
 
 signals:
+    void showGreenScreen();
+    void calibrationSuccess();
+    void calibrationError(int errorCode);
     void finished();
-    void error(QString err);
 };
 
 #endif // TRACKINGMANAGER_H

@@ -155,13 +155,37 @@ void MainWindow::startTrackingManager() {
     TrackingManager* worker = new TrackingManager();
     worker->moveToThread(thread);
 
-    connect(worker, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
+    // Lancement et arrêt du thread
     connect(thread, SIGNAL(started()), worker, SLOT(process()));
     connect(worker, SIGNAL(finished()), thread, SLOT(quit()));
     connect(worker, SIGNAL(finished()), worker, SLOT(deleteLater()));
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 
+    // Communication Main Window <--> Tracking Manager
+    connect(worker, SIGNAL(showGreenScreen()), this, SLOT(onShowGreenScreen()));
+    connect(this, SIGNAL(stratCalibration()), worker, SLOT(onStratCalibration()));
+    connect(worker, SIGNAL(calibrationSuccess()), this, SLOT(onCalibrationSuccess()));
+    connect(worker, SIGNAL(calibrationError(int)), this, SLOT(onCalibrationError(int)));
+
     thread->start();
+}
+
+// Affiche un écran vert pour le calibrage
+void MainWindow::onShowGreenScreen() {
+    // TODO afficher un écran vert pour le calibrage
+
+    // Lance le processus de calibration
+    emit stratCalibration();
+}
+
+// Quand la calibration a réussie
+void MainWindow::onCalibrationSuccess() {
+
+}
+
+// Quand la calibration a échouée
+void MainWindow::onCalibrationError(int errorCode) {
+
 }
 
 void MainWindow::updateToolBarActions(QAction* action) {
