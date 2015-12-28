@@ -2,6 +2,7 @@
 #define TRACKINGMANAGER_H
 
 #include <QObject>
+#include <opencv2/opencv.hpp>
 #include "screendetector.h"
 
 class TrackingManager : public QObject
@@ -11,6 +12,8 @@ public:
     explicit TrackingManager(QObject *parent = 0);
 
 private:
+    VideoCapture* cap;
+
     void mainLoop();
 
 public slots:

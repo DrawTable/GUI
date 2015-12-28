@@ -1,5 +1,4 @@
 #include "trackingmanager.h"
-#include <QDebug>
 
 TrackingManager::TrackingManager(QObject *parent) : QObject(parent)
 {
@@ -20,14 +19,22 @@ void TrackingManager::process() {
 
 // Lance le processus de calibration
 void TrackingManager::onStratCalibration() {
-    // TODO Détéction de l'écran vert avec OpenCV, matrice de transformation, etc.
-    // get an image
-    Mat img = imread("/home/sacha/Projets/DrawTable/Test_calibration/Test_calibration/IMG_1878.JPG");
-    ScreenDetector sd(img);
+    Mat frame;
 
-    // Start webcam
-    // cap = new VideoCapture(0);
-    // webCam = true;
+    // get an image
+    // frame = imread("/home/sacha/Projets/DrawTable/Test_calibration/Test_calibration/IMG_1878.JPG");
+
+    // Lancement de la capture avec la webcam
+    cap = new VideoCapture(0);
+
+    // Lecture d'une image
+    if (!cap->read(frame)) {
+        // Erreur: la lecture de la frame a échoué
+        cerr << "la lecture de la frame a échoué" << endl;
+        return;
+    }
+
+    ScreenDetector sd(frame);
 
     ScreenDetector::Error err;
 
