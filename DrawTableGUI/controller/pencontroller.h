@@ -5,6 +5,12 @@
 #include <QGraphicsPathItem>
 #include <QPainterPath>
 
+/**
+ * @brief The PenController class
+ *
+ * Contrôleur gérant le dessin à main levée, hérite de AbstractController
+ *
+ */
 class PenController : public AbstractController {
 
 public:

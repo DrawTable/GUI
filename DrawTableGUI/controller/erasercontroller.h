@@ -5,6 +5,14 @@
 #include <QGraphicsPathItem>
 #include <QPainterPath>
 
+
+/**
+ * @brief The EraserController class
+ *
+ * Contrôleur gérant la fonction d'effacement, hérite de AbstractController
+ *
+ */
+
 class EraserController : public AbstractController {
 
 public:

@@ -5,6 +5,13 @@
 #include <QPoint>
 #include <QGraphicsRectItem>
 
+
+/**
+ * @brief The RectangleController class
+ *
+ * Contrôleur gérant le dessin de rectangles, hérite de AbstractController
+ *
+ */
 class RectangleController : public AbstractController {
 
 public:

@@ -5,6 +5,11 @@
 #include <QPoint>
 #include <QGraphicsEllipseItem>
 
+/**
+ * @brief The EllipseController class
+ *
+ * Contrôleur gérant le dessin d'élipse, hérite de AbstractController
+ */
 class EllipseController : public AbstractController {
 
 public:

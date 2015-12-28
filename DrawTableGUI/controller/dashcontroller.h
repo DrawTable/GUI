@@ -4,6 +4,12 @@
 #include "abstractcontroller.h"
 #include <QGraphicsLineItem>
 
+/**
+ * @brief The DashController class
+ *
+ * Contrôleur gérant le dessin de trait droit, hérite de AbstractController
+ *
+ */
 class DashController : public AbstractController {
 
 public:

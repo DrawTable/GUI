@@ -8,6 +8,14 @@
 
 class GeneralController;
 
+/**
+ * @brief The Table class
+ *
+ * Vue utilisée pour le dessin, elle possède une redéfinition des
+ * méthode appelée lors des QMouseEvent qui en délégue la gestion
+ * au GeneralController
+ *  *
+ */
 class Table : public QGraphicsView {
     Q_OBJECT
 
@@ -24,6 +32,10 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent* event);
 
 private:
+    /**
+     * @brief controller
+     * Contrôleur associé à la vue
+     */
     GeneralController* controller;
 };
 

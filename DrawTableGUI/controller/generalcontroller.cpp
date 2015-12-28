@@ -93,7 +93,7 @@ bool GeneralController::toSave()
     return modifToSave;
 }
 
-bool GeneralController::setToSave(bool toSave)
+void GeneralController::setToSave(bool toSave)
 {
     this->modifToSave = toSave;
 }
