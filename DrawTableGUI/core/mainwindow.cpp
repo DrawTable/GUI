@@ -15,7 +15,7 @@
 #include <QColorDialog>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
-    // Creation des actions du menu principale
+    // Création des actions du menu principal
     newImg = new QAction(tr("&New"), this);
     newImg->setShortcut(QKeySequence::New);
     open = new QAction(tr("&Open"), this);
@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     quit = new QAction(tr("&Quit"), this);
     quit->setShortcut(QKeySequence::Quit);
 
-    // Creation du menu et ajout des actions liees a ce dernier
+    // Création du menu et ajout des actions liées à ce dernier
     menu = menuBar()->addMenu("&File");
     menu->addAction(newImg);
     menu->addAction(open);
@@ -41,13 +41,13 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     connect(print, SIGNAL(triggered()), this, SLOT(onPrintTriggered()));
     connect(quit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
 
-    // Creation des actions du menu d'edition
+    // Création des actions du menu d'édition
     undo = new QAction(tr("&Undo"), this);
     undo->setShortcut(QKeySequence::Undo);
     redo = new QAction(tr("&redo"), this);
     redo->setShortcut(QKeySequence::Redo);
 
-    // Creation du menu edit et ajout des actions liees a ce dernier
+    // Création du menu edit et ajout des actions liées à ce dernier
     edit = menuBar()->addMenu("&Edit");
     edit->addAction(undo);
     edit->addAction(redo);
@@ -173,6 +173,11 @@ void MainWindow::startTrackingManager() {
 // Affiche un écran vert pour le calibrage
 void MainWindow::onShowGreenScreen() {
     // TODO afficher un écran vert pour le calibrage
+    toolBar->hide();
+    menuBar()->hide();
+
+    QBrush bgColor(Qt::green);    
+    table->setBackgroundBrush(bgColor);
 
     // Lance le processus de calibration
     emit stratCalibration();
@@ -181,11 +186,21 @@ void MainWindow::onShowGreenScreen() {
 // Quand la calibration a réussie
 void MainWindow::onCalibrationSuccess() {
     // TODO implementation
+    toolBar->show();
+    menuBar()->show();
+
+    QBrush bgColor(Qt::transparent);
+    table->setBackgroundBrush(bgColor);
 }
 
 // Quand la calibration a échouée
 void MainWindow::onCalibrationError(int errorCode) {
     // TODO implementation
+    toolBar->show();
+    menuBar()->show();
+
+    QBrush bgColor(Qt::transparent);
+    table->setBackgroundBrush(bgColor);
 }
 
 void MainWindow::updateToolBarActions(QAction* action) {

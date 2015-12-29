@@ -49,6 +49,7 @@ void TrackingManager::onStratCalibration() {
         return;
     }
 
+    /*
     // test if we can transform a point
     Point p1(1756, 1010);
     Point p2 = ScreenDetector::transformPoint(p1, transformMatrix);
@@ -58,6 +59,7 @@ void TrackingManager::onStratCalibration() {
     p1 = Point(0, 0);
     p2 = ScreenDetector::transformPoint(p1, transformMatrix);
     cout << p1 << " -> " << p2 << endl; // will be p1 and p2 are < 0
+    */
 
     bool success = true;
     if (success) {
@@ -88,5 +90,7 @@ void TrackingManager::mainLoop() {
 
         // Envoie les coordonnées du stylet afin de bouger la souris
         emit mouseMove(screenPoint.x, screenPoint.y);
+
+        // QThread::msleep(16); // environ 60 fps
     }
 }
