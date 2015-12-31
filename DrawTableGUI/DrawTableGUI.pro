@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui printsupport
+QT       += network
 CONFIG   += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -29,7 +30,9 @@ SOURCES += main.cpp\
     camera/cameramanager.cpp \
     camera/cameramanagerupdater.cpp \
     modal/menudialog.cpp \
-    tracking/leddetector.cpp
+    tracking/leddetector.cpp \
+    tracking/controller.cpp \
+    tracking/worker.cpp
 
 HEADERS  += core/mainwindow.h \
     view/table.h \
@@ -45,7 +48,9 @@ HEADERS  += core/mainwindow.h \
     camera/cameramanager.h \
     camera/cameramanagerupdater.h \
     modal/menudialog.h \
-    tracking/leddetector.h
+    tracking/leddetector.h \
+    tracking/controller.h \
+    tracking/worker.h
 
 RESOURCES += \
     icons.qrc
