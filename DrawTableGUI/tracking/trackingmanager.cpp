@@ -1,5 +1,6 @@
 #include "trackingmanager.h"
 #include "leddetector.h"
+#include "controller.h"
 
 TrackingManager::TrackingManager(QObject *parent) : QObject(parent)
 {
@@ -21,9 +22,6 @@ void TrackingManager::process() {
 // Lance le processus de calibration
 void TrackingManager::onStratCalibration() {
     Mat frame;
-
-    // get an image
-    // frame = imread("/home/sacha/Projets/DrawTable/Test_calibration/Test_calibration/IMG_1878.JPG");
 
     // Lancement de la capture avec la webcam
     cap = new VideoCapture(0);
@@ -50,18 +48,6 @@ void TrackingManager::onStratCalibration() {
         return;
     }
 
-    /*
-    // test if we can transform a point
-    Point p1(1756, 1010);
-    Point p2 = ScreenDetector::transformPoint(p1, transformMatrix);
-    cout << p1 << " -> " << p2 << endl;
-
-    // test the result of a point outside of the screen
-    p1 = Point(0, 0);
-    p2 = ScreenDetector::transformPoint(p1, transformMatrix);
-    cout << p1 << " -> " << p2 << endl; // will be p1 and p2 are < 0
-    */
-
     bool success = true;
     if (success) {
         emit calibrationSuccess();
@@ -75,6 +61,9 @@ void TrackingManager::onStratCalibration() {
 
 // Boucle principal du thread
 void TrackingManager::mainLoop() {
+    Controller ctrl;
+    ctrl.start();
+
     LedDetector* ledDetector = LedDetector::getInstance();
     Point stylusPoint;
     forever {
@@ -86,27 +75,18 @@ void TrackingManager::mainLoop() {
             return;
         }
 
-
-        // TODO get the stylus position (x; y) from the `frame` Mat.
+        // Tracking de la led
        ledDetector->setImage(frame);
        stylusPoint = ledDetector->debugLedDetection();
-       if(stylusPoint.x > 0 && stylusPoint.y > 0){
+
+       // Point screenPoint = ScreenDetector::transformPoint(*stylusPoint, transformMatrix);
+
+       // Envoie les coordonnées du stylet afin de bouger la souris
+
+       if(stylusPoint.x > 0 && stylusPoint.y > 0 && stylusPoint.x < 1440 && stylusPoint.y < 800){
+           ctrl.mouseMove(stylusPoint.x, stylusPoint.y);
            cout << stylusPoint << endl;
        }
 
-//        Point screenPoint = ScreenDetector::transformPoint(*stylusPoint, transformMatrix);
-
-        // Envoie les coordonnées du stylet afin de bouger la souris
-//        emit mouseMove(screenPoint.x, screenPoint.y);
-
-        // QThread::msleep(16); // environ 60 fps
-       int key = waitKey(1);
-       if(key == int('p')){
-           cout << key << endl;
-           waitKey(0);
-       }
-//       else if (key == 27) {
-//            break;
-//       }
     }
 }

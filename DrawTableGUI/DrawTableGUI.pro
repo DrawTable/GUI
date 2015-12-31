@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui printsupport
+QT       += network
 CONFIG   += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -26,7 +27,9 @@ SOURCES += main.cpp\
     controller/erasercontroller.cpp \
     tracking/trackingmanager.cpp \
     tracking/screendetector.cpp \
-    tracking/leddetector.cpp
+    tracking/leddetector.cpp \
+    tracking/controller.cpp \
+    tracking/worker.cpp
 
 HEADERS  += core/mainwindow.h \
     view/table.h \
@@ -39,7 +42,9 @@ HEADERS  += core/mainwindow.h \
     controller/erasercontroller.h \
     tracking/trackingmanager.h \
     tracking/screendetector.h \
-    tracking/leddetector.h
+    tracking/leddetector.h \
+    tracking/controller.h \
+    tracking/worker.h
 
 RESOURCES += \
     icons.qrc
