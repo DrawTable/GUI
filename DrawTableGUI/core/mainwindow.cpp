@@ -1,18 +1,4 @@
 #include "mainwindow.h"
-#include "../controller/pencontroller.h"
-#include "../controller/dashcontroller.h"
-#include "../controller/rectanglecontroller.h"
-#include "../controller/ellipsecontroller.h"
-#include "../controller/generalcontroller.h"
-#include "../controller/erasercontroller.h"
-#include <QApplication>
-#include <QFileDialog>
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QPainter>
-#include <QPixmap>
-#include <QMenuBar>
-#include <QColorDialog>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     // Création des actions du menu principal
@@ -143,7 +129,9 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     setCentralWidget(table);
     showFullScreen();
 
-    startTrackingManager();
+    CameraManager* cm = CameraManager::getInstance();
+
+    // startTrackingManager();
 }
 
 MainWindow::~MainWindow() {
@@ -163,7 +151,7 @@ void MainWindow::startTrackingManager() {
 
     // Communication Main Window <--> Tracking Manager
     connect(worker, SIGNAL(showGreenScreen()), this, SLOT(onShowGreenScreen()));
-    connect(this, SIGNAL(stratCalibration()), worker, SLOT(onStratCalibration()));
+    connect(this, SIGNAL(stratCalibration(int, int)), worker, SLOT(onStratCalibration(int, int)));
     connect(worker, SIGNAL(calibrationSuccess()), this, SLOT(onCalibrationSuccess()));
     connect(worker, SIGNAL(calibrationError(int)), this, SLOT(onCalibrationError(int)));
 
@@ -180,7 +168,8 @@ void MainWindow::onShowGreenScreen() {
     table->setBackgroundBrush(bgColor);
 
     // Lance le processus de calibration
-    emit stratCalibration();
+    QRect rec = QApplication::desktop()->screenGeometry();
+    emit stratCalibration(rec.width(), rec.height());
 }
 
 // Quand la calibration a réussie

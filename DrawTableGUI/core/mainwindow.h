@@ -1,16 +1,34 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "../view/table.h"
+#include "../controller/generalcontroller.h"
+#include "../tracking/trackingmanager.h"
+#include "../controller/pencontroller.h"
+#include "../controller/dashcontroller.h"
+#include "../controller/rectanglecontroller.h"
+#include "../controller/ellipsecontroller.h"
+#include "../controller/generalcontroller.h"
+#include "../controller/erasercontroller.h"
+#include "../camera/cameramanager.h"
+
+#include <QApplication>
+#include <QFileDialog>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPainter>
+#include <QPixmap>
+#include <QMenuBar>
+#include <QColorDialog>
+#include <QDebug>
+#include <QRect>
+#include <QDesktopWidget>
 #include <QMainWindow>
 #include <QAction>
 #include <QToolBar>
 #include <QToolButton>
 #include <QMenu>
 #include <QThread>
-
-#include "../view/table.h"
-#include "../controller/generalcontroller.h"
-#include "../tracking/trackingmanager.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -42,7 +60,7 @@ private slots:
     void onCalibrationError(int errorCode);
 
 signals:
-    void stratCalibration();
+    void stratCalibration(int width, int height);
 
 private:
     QMenu* menu;

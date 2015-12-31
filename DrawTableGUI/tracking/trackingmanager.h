@@ -19,7 +19,7 @@ private:
 
 public slots:
     void process();
-    void onStratCalibration();
+    void onStratCalibration(int width, int height);
 
 signals:
     void showGreenScreen();

@@ -50,9 +50,9 @@ public:
         string getErrorMessage() const {return message;}
     };
 
-    ScreenDetector(Mat img);
+    ScreenDetector(Mat img, int width, int height);
     void setColorRange(const Scalar hsvMin, const Scalar HsvMax);
-    Mat getTransformationMatrix(Error&);
+    Mat getTransformationMatrix(Error& err);
     static Point transformPoint(Point point, Mat transformMatrix);
 
 private:
@@ -64,6 +64,9 @@ private:
 
     const int erodeDilateSize = 5;
     const double approximateEpsilon = 0.05;
+
+    int interfaceHeight;
+    int interfaceWidth;
 
     vector<Point> getOrderedPoints(vector<Point> rect);
     Mat transformImage(vector<Point> rect);

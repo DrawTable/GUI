@@ -18,14 +18,14 @@ void TrackingManager::process() {
 }
 
 // Lance le processus de calibration
-void TrackingManager::onStratCalibration() {
+void TrackingManager::onStratCalibration(int width, int height) {
     Mat frame;
 
     // get an image
     // frame = imread("/home/sacha/Projets/DrawTable/Test_calibration/Test_calibration/IMG_1878.JPG");
 
     // Lancement de la capture avec la webcam
-    cap = new VideoCapture(0);
+    cap = new VideoCapture(2);
 
     // Lecture d'une image
     if (!cap->read(frame)) {
@@ -35,7 +35,10 @@ void TrackingManager::onStratCalibration() {
         return;
     }
 
-    ScreenDetector sd(frame);
+    namedWindow("frame", WINDOW_KEEPRATIO);
+    imshow("frame", frame);
+
+    ScreenDetector sd(frame, width, height);
 
     ScreenDetector::Error err;
 
@@ -45,11 +48,11 @@ void TrackingManager::onStratCalibration() {
     // always check error before using the transformatrix
     if(err.hasError()){
         cerr << err.getErrorTitle() << ":\n" << err.getErrorMessage() << endl;
-        emit calibrationError(2);
+        emit calibrationError(1);
         return;
     }
 
-    /*
+
     // test if we can transform a point
     Point p1(1756, 1010);
     Point p2 = ScreenDetector::transformPoint(p1, transformMatrix);
@@ -59,7 +62,7 @@ void TrackingManager::onStratCalibration() {
     p1 = Point(0, 0);
     p2 = ScreenDetector::transformPoint(p1, transformMatrix);
     cout << p1 << " -> " << p2 << endl; // will be p1 and p2 are < 0
-    */
+
 
     bool success = true;
     if (success) {

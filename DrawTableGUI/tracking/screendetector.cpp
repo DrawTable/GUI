@@ -1,10 +1,12 @@
 #include "screendetector.h"
 
-ScreenDetector::ScreenDetector(Mat img)
+ScreenDetector::ScreenDetector(Mat img, int width, int height)
     :img(img)
 {
     hsvMin = Scalar(41,26,18);
     hsvMax = Scalar(90,255,255);
+    this->interfaceWidth = width;
+    this->interfaceHeight = height;
 }
 
 void ScreenDetector::setColorRange(const Scalar hsvMin, const Scalar HsvMax)
@@ -12,7 +14,6 @@ void ScreenDetector::setColorRange(const Scalar hsvMin, const Scalar HsvMax)
     this->hsvMin = hsvMin;
     this->hsvMax = HsvMax;
 }
-
 
 Mat ScreenDetector::getTransformationMatrix(Error& error)
 {
@@ -103,9 +104,9 @@ Mat ScreenDetector::transformImage(std::vector<Point> rect)
     Point2f dst[4];
 
     dst[0] = Point(0,0);
-    dst[1] = Point(width-1, 0);
-    dst[2] = Point(width-1, height-1);
-    dst[3] = Point(0, height-1);
+    dst[1] = Point(interfaceWidth-1, 0);
+    dst[2] = Point(interfaceWidth-1, interfaceHeight-1);
+    dst[3] = Point(0, interfaceHeight-1);
 
     Mat transformMatrix;
     transformMatrix = getPerspectiveTransform(src, dst);
