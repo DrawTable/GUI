@@ -13,7 +13,7 @@ using namespace cv;
 class LedDetector {
 
     Mat orig, img, hsv, thresholded, ledThresholded;
-    int lowH = 139, lowS = 0, lowV = 185, highH = 179, highS = 176, highV = 255;
+    int lowH = 139, lowS = 0, lowV = 216, highH = 177, highS = 176, highV = 255;
     int led_lowH = 0, led_lowS = 0, led_lowV = 0, led_highH = 179, led_highS = 255, led_highV = 255;
     int h_bins = 31, s_bins = 16, v_bins = 40;
 
@@ -183,12 +183,11 @@ public:
         double m10 = oMoments.m10;
         double mArea = oMoments.m00;
 
-        if(mArea < 50){
+        if(mArea < 20){
             ledPos = Point(-1,-1);
             return;
         }
 
-        cout << "area: " << mArea << endl;
 
         ledPos.x = m10/mArea;
         ledPos.y = m01/mArea;

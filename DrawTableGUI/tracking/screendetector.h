@@ -9,7 +9,7 @@
 using namespace std;
 using namespace cv;
 
-#define DEBUG false      // show windows for debug
+#define DEBUG true      // show windows for debug
 
 /**
  * @brief The ScreenDetector class Find a screen within an single image

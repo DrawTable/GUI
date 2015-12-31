@@ -61,9 +61,11 @@ void TrackingManager::onStratCalibration() {
 
 // Boucle principal du thread
 void TrackingManager::mainLoop() {
+
     Controller ctrl;
     ctrl.start();
-
+    bool click = false;
+    bool release = false;
     LedDetector* ledDetector = LedDetector::getInstance();
     Point stylusPoint;
     forever {
@@ -79,13 +81,22 @@ void TrackingManager::mainLoop() {
        ledDetector->setImage(frame);
        stylusPoint = ledDetector->debugLedDetection();
 
-       // Point screenPoint = ScreenDetector::transformPoint(*stylusPoint, transformMatrix);
-
        // Envoie les coordonnées du stylet afin de bouger la souris
-
        if(stylusPoint.x > 0 && stylusPoint.y > 0 && stylusPoint.x < 1440 && stylusPoint.y < 800){
-           ctrl.mouseMove(stylusPoint.x, stylusPoint.y);
+
+           stylusPoint = ScreenDetector::transformPoint(stylusPoint, transformMatrix);
            cout << stylusPoint << endl;
+           ctrl.mouseMove(stylusPoint.x, stylusPoint.y);
+           if(!click){
+               ctrl.mousePressed();
+               release = false;
+           }
+       } else {
+           click = false;
+           if(!release){
+               ctrl.mouseReleased();
+               release = true;
+           }
        }
 
     }

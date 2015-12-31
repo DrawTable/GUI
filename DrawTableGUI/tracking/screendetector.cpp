@@ -99,6 +99,9 @@ Mat ScreenDetector::transformImage(std::vector<Point> rect)
     int heightB  = std::sqrt( std::pow( std::abs(tr.y - br.y) ,2) + std::pow( std::abs(tr.x - br.x),2));
     height = std::max(heightA, heightB);
 
+    width = 1440;
+    height = 900;
+
     Point2f src[4];
     src[0] = rect.at(0);
     src[1] = rect.at(1);
