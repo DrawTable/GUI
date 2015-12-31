@@ -141,7 +141,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
 
     // Integration de la vue a la GUI
     setCentralWidget(table);
-    showFullScreen();
+//    showFullScreen();
 
     startTrackingManager();
 }

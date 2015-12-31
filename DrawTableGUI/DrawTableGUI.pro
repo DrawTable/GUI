@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     controller/generalcontroller.cpp \
     controller/erasercontroller.cpp \
     tracking/trackingmanager.cpp \
-    tracking/screendetector.cpp
+    tracking/screendetector.cpp \
+    tracking/leddetector.cpp
 
 HEADERS  += core/mainwindow.h \
     view/table.h \
@@ -37,7 +38,8 @@ HEADERS  += core/mainwindow.h \
     controller/generalcontroller.h \
     controller/erasercontroller.h \
     tracking/trackingmanager.h \
-    tracking/screendetector.h
+    tracking/screendetector.h \
+    tracking/leddetector.h
 
 RESOURCES += \
     icons.qrc

@@ -1,4 +1,5 @@
 #include "trackingmanager.h"
+#include "leddetector.h"
 
 TrackingManager::TrackingManager(QObject *parent) : QObject(parent)
 {
@@ -64,6 +65,7 @@ void TrackingManager::onStratCalibration() {
     bool success = true;
     if (success) {
         emit calibrationSuccess();
+        mainLoop();
     } else {
         int errorCode = -1;
         emit calibrationError(errorCode);
@@ -73,6 +75,8 @@ void TrackingManager::onStratCalibration() {
 
 // Boucle principal du thread
 void TrackingManager::mainLoop() {
+    LedDetector* ledDetector = LedDetector::getInstance();
+    Point stylusPoint;
     forever {
         Mat frame;
 
@@ -82,15 +86,27 @@ void TrackingManager::mainLoop() {
             return;
         }
 
+
         // TODO get the stylus position (x; y) from the `frame` Mat.
-        int x = 0;
-        int y = 0;
-        Point stylusPoint(x, y);
-        Point screenPoint = ScreenDetector::transformPoint(stylusPoint, transformMatrix);
+       ledDetector->setImage(frame);
+       stylusPoint = ledDetector->debugLedDetection();
+       if(stylusPoint.x > 0 && stylusPoint.y > 0){
+           cout << stylusPoint << endl;
+       }
+
+//        Point screenPoint = ScreenDetector::transformPoint(*stylusPoint, transformMatrix);
 
         // Envoie les coordonnées du stylet afin de bouger la souris
-        emit mouseMove(screenPoint.x, screenPoint.y);
+//        emit mouseMove(screenPoint.x, screenPoint.y);
 
         // QThread::msleep(16); // environ 60 fps
+       int key = waitKey(1);
+       if(key == int('p')){
+           cout << key << endl;
+           waitKey(0);
+       }
+//       else if (key == 27) {
+//            break;
+//       }
     }
 }
