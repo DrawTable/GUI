@@ -31,10 +31,12 @@ Mat ScreenDetector::getTransformationMatrix(Error& error)
     erode(thresholded, thresholded, getStructuringElement(MORPH_ELLIPSE, Size(erodeDilateSize, erodeDilateSize)) );
     GaussianBlur(thresholded, thresholded, Size(3,3), 0);
 
+    Mat forContours;
+    thresholded.copyTo(forContours);
     // find all contours
     Contours contours;
     Contour approximatedScreen;
-    findContours(thresholded, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+    findContours(forContours, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
     int nbContours = contours.size();
     cout << nbContours << " contours found, debug: " << DEBUG << endl;
 
@@ -66,11 +68,14 @@ Mat ScreenDetector::getTransformationMatrix(Error& error)
     if(DEBUG){
         cout << "show debug window" << endl;
         namedWindow("debug", WINDOW_KEEPRATIO);
+        namedWindow("thresholded_calibration", WINDOW_KEEPRATIO);
         Mat debug = Mat::zeros(img.rows, img.cols, CV_8UC3);
         polylines(debug, approximatedScreen, true, Scalar(0,0,255), 3);
         imshow("debug", debug);
+        imshow("thresholded_calibration", thresholded);
     }
 
+//    return Mat::zeros(img.rows, img.cols, CV_8UC1);
     // get a transformation matrix
     return transformImage(approximatedScreen);
 }

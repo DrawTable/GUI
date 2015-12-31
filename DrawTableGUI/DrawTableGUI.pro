@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     tracking/screendetector.cpp \
     camera/cameramanager.cpp \
     camera/cameramanagerupdater.cpp \
-    modal/menudialog.cpp
+    modal/menudialog.cpp \
+    tracking/leddetector.cpp
 
 HEADERS  += core/mainwindow.h \
     view/table.h \
@@ -43,7 +44,8 @@ HEADERS  += core/mainwindow.h \
     tracking/screendetector.h \
     camera/cameramanager.h \
     camera/cameramanagerupdater.h \
-    modal/menudialog.h
+    modal/menudialog.h \
+    tracking/leddetector.h
 
 RESOURCES += \
     icons.qrc
