@@ -63,8 +63,11 @@ private slots:
     void onCalibrationSuccess();
     void onCalibrationError(int errorCode);
 
+    // Communication Main Window <--> Camera Manager
+    void onCameraChoosen(int cameraId);
+
 signals:
-    void stratCalibration();
+    void stratCalibration(int, int);
 
 private:
     QToolBar* toolBar;
@@ -89,7 +92,7 @@ private:
 
     GeneralController* controller;
 
-    void startTrackingManager();
+    void startTrackingManager(int cameraId);
 };
 
 #endif // MAINWINDOW_H

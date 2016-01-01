@@ -118,16 +118,23 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
 
     showFullScreen();
     menuBar()->hide();
-    startTrackingManager();
+
+    CameraManager* cm = CameraManager::getInstance();
+    connect(cm, SIGNAL(cameraChoosen(int)), this, SLOT(onCameraChoosen(int)));
 }
 
 MainWindow::~MainWindow() {
 }
 
+// Lance le Tracking Manager une fois que l'utilisateur a choisi la caméra à utiliser
+void MainWindow::onCameraChoosen(int cameraId) {
+    startTrackingManager(cameraId);
+}
+
 // Crée et démarre un thread qui gère le tracking du stylet
-void MainWindow::startTrackingManager() {
-    /*QThread* thread = new QThread;
-    TrackingManager* worker = new TrackingManager();
+void MainWindow::startTrackingManager(int cameraId) {
+    QThread* thread = new QThread;
+    TrackingManager* worker = new TrackingManager(cameraId);
     worker->moveToThread(thread);
 
     // Lancement et arrêt du thread
@@ -138,24 +145,25 @@ void MainWindow::startTrackingManager() {
 
     // Communication Main Window <--> Tracking Manager
     connect(worker, SIGNAL(showGreenScreen()), this, SLOT(onShowGreenScreen()));
-    connect(this, SIGNAL(stratCalibration()), worker, SLOT(onStratCalibration()));
+    connect(this, SIGNAL(stratCalibration(int, int)), worker, SLOT(onStratCalibration(int, int)));
     connect(worker, SIGNAL(calibrationSuccess()), this, SLOT(onCalibrationSuccess()));
     connect(worker, SIGNAL(calibrationError(int)), this, SLOT(onCalibrationError(int)));
 
-    thread->start();*/
+    thread->start();
 }
 
 // Affiche un écran vert pour le calibrage
 void MainWindow::onShowGreenScreen() {
     // TODO afficher un écran vert pour le calibrage
     toolBar->hide();
-    //menuBar()->hide();
+    menuBar()->hide();
 
-    QBrush bgColor(Qt::green);    
+    QBrush bgColor(Qt::green);
     table->setBackgroundBrush(bgColor);
 
     // Lance le processus de calibration
-    emit stratCalibration();
+    QRect rec = QApplication::desktop()->screenGeometry();
+    emit stratCalibration(rec.width(), rec.height());
 }
 
 // Quand la calibration a réussie
