@@ -5,7 +5,7 @@
 GeneralController::GeneralController(Table* view) {
     this->view = view;
     this->drawController = PenController::getInstance();
-    this->pen = new QPen(Qt::black);
+    this->pen = new QPen(Qt::white);
     this->view->setController(this);
 }
 
@@ -28,6 +28,11 @@ void GeneralController::redo() {
         view->scene()->addItem(temp);
         modifToSave = true;
     }
+}
+
+void GeneralController::resetUndoHistory() {
+    lastActions.clear();
+    nextActions.clear();
 }
 
 void GeneralController::mouseDoubleClickEvent(QMouseEvent* event) {

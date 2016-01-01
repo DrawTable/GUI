@@ -1,18 +1,37 @@
 <RCC>
-    <qresource prefix="/svg">
-        <file>icons/cursor.svg</file>
-        <file>icons/dash.svg</file>
-        <file>icons/ellipse.svg</file>
-        <file>icons/eraser.svg</file>
-        <file>icons/pen.svg</file>
-        <file>icons/rectangle.svg</file>
-        <file>icons/color.svg</file>
-        <file>icons/thickness.svg</file>
-        <file>icons/thickness1.svg</file>
-        <file>icons/thickness2.svg</file>
-        <file>icons/thickness3.svg</file>
-        <file>icons/thickness4.svg</file>
-        <file>icons/thickness5.svg</file>
-        <file>icons/thickness6.svg</file>
+    <qresource prefix="/menu">
+      <file>icons/new_on.png</file>
+      <file>icons/open_on.png</file>
+      <file>icons/print_on.png</file>
+      <file>icons/quit_on.png</file>
+      <file>icons/save_on.png</file>
+      <file>icons/new_off.png</file>
+      <file>icons/open_off.png</file>
+      <file>icons/print_off.png</file>
+      <file>icons/quit_off.png</file>
+      <file>icons/save_off.png</file>
+    </qresource>
+    <qresource prefix="/tool">
+        <file>icons/color.png</file>
+        <file>icons/dash.png</file>
+        <file>icons/ellipse.png</file>
+        <file>icons/eraser.png</file>
+        <file>icons/menu.png</file>
+        <file>icons/mode.png</file>
+        <file>icons/pen.png</file>
+        <file>icons/rectangle.png</file>
+        <file>icons/thickness.png</file>
+        <file>icons/thickness1.png</file>
+        <file>icons/thickness2.png</file>
+        <file>icons/thickness3.png</file>
+        <file>icons/thickness4.png</file>
+        <file>icons/thickness5.png</file>
+        <file>icons/thickness6.png</file>
+        <file>icons/redo.png</file>
+        <file>icons/undo.png</file>
+    </qresource>
+    <qresource prefix="/cursor">
+        <file>icons/eraser.ico</file>
+        <file>icons/pen.ico</file>
     </qresource>
 </RCC>

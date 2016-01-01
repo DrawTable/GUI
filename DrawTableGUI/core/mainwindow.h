@@ -1,16 +1,34 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "../view/table.h"
+#include "../controller/generalcontroller.h"
+#include "../tracking/trackingmanager.h"
+#include "../controller/pencontroller.h"
+#include "../controller/dashcontroller.h"
+#include "../controller/rectanglecontroller.h"
+#include "../controller/ellipsecontroller.h"
+#include "../controller/generalcontroller.h"
+#include "../controller/erasercontroller.h"
+#include "../camera/cameramanager.h"
+
+#include <QApplication>
+#include <QFileDialog>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPainter>
+#include <QPixmap>
+#include <QMenuBar>
+#include <QColorDialog>
+#include <QDebug>
+#include <QRect>
+#include <QDesktopWidget>
 #include <QMainWindow>
 #include <QAction>
 #include <QToolBar>
 #include <QToolButton>
 #include <QMenu>
 #include <QThread>
-
-#include "../view/table.h"
-#include "../controller/generalcontroller.h"
-#include "../controller/trackingmanager.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -19,39 +37,49 @@ public:
     MainWindow(QWidget* parent = 0);
     ~MainWindow();
 
-private slots:
+public slots:
+    void onNewTriggered();
+    void onOpenTriggered();
+    void onSaveTriggered();
+    void onPrintTriggered();
     void updateToolBarActions(QAction* action);
-    void onCursorTriggered(bool checked = false);
     void onPenTriggered(bool checked = false);
     void onDashTriggered(bool checked = false);
     void onEraserTriggered(bool checked = false);
     void onEllipseTriggered(bool checked = false);
     void onRectangleTriggered(bool checked = false);
+    void onMenuTriggered();
     void onColorTriggered();
-    void onSaveTriggered();
-    void onOpenTriggered();
-    void onNewTriggered();
-    void onPrintTriggered();
     void onUndoTriggered();
     void onRedoTriggered();
+    void onModeTriggered();
     void onThicknessChanged();
     void onQuitTriggered();
     void openFile();
+
+    // Communication Main Window <--> Tracking Manager
+    void onShowGreenScreen();
+    void onCalibrationSuccess();
+    void onCalibrationError(int errorCode);
+
+    // Communication Main Window <--> Camera Manager
+    void onCameraChoosen(int cameraId);
+
 signals:
-    quitProg();
+    void stratCalibration(int, int);
+    void quitProg();
+
 private:
-    QMenu* menu;
-    QMenu* edit;
     QToolBar* toolBar;
     QToolButton* thickness;
     Table* table;
 
+    QAction* menu;
     QAction* newImg;
     QAction* open;
     QAction* save;
     QAction* print;
     QAction* quit;
-    QAction* cursor;
     QAction* pen;
     QAction* dash;
     QAction* eraser;
@@ -60,12 +88,13 @@ private:
     QAction* undo;
     QAction* redo;
     QAction* color;
+    QAction* mode;
 
 
 
     GeneralController* controller;
 
-    void startTrackingManager();
+    void startTrackingManager(int cameraId);
 };
 
 #endif // MAINWINDOW_H

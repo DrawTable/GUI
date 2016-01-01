@@ -35,6 +35,7 @@ public:
     bool canRedo();
     bool toSave();
     void setToSave(bool toSave);
+    void resetUndoHistory();
 
     void undo();
     void redo();
