@@ -5,6 +5,7 @@ Table::Table(QWidget* parent) {
     setScene(scene);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setRenderHint(QPainter::HighQualityAntialiasing);
     setMouseTracking(true);
 }
 

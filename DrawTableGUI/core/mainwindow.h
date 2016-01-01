@@ -37,25 +37,26 @@ public:
     MainWindow(QWidget* parent = 0);
     ~MainWindow();
 
+public slots:
+    void onNewTriggered();
+    void onOpenTriggered();
+    void onSaveTriggered();
+    void onPrintTriggered();
+    void onQuitTriggered();
+
 private slots:
     void updateToolBarActions(QAction* action);
-    void onCursorTriggered(bool checked = false);
     void onPenTriggered(bool checked = false);
     void onDashTriggered(bool checked = false);
     void onEraserTriggered(bool checked = false);
     void onEllipseTriggered(bool checked = false);
     void onRectangleTriggered(bool checked = false);
+    void onMenuTriggered();
     void onColorTriggered();
-    void onSaveTriggered();
-    void onOpenTriggered();
-    void onNewTriggered();
-    void onPrintTriggered();
     void onUndoTriggered();
     void onRedoTriggered();
+    void onModeTriggered();
     void onThicknessChanged();
-
-    // Communication Main Window <--> Camera Manager
-    void onCameraChoosen(int cameraId);
 
     // Communication Main Window <--> Tracking Manager
     void onShowGreenScreen();
@@ -63,21 +64,19 @@ private slots:
     void onCalibrationError(int errorCode);
 
 signals:
-    void stratCalibration(int width, int height);
+    void stratCalibration();
 
 private:
-    QMenu* menu;
-    QMenu* edit;
     QToolBar* toolBar;
     QToolButton* thickness;
     Table* table;
 
+    QAction* menu;
     QAction* newImg;
     QAction* open;
     QAction* save;
     QAction* print;
     QAction* quit;
-    QAction* cursor;
     QAction* pen;
     QAction* dash;
     QAction* eraser;
@@ -86,10 +85,11 @@ private:
     QAction* undo;
     QAction* redo;
     QAction* color;
+    QAction* mode;
 
     GeneralController* controller;
 
-    void startTrackingManager(int cameraId);
+    void startTrackingManager();
 };
 
 #endif // MAINWINDOW_H

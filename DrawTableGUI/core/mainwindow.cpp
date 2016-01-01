@@ -1,91 +1,64 @@
 #include "mainwindow.h"
+#include "../modal/menudialog.h"
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
-    // Création des actions du menu principal
-    newImg = new QAction(tr("&New"), this);
-    newImg->setShortcut(QKeySequence::New);
-    open = new QAction(tr("&Open"), this);
-    open->setShortcut(QKeySequence::Open);
-    save = new QAction(tr("&Save"), this);
-    save->setShortcut(QKeySequence::Save);
-    print = new QAction(tr("&Print"), this);
-    print->setShortcut(QKeySequence::Print);
-    quit = new QAction(tr("&Quit"), this);
-    quit->setShortcut(QKeySequence::Quit);
-
-    // Création du menu et ajout des actions liées à ce dernier
-    menu = menuBar()->addMenu("&File");
-    menu->addAction(newImg);
-    menu->addAction(open);
-    menu->addAction(save);
-    menu->addAction(print);
-    menu->addAction(quit);
-
-    connect(newImg, SIGNAL(triggered()), this, SLOT(onNewTriggered()));
-    connect(open, SIGNAL(triggered()), this, SLOT(onOpenTriggered()));
-    connect(save, SIGNAL(triggered()), this, SLOT(onSaveTriggered()));
-    connect(print, SIGNAL(triggered()), this, SLOT(onPrintTriggered()));
-    connect(quit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
-
-    // Création des actions du menu d'édition
-    undo = new QAction(tr("&Undo"), this);
-    undo->setShortcut(QKeySequence::Undo);
-    redo = new QAction(tr("&redo"), this);
-    redo->setShortcut(QKeySequence::Redo);
-
-    // Création du menu edit et ajout des actions liées à ce dernier
-    edit = menuBar()->addMenu("&Edit");
-    edit->addAction(undo);
-    edit->addAction(redo);
-
-    connect(undo, SIGNAL(triggered()), this, SLOT(onUndoTriggered()));
-    connect(redo, SIGNAL(triggered()), this, SLOT(onRedoTriggered()));
-
     // Creation de la vue
-    QBrush bgColor(Qt::white);
+    QBrush bgColor(Qt::black);
     table = new Table(this);
     table->setBackgroundBrush(bgColor);
+    table->setStyleSheet("border: 0px;");
     table->scene()->setSceneRect(0, 0, maximumWidth(), maximumHeight());
 
     // Creation des actions de la toolbar
-    cursor = new QAction(this);
-    cursor->setCheckable(true);
-    cursor->setIcon(QIcon(":/svg/icons/cursor.svg"));
-    connect(cursor, SIGNAL(triggered(bool)), this, SLOT(onCursorTriggered(bool)));
+    menu = new QAction(this);
+    menu->setIcon(QIcon(":/tool/icons/menu.png"));
+    connect(menu, SIGNAL(triggered()), this, SLOT(onMenuTriggered()));
 
     pen = new QAction(this);
     pen->setCheckable(true);
     pen->setChecked(true);
-    pen->setIcon(QIcon(":/svg/icons/pen.svg"));
+    pen->setIcon(QIcon(":/tool/icons/pen.png"));
     connect(pen, SIGNAL(triggered(bool)), this, SLOT(onPenTriggered(bool)));
+
+    undo = new QAction(this);
+    undo->setIcon(QIcon(":/tool/icons/undo.png"));
+    connect(undo, SIGNAL(triggered()), this, SLOT(onUndoTriggered()));
+
+    redo = new QAction(this);
+    redo->setIcon(QIcon(":/tool/icons/redo.png"));
+    connect(redo, SIGNAL(triggered()), this, SLOT(onRedoTriggered()));
 
     dash = new QAction(this);
     dash->setCheckable(true);
-    dash->setIcon(QIcon(":/svg/icons/dash.svg"));
+    dash->setIcon(QIcon(":/tool/icons/dash.png"));
     connect(dash, SIGNAL(triggered(bool)), this, SLOT(onDashTriggered(bool)));
 
     eraser = new QAction(this);
     eraser->setCheckable(true);
-    eraser->setIcon(QIcon(":/svg/icons/eraser.svg"));
+    eraser->setIcon(QIcon(":/tool/icons/eraser.png"));
     connect(eraser, SIGNAL(triggered(bool)), this, SLOT(onEraserTriggered(bool)));
 
     ellipse = new QAction(this);
     ellipse->setCheckable(true);
-    ellipse->setIcon(QIcon(":/svg/icons/ellipse.svg"));
+    ellipse->setIcon(QIcon(":/tool/icons/ellipse.png"));
     connect(ellipse, SIGNAL(triggered(bool)), this, SLOT(onEllipseTriggered(bool)));
 
     rectangle = new QAction(this);
     rectangle->setCheckable(true);
-    rectangle->setIcon(QIcon(":/svg/icons/rectangle.svg"));
+    rectangle->setIcon(QIcon(":/tool/icons/rectangle.png"));
     connect(rectangle, SIGNAL(triggered(bool)), this, SLOT(onRectangleTriggered(bool)));
 
     color = new QAction(this);
-    color->setIcon(QIcon(":/svg/icons/color.svg"));
+    color->setIcon(QIcon(":/tool/icons/color.png"));
     connect(color, SIGNAL(triggered()), this, SLOT(onColorTriggered()));
+
+    mode = new QAction(this);
+    mode->setIcon(QIcon(":/tool/icons/mode.png"));
+    connect(mode, SIGNAL(triggered()), this, SLOT(onModeTriggered()));
 
     QList<QIcon> icons;
     for (int i = 0; i < 6; ++i) {
-        icons << QIcon(QString(":/svg/icons/thickness%1.svg").arg(i + 1));
+        icons << QIcon(QString(":/tool/icons/thickness%1.png").arg(i + 1));
     }
 
     QStringList thicknesses;
@@ -99,28 +72,43 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
         connect(action, SIGNAL(triggered()), this, SLOT(onThicknessChanged()));
         thicknessMenu->addAction(action);
     }
-    thicknessMenu->actions().at(0)->setChecked(true);
+    thicknessMenu->actions().first()->setChecked(true);
+    thicknessMenu->setStyleSheet("background: rgb(46,46,46);");
 
     thickness = new QToolButton(this);
-    thickness->setIcon(QIcon(":/svg/icons/thickness.svg"));
+    thickness->setIcon(QIcon(":/tool/icons/thickness.png"));
     thickness->setPopupMode(QToolButton::MenuButtonPopup);
     thickness->setMenu(thicknessMenu);
 
     // Creation de la toolbar et integration des actions
+    QWidget* spacer1 = new QWidget();
+    spacer1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    QWidget* spacer2 = new QWidget();
+    spacer2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     toolBar = new QToolBar(tr("Tools"));
-    toolBar->addAction(cursor);
-    toolBar->addSeparator();
+    toolBar->addAction(menu);
+    toolBar->addWidget(spacer1);
     toolBar->addAction(pen);
     toolBar->addAction(eraser);
-    toolBar->addAction(dash);
+    toolBar->addSeparator();
     toolBar->addWidget(thickness);
     toolBar->addSeparator();
+    toolBar->addAction(undo);
+    toolBar->addAction(redo);
+    toolBar->addSeparator();
+    toolBar->addAction(dash);
     toolBar->addAction(ellipse);
     toolBar->addAction(rectangle);
     toolBar->addSeparator();
     toolBar->addAction(color);
+    toolBar->addWidget(spacer2);
+    toolBar->addAction(mode);
+    toolBar->setFloatable(false);
+    toolBar->setMovable(false);
+    toolBar->setStyleSheet("QToolBar{ background: rgb(46,46,46); border: 0px; }");
     connect(toolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(updateToolBarActions(QAction*)));
-    addToolBar(Qt::RightToolBarArea, toolBar);
+    addToolBar(Qt::BottomToolBarArea, toolBar);
+    onPenTriggered(false);
 
     // Creation du controleur principale
     controller = new GeneralController(table);
@@ -128,25 +116,18 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     // Integration de la vue a la GUI
     setCentralWidget(table);
     showFullScreen();
+    menuBar()->hide();
 
-    CameraManager* cm = CameraManager::getInstance();
-    connect(cm, SIGNAL(cameraChoosen(int)), this, SLOT(onCameraChoosen(int)));
-
-    // startTrackingManager();
+    startTrackingManager();
 }
 
 MainWindow::~MainWindow() {
 }
 
-// Lance le Tracking Manager une fois que l'utilisateur a choisi la caméra à utiliser
-void MainWindow::onCameraChoosen(int cameraId) {
-    startTrackingManager(cameraId);
-}
-
 // Crée et démarre un thread qui gère le tracking du stylet
-void MainWindow::startTrackingManager(int cameraId) {
-    QThread* thread = new QThread;
-    TrackingManager* worker = new TrackingManager(cameraId);
+void MainWindow::startTrackingManager() {
+    /*QThread* thread = new QThread;
+    TrackingManager* worker = new TrackingManager();
     worker->moveToThread(thread);
 
     // Lancement et arrêt du thread
@@ -157,34 +138,33 @@ void MainWindow::startTrackingManager(int cameraId) {
 
     // Communication Main Window <--> Tracking Manager
     connect(worker, SIGNAL(showGreenScreen()), this, SLOT(onShowGreenScreen()));
-    connect(this, SIGNAL(stratCalibration(int, int)), worker, SLOT(onStratCalibration(int, int)));
+    connect(this, SIGNAL(stratCalibration()), worker, SLOT(onStratCalibration()));
     connect(worker, SIGNAL(calibrationSuccess()), this, SLOT(onCalibrationSuccess()));
     connect(worker, SIGNAL(calibrationError(int)), this, SLOT(onCalibrationError(int)));
 
-    thread->start();
+    thread->start();*/
 }
 
 // Affiche un écran vert pour le calibrage
 void MainWindow::onShowGreenScreen() {
     // TODO afficher un écran vert pour le calibrage
     toolBar->hide();
-    menuBar()->hide();
+    //menuBar()->hide();
 
     QBrush bgColor(Qt::green);    
     table->setBackgroundBrush(bgColor);
 
     // Lance le processus de calibration
-    QRect rec = QApplication::desktop()->screenGeometry();
-    emit stratCalibration(rec.width(), rec.height());
+    emit stratCalibration();
 }
 
 // Quand la calibration a réussie
 void MainWindow::onCalibrationSuccess() {
     // TODO implementation
     toolBar->show();
-    menuBar()->show();
+    //menuBar()->show();
 
-    QBrush bgColor(Qt::transparent);
+    QBrush bgColor(Qt::black);
     table->setBackgroundBrush(bgColor);
 }
 
@@ -192,49 +172,54 @@ void MainWindow::onCalibrationSuccess() {
 void MainWindow::onCalibrationError(int errorCode) {
     // TODO implementation
     toolBar->show();
-    menuBar()->show();
+    //menuBar()->show();
 
-    QBrush bgColor(Qt::transparent);
+    QBrush bgColor(Qt::black);
     table->setBackgroundBrush(bgColor);
 }
 
 void MainWindow::updateToolBarActions(QAction* action) {
-    if (action != color){
+    if (action->isCheckable()){
         const QList<QAction*>& actions = toolBar->actions();
-        foreach(QAction* a, actions) {
+        foreach (QAction* a, actions) {
             if (a != action) { a->setChecked(false); }
         }
     }
 }
 
-void MainWindow::onCursorTriggered(bool checked) {
-    if (checked) {}
-    else { cursor->setChecked(true); }
-}
-
 void MainWindow::onPenTriggered(bool checked) {
     if (checked) { controller->setDrawController(PenController::getInstance()); }
     else { pen->setChecked(true); }
+    table->setCursor(QCursor(QPixmap(":/cursor/icons/pen.ico")));
 }
 
 void MainWindow::onDashTriggered(bool checked) {
     if (checked) { controller->setDrawController(DashController::getInstance()); }
     else { dash->setChecked(true); }
+    table->setCursor(Qt::CrossCursor);
 }
 
 void MainWindow::onEraserTriggered(bool checked) {
     if (checked) { controller->setDrawController(EraserController::getInstance()); }
     else { eraser->setChecked(true); }
+    table->setCursor(QCursor(QPixmap(":/cursor/icons/eraser.ico")));
 }
 
 void MainWindow::onEllipseTriggered(bool checked) {
     if (checked) { controller->setDrawController(EllipseController::getInstance()); }
     else { ellipse->setChecked(true); }
+    table->setCursor(Qt::CrossCursor);
 }
 
 void MainWindow::onRectangleTriggered(bool checked) {
     if (checked) { controller->setDrawController(RectangleController::getInstance()); }
     else { rectangle->setChecked(true);}
+    table->setCursor(Qt::CrossCursor);
+}
+
+void MainWindow::onMenuTriggered() {
+    MenuDialog dialog(this);
+    dialog.exec();
 }
 
 void MainWindow::onSaveTriggered() {
@@ -248,7 +233,7 @@ void MainWindow::onSaveTriggered() {
     // creation du painter allant servir à effectuer notre rendu
     QPainter painter(&pixmap);
     // selection qualite
-    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::HighQualityAntialiasing);
     // generation du rendu
     table->render(&painter);
     // enregistrement
@@ -283,6 +268,10 @@ void MainWindow::onPrintTriggered() {
     }
 }
 
+void MainWindow::onQuitTriggered() {
+    QApplication::quit();
+}
+
 void MainWindow::onUndoTriggered() {
     controller->undo();
 }
@@ -291,9 +280,13 @@ void MainWindow::onRedoTriggered() {
     controller->redo();
 }
 
+void MainWindow::onModeTriggered() {
+    // TODO
+}
+
 void MainWindow::onThicknessChanged() {
     const QList<QAction*>& actions = thickness->menu()->actions();
-    foreach(QAction* a, actions) {
+    foreach (QAction* a, actions) {
         a->setChecked(false);
     }
     QAction* action = qobject_cast<QAction*>(sender());

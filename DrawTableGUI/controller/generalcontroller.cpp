@@ -5,7 +5,7 @@
 GeneralController::GeneralController(Table* view) {
     this->view = view;
     this->drawController = PenController::getInstance();
-    this->pen = new QPen(Qt::black);
+    this->pen = new QPen(Qt::white);
     this->view->setController(this);
 }
 
