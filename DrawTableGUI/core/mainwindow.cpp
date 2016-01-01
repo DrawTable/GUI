@@ -94,8 +94,9 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
 
     thickness = new QToolButton(this);
     thickness->setIcon(QIcon(":/tool/icons/thickness.png"));
-    thickness->setPopupMode(QToolButton::MenuButtonPopup);
+    thickness->setPopupMode(QToolButton::InstantPopup);
     thickness->setMenu(thicknessMenu);
+    thickness->setStyleSheet("QToolButton::menu-indicator{image: none;}");
 
     // Creation de la toolbar et integration des actions
     QWidget* spacer1 = new QWidget();
