@@ -54,6 +54,9 @@ private slots:
     void onRedoTriggered();
     void onThicknessChanged();
 
+    // Communication Main Window <--> Camera Manager
+    void onCameraChoosen(int cameraId);
+
     // Communication Main Window <--> Tracking Manager
     void onShowGreenScreen();
     void onCalibrationSuccess();
@@ -86,7 +89,7 @@ private:
 
     GeneralController* controller;
 
-    void startTrackingManager();
+    void startTrackingManager(int cameraId);
 };
 
 #endif // MAINWINDOW_H

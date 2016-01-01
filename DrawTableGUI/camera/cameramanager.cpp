@@ -51,6 +51,11 @@ void CameraManager::mouseHandler(int event, int x, int y, int flags, void * para
     qDebug() << "Clicked: " << i;
 
     CameraManager::getInstance()->destroyWindows();
+    CameraManager::getInstance()->emitCameraId(i);
+}
+
+void CameraManager::emitCameraId(int cameraId) {
+    emit cameraChoosen(cameraId);
 }
 
 void CameraManager::destroyWindows() {

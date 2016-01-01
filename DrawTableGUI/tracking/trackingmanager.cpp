@@ -1,8 +1,8 @@
 #include "trackingmanager.h"
 
-TrackingManager::TrackingManager(QObject *parent) : QObject(parent)
+TrackingManager::TrackingManager(int cameraId, QObject *parent) : QObject(parent)
 {
-
+    this->cameraId = cameraId;
 }
 
 /*
@@ -25,7 +25,7 @@ void TrackingManager::onStratCalibration(int width, int height) {
     // frame = imread("/home/sacha/Projets/DrawTable/Test_calibration/Test_calibration/IMG_1878.JPG");
 
     // Lancement de la capture avec la webcam
-    cap = new VideoCapture(2);
+    cap = new VideoCapture(cameraId);
 
     // Lecture d'une image
     if (!cap->read(frame)) {

@@ -17,6 +17,11 @@ void CameraManagerUpdater::process() {
         }
     }
 
+    for (unsigned int i = 0; i < captures.size(); i++) {
+        cv::VideoCapture* cap = captures.at(i);
+        cap->release();
+    }
+
     emit finished();
 }
 

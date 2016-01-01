@@ -130,6 +130,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     showFullScreen();
 
     CameraManager* cm = CameraManager::getInstance();
+    connect(cm, SIGNAL(cameraChoosen(int)), this, SLOT(onCameraChoosen(int)));
 
     // startTrackingManager();
 }
@@ -137,10 +138,15 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
 MainWindow::~MainWindow() {
 }
 
+// Lance le Tracking Manager une fois que l'utilisateur a choisi la caméra à utiliser
+void MainWindow::onCameraChoosen(int cameraId) {
+    startTrackingManager(cameraId);
+}
+
 // Crée et démarre un thread qui gère le tracking du stylet
-void MainWindow::startTrackingManager() {
+void MainWindow::startTrackingManager(int cameraId) {
     QThread* thread = new QThread;
-    TrackingManager* worker = new TrackingManager();
+    TrackingManager* worker = new TrackingManager(cameraId);
     worker->moveToThread(thread);
 
     // Lancement et arrêt du thread

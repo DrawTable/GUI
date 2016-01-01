@@ -31,6 +31,10 @@ private:
     QThread* thread;
     CameraManagerUpdater* updater;
     void onUpdaterFinished();
+    void emitCameraId(int cameraId);
+
+signals:
+    void cameraChoosen(int id);
 };
 
 #endif // CAMERAMANAGER_H

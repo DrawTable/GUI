@@ -9,11 +9,12 @@ class TrackingManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit TrackingManager(QObject *parent = 0);
+    explicit TrackingManager(int cameraId, QObject *parent = 0);
 
 private:
     VideoCapture* cap;
     Mat transformMatrix;
+    int cameraId;
 
     void mainLoop();
 
