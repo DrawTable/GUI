@@ -3,7 +3,7 @@
 ScreenDetector::ScreenDetector(Mat img, int width, int height)
     :img(img)
 {
-    hsvMin = Scalar(41,26,18);
+    hsvMin = Scalar(41,26,50);
     hsvMax = Scalar(90,255,255);
     this->interfaceWidth = width;
     this->interfaceHeight = height;
@@ -18,8 +18,11 @@ void ScreenDetector::setColorRange(const Scalar hsvMin, const Scalar HsvMax)
 Mat ScreenDetector::getTransformationMatrix(Error& error)
 {
     bool approxFound = false;
+
     // convert image to HSV
     cvtColor(img, hsv, CV_BGR2HSV);
+
+
 
     // threshold the image
     inRange(hsv, hsvMin, hsvMax, thresholded);
@@ -92,16 +95,16 @@ Mat ScreenDetector::transformImage(std::vector<Point> rect)
     bl = rect.at(3);
 
     // find max width
-    int widthA  = std::sqrt( std::pow( std::abs(br.y - bl.y) ,2) + std::pow( std::abs(br.x - bl.x),2));
-    int widthB  = std::sqrt( std::pow( std::abs(tr.y - tl.y) ,2) + std::pow( std::abs(tr.x - tl.x),2));
-    width = std::max(widthA, widthB);
+//    int widthA  = std::sqrt( std::pow( std::abs(br.y - bl.y) ,2) + std::pow( std::abs(br.x - bl.x),2));
+//    int widthB  = std::sqrt( std::pow( std::abs(tr.y - tl.y) ,2) + std::pow( std::abs(tr.x - tl.x),2));
+//    width = std::max(widthA, widthB);
 
-    int heightA  = std::sqrt( std::pow( std::abs(tl.y - bl.y) ,2) + std::pow( std::abs(tl.x - bl.x),2));
-    int heightB  = std::sqrt( std::pow( std::abs(tr.y - br.y) ,2) + std::pow( std::abs(tr.x - br.x),2));
-    height = std::max(heightA, heightB);
+//    int heightA  = std::sqrt( std::pow( std::abs(tl.y - bl.y) ,2) + std::pow( std::abs(tl.x - bl.x),2));
+//    int heightB  = std::sqrt( std::pow( std::abs(tr.y - br.y) ,2) + std::pow( std::abs(tr.x - br.x),2));
+//    height = std::max(heightA, heightB);
 
-    width = 1440;
-    height = 900;
+    width = 1920;
+    height = 1080;
 
     Point2f src[4];
     src[0] = rect.at(0);

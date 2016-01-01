@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     modal/menudialog.cpp \
     tracking/leddetector.cpp \
     tracking/controller.cpp \
-    tracking/worker.cpp
+    tracking/worker.cpp \
+    tracking/LedDetection/leddetector.cpp
 
 HEADERS  += core/mainwindow.h \
     view/table.h \
@@ -50,7 +51,8 @@ HEADERS  += core/mainwindow.h \
     modal/menudialog.h \
     tracking/leddetector.h \
     tracking/controller.h \
-    tracking/worker.h
+    tracking/worker.h \
+    tracking/LedDetection/leddetector.h
 
 RESOURCES += \
     icons.qrc
