@@ -174,6 +174,8 @@ void MainWindow::onCalibrationSuccess() {
 
     QBrush bgColor(Qt::black);
     table->setBackgroundBrush(bgColor);
+
+    controller->enable();
 }
 
 // Quand la calibration a échouée

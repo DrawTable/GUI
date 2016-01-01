@@ -12,6 +12,14 @@ GeneralController::GeneralController(Table* view) {
 GeneralController::~GeneralController() {
 }
 
+void GeneralController::enable() {
+    isEnable = true;
+}
+
+void GeneralController::disable() {
+    isEnable = false;
+}
+
 void GeneralController::undo() {
     if (canUndo()) {
         QGraphicsItem* temp = lastActions.takeLast();
@@ -29,22 +37,28 @@ void GeneralController::redo() {
 }
 
 void GeneralController::mouseDoubleClickEvent(QMouseEvent* event) {
-    drawController->mouseDoubleClickEvent(view->scene(), event);
+    if (isEnable) {
+        drawController->mouseDoubleClickEvent(view->scene(), event);
+    }
 }
 
 void GeneralController::mouseMoveEvent(QMouseEvent* event) {
-    if (event->buttons() == Qt::LeftButton) {
+    if (isEnable && event->buttons() == Qt::LeftButton) {
         drawController->mouseMoveEvent(view->scene(), event);
     }
 }
 
 void GeneralController::mousePressEvent(QMouseEvent* event) {
-    drawController->mousePressEvent(view->scene(), event, pen);
+    if (isEnable) {
+        drawController->mousePressEvent(view->scene(), event, pen);
+    }
 }
 
 void GeneralController::mouseReleaseEvent(QMouseEvent* event) {
-    lastActions.append(drawController->mouseReleaseEvent(view->scene(), event));
-    nextActions.clear();
+    if (isEnable) {
+        lastActions.append(drawController->mouseReleaseEvent(view->scene(), event));
+        nextActions.clear();
+    }
 }
 
 bool GeneralController::canRedo(){

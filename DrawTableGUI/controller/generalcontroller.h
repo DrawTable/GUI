@@ -19,6 +19,10 @@ public:
     QPen* getPen();
     void setBrush(QBrush* brush);
     QBrush* getBrush();
+
+    void enable();
+    void disable();
+
     bool canUndo();
     bool canRedo();
 
@@ -36,6 +40,8 @@ private:
     QBrush* brush;
     QList<QGraphicsItem*> lastActions;
     QList<QGraphicsItem*> nextActions;
+
+    bool isEnable = false;
 };
 
 #endif // GENERALCONTROLLER_H
