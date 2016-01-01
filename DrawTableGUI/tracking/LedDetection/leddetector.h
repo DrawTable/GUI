@@ -3,17 +3,19 @@
 
 #include <opencv2/opencv.hpp>
 #include <iostream>
+#include <QString>
 
 using namespace std;
 using namespace cv;
 
 // values for led on TV
-// 148 0 128
-// 168 127 255
+// 151 47 156
+// 5 255 255
 class LedDetector {
 
     Mat orig, img, hsv, thresholded, ledThresholded;
     int lowH = 139, lowS = 0, lowV = 216, highH = 177, highS = 176, highV = 255;
+//    int lowH = 131, lowS = 47, lowV = 168, highH = 5, highS = 255, highV = 255;
     int led_lowH = 0, led_lowS = 0, led_lowV = 0, led_highH = 179, led_highS = 255, led_highV = 255;
     int h_bins = 31, s_bins = 16, v_bins = 40;
 
@@ -29,6 +31,8 @@ class LedDetector {
 
     Mat forgroundMask;
     Point ledPos;
+
+    cv::Ptr<BackgroundSubtractorMOG2> bg;
 
 public:
 
@@ -49,6 +53,9 @@ public:
         LedDetector::getInstance()->trackLed();
     }
 
+    static void onTrackBarChangedSubtractor(int, void*){
+        LedDetector::getInstance()->backgroundSubtraction();
+    }
 
     static void onMouse(int event, int x, int y, int, void*){
         LedDetector::getInstance()->selectRoi(event, Point(x,y));
@@ -73,12 +80,107 @@ public:
 
     void backgroundSubtraction(){
 
-//       bgs.operator()(this->img, forgroundMask);
-//        imshow("bg_subtraction", forgroundMask);
+        Mat fore;
+
+        // Track tout objet en movement
+        bg->apply(this->img,fore, 0.1);
+
+
+//        cv::erode (fore, fore, cv::Mat ());
+//        cv::dilate (fore, fore, cv::Mat ());
+        erode(fore, fore, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+        dilate(fore, fore, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+        dilate(fore, fore, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+        erode(fore, fore, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+
+        // Track tout objet rouge
+        // Hue range is circular [0:179] deg
+        if(lowH <= highH){
+            // min Hue value <= max value (i.e [20:160])
+            inRange(hsv, Scalar(lowH, lowS, lowV), Scalar(highH,highS,highV), thresholded);
+        } else {
+            // min Hue value >= max value (i.e: [160:20])
+            vector<Mat> hsv_planes;
+            split(hsv,hsv_planes);
+
+            Mat maskH, maskS, maskV;
+            inRange(hsv_planes[0], highH, lowH, maskH);    // inRange Hue (max -> min)
+            inRange(hsv_planes[1], lowS, highS, maskS);    // inRange Sat (normal)
+            inRange(hsv_planes[2], lowV, highV, maskV);    // inRange Val (normal)
+
+            bitwise_and(maskS, maskV, thresholded);        // merge Sat & Val
+            bitwise_not(maskH, maskH);                     // invese Hue range
+            bitwise_and(maskH, thresholded, thresholded);  // merge All
+        }
+
+
+        erode(thresholded, thresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+        dilate(thresholded, thresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+        dilate(thresholded, thresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+        erode(thresholded, thresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+
+
+        // mask objet en mouvement
+        Mat maskedFore;
+        this->orig.copyTo(maskedFore, fore);
+
+
+        // mask couleur
+        Mat maskedThres;
+        this->orig.copyTo(maskedThres, thresholded);
+
+        Mat roi;
+        bitwise_and(maskedFore, maskedThres, roi);
+        vector<Mat> planes;
+        split(roi, planes);
+        roi = planes[1];
+
+        vector<vector<Point>> contours;
+        vector<Point> approxCircle;
+
+
+        Mat contoured;
+        roi.copyTo(contoured);
+        findContours(contoured, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+        long nbContours = contours.size();
+        if(nbContours > 0){
+            for(int i=0; i < nbContours; i++){
+                approxPolyDP(contours.at(i), approxCircle, 0.01 * arcLength(contours.at(i), true), true);
+                Scalar color(rng.uniform(0,255),rng.uniform(0,255),rng.uniform(0,255));
+                polylines(img, approxCircle, true, color, 2);
+                putText(img, to_string(approxCircle.size()), Point(approxCircle.at(0).x - 30, approxCircle.at(0).y - 30), FONT_HERSHEY_SIMPLEX, 1, color, 2);
+            }
+        }
+
+
+        cv::imshow ("Fore", fore);
+        cv::imshow ("Frame", this->img);
+        cv::imshow ("Masked", maskedFore);
+        cv::imshow ("threshold", maskedThres);
+        cv::imshow("roi", roi);
     }
 
-    void setDebugBgSubstraction(){
-        namedWindow("bg_subtraction", 0);
+    void activateDebugBgSubstraction(){
+        cv::namedWindow ("Frame", 0);
+        cv::namedWindow ("Fore", 0);
+        cv::namedWindow ("Masked", 0);
+        cv::namedWindow("threshold", 0);
+        cv::namedWindow("roi", 0);
+
+        lowH = 139;
+        lowS = 0;
+        lowV = 139;
+
+        highH = 4;
+        highS = 255;
+        highV = 255;
+
+        createTrackbar("lowH", "threshold", &lowH, 179, onTrackBarChangedSubtractor);
+        createTrackbar("lowS", "threshold", &lowS, 255, onTrackBarChangedSubtractor);
+        createTrackbar("lowV", "threshold", &lowV, 255, onTrackBarChangedSubtractor);
+        createTrackbar("highH", "threshold", &highH, 179, onTrackBarChangedSubtractor);
+        createTrackbar("highS", "threshold", &highS, 255, onTrackBarChangedSubtractor);
+        createTrackbar("highV", "threshold", &highV, 255, onTrackBarChangedSubtractor);
     }
 
     Point debugLedDetection(){
@@ -237,18 +339,18 @@ public:
 
     void showImages(){
         imshow("source", img);
-        imshow("threshold", thresholded);
+//        imshow("threshold", thresholded);
 
         Mat masked;
         orig.copyTo(masked, thresholded);
         imshow("masked", masked);
 
-        if(!ledThresholded.empty() && checkLightTrackingRect()){
-            Mat masked, orig_roi;
-            orig_roi = orig(lightTracking);
-            orig_roi.copyTo(masked, ledThresholded);
-            imshow("ledThresholded", masked);
-        }
+//        if(!ledThresholded.empty() && checkLightTrackingRect()){
+//            Mat masked, orig_roi;
+//            orig_roi = orig(lightTracking);
+//            orig_roi.copyTo(masked, ledThresholded);
+//            imshow("ledThresholded", masked);
+//        }
     }
 
     void selectRoi(int event, Point p){
@@ -407,6 +509,9 @@ private:
 
     /////////////////////////// private ////////////////////////////////
     LedDetector(){
+        bg =  createBackgroundSubtractorMOG2();
+        bg->setNMixtures(3);
+        bg->setDetectShadows(false);
     }
 
     ~LedDetector(){

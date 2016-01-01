@@ -1,5 +1,5 @@
 #include "trackingmanager.h"
-#include "leddetector.h"
+#include "LedDetection/leddetector.h"
 #include "controller.h"
 
 TrackingManager::TrackingManager(QObject *parent) : QObject(parent)

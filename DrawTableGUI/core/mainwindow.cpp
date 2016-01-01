@@ -141,7 +141,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
 
     // Integration de la vue a la GUI
     setCentralWidget(table);
-//    showFullScreen();
+    showFullScreen();
 
     startTrackingManager();
 }
@@ -189,7 +189,7 @@ void MainWindow::onCalibrationSuccess() {
     toolBar->show();
     menuBar()->show();
 
-    QBrush bgColor(Qt::transparent);
+    QBrush bgColor(Qt::black);
     table->setBackgroundBrush(bgColor);
 }
 
