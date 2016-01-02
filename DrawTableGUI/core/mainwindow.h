@@ -95,6 +95,7 @@ private:
     GeneralController* controller;
 
     void startTrackingManager(int cameraId);
+    void tryCameraMode();
 };
 
 #endif // MAINWINDOW_H
