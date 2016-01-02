@@ -21,6 +21,7 @@ public:
 
     void listCameras();
     void startUpdater();
+    int countCameras();
 
     static void mouseHandler(int, int, int, int, void*);
 
