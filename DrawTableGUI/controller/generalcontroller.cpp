@@ -62,16 +62,11 @@ void GeneralController::mousePressEvent(QMouseEvent* event) {
 }
 
 void GeneralController::mouseReleaseEvent(QMouseEvent* event) {
-<<<<<<< HEAD
-    lastActions.append(drawController->mouseReleaseEvent(view->scene(), event));
-    nextActions.clear();
-    modifToSave = true;
-=======
     if (isEnable) {
         lastActions.append(drawController->mouseReleaseEvent(view->scene(), event));
         nextActions.clear();
+        modifToSave = true;
     }
->>>>>>> final-version
 }
 
 bool GeneralController::canRedo(){

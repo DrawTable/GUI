@@ -82,7 +82,6 @@ private:
      */
     QList<QGraphicsItem*> nextActions;
 
-<<<<<<< HEAD
     /**
      * @brief modifToSave
      * Vaut true si une modification sur le dessin a été effectuée depuis
@@ -90,9 +89,7 @@ private:
      */
     bool modifToSave;
 
-=======
     bool isEnable = false;
->>>>>>> final-version
 };
 
 #endif // GENERALCONTROLLER_H
