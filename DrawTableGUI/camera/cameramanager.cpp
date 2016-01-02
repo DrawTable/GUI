@@ -41,6 +41,10 @@ void CameraManager::listCameras() {
 
 // Gestion d'événements sur les fenêtres d'aperçu
 void CameraManager::mouseHandler(int event, int x, int y, int flags, void * params) {
+    Q_UNUSED(x)
+    Q_UNUSED(y)
+    Q_UNUSED(flags)
+
     // On ne gère que le clique gauche
     if(event != cv::EVENT_LBUTTONDOWN) {
         return;

@@ -199,6 +199,8 @@ void MainWindow::onCalibrationSuccess() {
 
 // Quand la calibration a échouée
 void MainWindow::onCalibrationError(int errorCode) {
+    Q_UNUSED(errorCode)
+
     // TODO implementation
     toolBar->show();
     //menuBar()->show();
@@ -380,9 +382,9 @@ void MainWindow::onQuitTriggered()
         switch (ret) {
           case QMessageBox::Save:
               onSaveTriggered();
-              emit quitProg();
+              QApplication::quit();
           case QMessageBox::Discard:
-              emit quitProg();
+              QApplication::quit();
               break;
           case QMessageBox::Cancel:
               // Nothing Happend
@@ -393,7 +395,7 @@ void MainWindow::onQuitTriggered()
         }
 
     }else{
-        emit quitProg();
+        QApplication::quit();
     }
 }
 

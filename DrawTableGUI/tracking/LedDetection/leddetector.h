@@ -302,8 +302,8 @@ public:
         vector<Point> points;
         findContours(threshold, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
         if(contours.size() > 0){
-            for(int i= 0; i < contours.size(); ++i){
-                for(int j =0; j < contours.at(i).size(); ++j)
+            for(size_t i= 0; i < contours.size(); ++i){
+                for(size_t j =0; j < contours.at(i).size(); ++j)
                     points.push_back(contours.at(i).at(j));
             }
 
