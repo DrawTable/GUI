@@ -138,6 +138,10 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     showFullScreen();
     menuBar()->hide();
 
+    QMessageBox::information(this, tr("Select your camera"),
+                             tr("Your camera(s) will now be displayed.\n\
+Please check the angle of the camera you want to use, so the screen is entirely in sight.\n\
+When you're ready, click on the chosen camera's image."));
     CameraManager* cm = CameraManager::getInstance();
     connect(cm, SIGNAL(cameraChoosen(int)), this, SLOT(onCameraChoosen(int)));
 }
@@ -147,6 +151,7 @@ MainWindow::~MainWindow() {
 
 // Lance le Tracking Manager une fois que l'utilisateur a choisi la caméra à utiliser
 void MainWindow::onCameraChoosen(int cameraId) {
+    QMessageBox::information(this, tr("Camera chosen"), QString("You chose the camera #") + QString::fromStdString(std::to_string(cameraId)) + QString(". The calibration will now begin."));
     startTrackingManager(cameraId);
 }
 
