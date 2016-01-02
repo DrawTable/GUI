@@ -35,10 +35,18 @@ SOURCES += main.cpp\
     tracking/screendetector.cpp \
     camera/cameramanager.cpp \
     camera/cameramanagerupdater.cpp \
-    modal/menudialog.cpp \
+    dialog/menudialog.cpp \
     tracking/controller.cpp \
     tracking/worker.cpp \
-    tracking/LedDetection/leddetector.cpp
+    tracking/LedDetection/leddetector.cpp \
+    keyboard/keybutton.cpp \
+    keyboard/keyboardmodel.cpp \
+    keyboard/keyboard.cpp \
+    keyboard/keyboardbutton.cpp \
+    dialog/savefiledialog.cpp \
+    dialog/openfiledialog.cpp \
+    keyboard/input.cpp \
+    dialog/filedialog.cpp
 
 HEADERS  += core/mainwindow.h \
     view/table.h \
@@ -53,10 +61,19 @@ HEADERS  += core/mainwindow.h \
     tracking/screendetector.h \
     camera/cameramanager.h \
     camera/cameramanagerupdater.h \
-    modal/menudialog.h \
+    dialog/menudialog.h \
     tracking/controller.h \
     tracking/worker.h \
-    tracking/LedDetection/leddetector.h
+    tracking/LedDetection/leddetector.h \
+    keyboard/keybutton.h \
+    keyboard/keymodel.h \
+    keyboard/keyboardmodel.h \
+    keyboard/keyboard.h \
+    keyboard/keyboardbutton.h \
+    dialog/savefiledialog.h \
+    dialog/openfiledialog.h \
+    keyboard/input.h \
+    dialog/filedialog.h
 
 RESOURCES += \
     icons.qrc

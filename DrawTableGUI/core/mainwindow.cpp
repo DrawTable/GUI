@@ -6,7 +6,8 @@
 #include "../controller/ellipsecontroller.h"
 #include "../controller/generalcontroller.h"
 #include "../controller/erasercontroller.h"
-#include "../modal/menudialog.h"
+#include "../dialog/menudialog.h"
+#include "../dialog/filedialog.h"
 
 #include <QApplication>
 #include <QFileDialog>
@@ -254,11 +255,7 @@ void MainWindow::onMenuTriggered() {
 }
 
 void MainWindow::onSaveTriggered() {
-    QFileDialog dialog(this);
-    dialog.setNameFilter(tr("Images (*.png *.bmp *.jpg)"));
-    dialog.setViewMode(QFileDialog::Detail);
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "C:/", tr("Images (*.png *.bmp *.jpg)"));
-
+    QString fileName = FileDialog::getSaveFileName();
     // creation du conteneur
     QPixmap pixmap(table->width(), table->height());
     // creation du painter allant servir à effectuer notre rendu
@@ -399,14 +396,8 @@ void MainWindow::onQuitTriggered()
     }
 }
 
-void MainWindow::openFile()
-{
-    QFileDialog dialog(this);
-    dialog.setNameFilter(tr("Images (*.png *.bmp *.jpg)"));
-    dialog.setViewMode(QFileDialog::Detail);
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
-                                                    "C:/",
-                                                    tr("Images (*.png *.bmp *.jpg)"));
+void MainWindow::openFile() {
+    QString fileName = FileDialog::getOpenFileName();
     QPixmap img(fileName);
     table->scene()->addPixmap(img);
 }

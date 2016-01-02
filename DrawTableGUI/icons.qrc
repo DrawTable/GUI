@@ -1,15 +1,15 @@
 <RCC>
     <qresource prefix="/menu">
-      <file>icons/new_on.png</file>
-      <file>icons/open_on.png</file>
-      <file>icons/print_on.png</file>
-      <file>icons/quit_on.png</file>
-      <file>icons/save_on.png</file>
-      <file>icons/new_off.png</file>
-      <file>icons/open_off.png</file>
-      <file>icons/print_off.png</file>
-      <file>icons/quit_off.png</file>
-      <file>icons/save_off.png</file>
+        <file>icons/new_on.png</file>
+        <file>icons/open_on.png</file>
+        <file>icons/print_on.png</file>
+        <file>icons/quit_on.png</file>
+        <file>icons/save_on.png</file>
+        <file>icons/new_off.png</file>
+        <file>icons/open_off.png</file>
+        <file>icons/print_off.png</file>
+        <file>icons/quit_off.png</file>
+        <file>icons/save_off.png</file>
     </qresource>
     <qresource prefix="/tool">
         <file>icons/color.png</file>
