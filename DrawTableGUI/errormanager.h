@@ -1,5 +1,0 @@
-#ifndef ERRORMANAGER
-#define ERRORMANAGER
-
-#endif // ERRORMANAGER
-
