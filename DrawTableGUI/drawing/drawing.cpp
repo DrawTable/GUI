@@ -1,6 +1,6 @@
-#include "table.h"
+#include "drawing.h"
 
-Table::Table(QWidget* parent) {
+Drawing::Drawing(QWidget* parent) {
     QGraphicsScene* scene = new QGraphicsScene(parent);
     setScene(scene);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -9,26 +9,26 @@ Table::Table(QWidget* parent) {
     setMouseTracking(true);
 }
 
-GeneralController *Table::getController() const {
+DrawingController *Drawing::getController() const {
     return controller;
 }
 
-void Table::setController(GeneralController *controller) {
+void Drawing::setController(DrawingController *controller) {
     this->controller = controller;
 }
 
-void Table::mouseDoubleClickEvent(QMouseEvent* event) {
+void Drawing::mouseDoubleClickEvent(QMouseEvent* event) {
     controller->mouseDoubleClickEvent(event);
 }
 
-void Table::mouseMoveEvent(QMouseEvent* event) {
+void Drawing::mouseMoveEvent(QMouseEvent* event) {
     controller->mouseMoveEvent(event);
 }
 
-void Table::mousePressEvent(QMouseEvent* event) {
+void Drawing::mousePressEvent(QMouseEvent* event) {
     controller->mousePressEvent(event);
 }
 
-void Table::mouseReleaseEvent(QMouseEvent* event) {
+void Drawing::mouseReleaseEvent(QMouseEvent* event) {
     controller->mouseReleaseEvent(event);
 }

@@ -2,7 +2,7 @@
 
 DashController* DashController::instance = nullptr;
 
-DashController::DashController() : AbstractController(), item(nullptr) {
+DashController::DashController() : AbstractToolController(), item(nullptr) {
 }
 
 DashController::~DashController() {

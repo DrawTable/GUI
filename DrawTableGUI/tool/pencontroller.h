@@ -1,17 +1,17 @@
 #ifndef PENCONTROLLER_H
 #define PENCONTROLLER_H
 
-#include "abstractcontroller.h"
+#include "abstracttoolcontroller.h"
 #include <QGraphicsPathItem>
 #include <QPainterPath>
 
 /**
  * @brief The PenController class
  *
- * Contrôleur gérant le dessin à main levée, hérite de AbstractController
+ * Contrôleur gérant le dessin à main levée, hérite de AbstractToolController
  *
  */
-class PenController : public AbstractController {
+class PenController : public AbstractToolController {
 
 public:
     virtual ~PenController();

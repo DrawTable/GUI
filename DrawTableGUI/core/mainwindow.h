@@ -1,15 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "../view/table.h"
-#include "../controller/generalcontroller.h"
+#include "../drawing/drawing.h"
+#include "../drawing/drawingcontroller.h"
 #include "../tracking/trackingmanager.h"
-#include "../controller/pencontroller.h"
-#include "../controller/dashcontroller.h"
-#include "../controller/rectanglecontroller.h"
-#include "../controller/ellipsecontroller.h"
-#include "../controller/generalcontroller.h"
-#include "../controller/erasercontroller.h"
+#include "../tool/pencontroller.h"
+#include "../tool/dashcontroller.h"
+#include "../tool/rectanglecontroller.h"
+#include "../tool/ellipsecontroller.h"
+#include "../tool/erasercontroller.h"
 #include "../camera/cameramanager.h"
 #include "../error/errormanager.h"
 
@@ -75,7 +74,7 @@ signals:
 private:
     QToolBar* toolBar;
     QToolButton* thickness;
-    Table* table;
+    Drawing* drawing;
 
     QAction* menu;
     QAction* newImg;
@@ -92,7 +91,7 @@ private:
     QAction* redo;
     QAction* color;
 
-    GeneralController* controller;
+    DrawingController* controller;
     ErrorManager* errorManager;
 
     void startTrackingManager(int cameraId);

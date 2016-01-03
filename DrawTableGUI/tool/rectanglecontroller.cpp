@@ -2,7 +2,7 @@
 
 RectangleController* RectangleController::instance = nullptr;
 
-RectangleController::RectangleController() : AbstractController(), origin(), item(nullptr) {
+RectangleController::RectangleController() : AbstractToolController(), origin(), item(nullptr) {
 }
 
 RectangleController::~RectangleController() {

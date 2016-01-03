@@ -1,7 +1,7 @@
 #ifndef ERASERCONTROLLER_H
 #define ERASERCONTROLLER_H
 
-#include "abstractcontroller.h"
+#include "abstracttoolcontroller.h"
 #include <QGraphicsPathItem>
 #include <QPainterPath>
 
@@ -9,11 +9,11 @@
 /**
  * @brief The EraserController class
  *
- * Contrôleur gérant la fonction d'effacement, hérite de AbstractController
+ * Contrôleur gérant la fonction d'effacement, hérite de AbstractToolController
  *
  */
 
-class EraserController : public AbstractController {
+class EraserController : public AbstractToolController {
 
 public:
     virtual ~EraserController();

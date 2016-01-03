@@ -22,59 +22,59 @@ unix {
   LIBS += -L/usr/local/lib -lopencv_calib3d -lopencv_core -lopencv_features2d -lopencv_flann -lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_shape -lopencv_stitching -lopencv_superres -lopencv_ts -lopencv_video -lopencv_videoio -lopencv_videostab
 }
 
-SOURCES += main.cpp\
-        core/mainwindow.cpp \
-    view/table.cpp \
-    controller/pencontroller.cpp \
-    controller/dashcontroller.cpp \
-    controller/rectanglecontroller.cpp \
-    controller/ellipsecontroller.cpp \
-    controller/generalcontroller.cpp \
-    controller/erasercontroller.cpp \
+SOURCES += main.cpp \
+    core/mainwindow.cpp \
+    tool/pencontroller.cpp \
+    tool/dashcontroller.cpp \
+    tool/rectanglecontroller.cpp \
+    tool/ellipsecontroller.cpp \
+    tool/erasercontroller.cpp \
     tracking/trackingmanager.cpp \
     tracking/screendetector.cpp \
-    camera/cameramanager.cpp \
-    camera/cameramanagerupdater.cpp \
-    dialog/menudialog.cpp \
     tracking/controller.cpp \
     tracking/worker.cpp \
     tracking/LedDetection/leddetector.cpp \
+    camera/cameramanager.cpp \
+    camera/cameramanagerupdater.cpp \
+    keyboard/input.cpp \
     keyboard/keybutton.cpp \
     keyboard/keyboardmodel.cpp \
-    keyboard/keyboard.cpp \
     keyboard/keyboardbutton.cpp \
+    keyboard/virtualkeyboard.cpp \
+    dialog/menudialog.cpp \
     dialog/savefiledialog.cpp \
     dialog/openfiledialog.cpp \
-    keyboard/input.cpp \
     dialog/filedialog.cpp \
+    drawing/drawing.cpp \
+    drawing/drawingcontroller.cpp \
     error/errormanager.cpp
 
-HEADERS  += core/mainwindow.h \
-    view/table.h \
-    controller/pencontroller.h \
-    controller/dashcontroller.h \
-    controller/rectanglecontroller.h \
-    controller/abstractcontroller.h \
-    controller/ellipsecontroller.h \
-    controller/generalcontroller.h \
-    controller/erasercontroller.h \
+HEADERS += core/mainwindow.h \
+    tool/abstracttoolcontroller.h \
+    tool/pencontroller.h \
+    tool/dashcontroller.h \
+    tool/rectanglecontroller.h \
+    tool/ellipsecontroller.h \
+    tool/erasercontroller.h \
     tracking/trackingmanager.h \
     tracking/screendetector.h \
-    camera/cameramanager.h \
-    camera/cameramanagerupdater.h \
-    dialog/menudialog.h \
     tracking/controller.h \
     tracking/worker.h \
     tracking/LedDetection/leddetector.h \
+    camera/cameramanager.h \
+    camera/cameramanagerupdater.h \
+    keyboard/input.h \
+    keyboard/virtualkeyboard.h \
     keyboard/keybutton.h \
     keyboard/keymodel.h \
     keyboard/keyboardmodel.h \
-    keyboard/keyboard.h \
     keyboard/keyboardbutton.h \
+    dialog/menudialog.h \
     dialog/savefiledialog.h \
     dialog/openfiledialog.h \
-    keyboard/input.h \
     dialog/filedialog.h \
+    drawing/drawing.h \
+    drawing/drawingcontroller.h \
     error/errormanager.h
 
 RESOURCES += \

@@ -8,10 +8,10 @@
 #include <QPushButton>
 #include <QListView>
 #include <QFileSystemModel>
-#include "../keyboard/keyboard.h"
+#include "../keyboard/virtualkeyboard.h"
 #include "../keyboard/input.h"
 
-class SaveFileDialog : /*public QWidget,*/ public QDialog {
+class SaveFileDialog : public QDialog {
     Q_OBJECT
 
     QLabel* title;
@@ -20,14 +20,14 @@ class SaveFileDialog : /*public QWidget,*/ public QDialog {
     QPushButton* save;
     QPushButton* cancel;
     QPushButton* drive;
-    Keyboard* keyboard;
-
+    VirtualKeyboard* keyboard;
     QFileSystemModel* model;
     QListView* view;
 
 private slots:
     void onViewClicked(QModelIndex index);
     void onSaveClicked();
+    void onCancelClicked();
     void onDriveClicked();
 
 public:

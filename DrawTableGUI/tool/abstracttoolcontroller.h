@@ -1,5 +1,5 @@
-#ifndef ABSTRACTCONTROLLER_H
-#define ABSTRACTCONTROLLER_H
+#ifndef ABSTRACTTOOLCONTROLLER_H
+#define ABSTRACTTOOLCONTROLLER_H
 
 #include <QMouseEvent>
 #include <QGraphicsScene>
@@ -7,13 +7,12 @@
 #include <QPen>
 
 /**
- * @brief The AbstractController class
+ * @brief The AbstractToolController class
  *
- * Classe abstraite contenant les fonction que doivent implémenter les controleurs
- * pour les dif
- * férents outils de l'application de dessin
+ * Classe abstraite contenant les fonctions que doivent implémenter les contrôleurs
+ * pour les différents outils de l'application de dessin.
  */
-class AbstractController {
+class AbstractToolController {
 
 public:
 
@@ -62,5 +61,5 @@ public:
     virtual QGraphicsItem* mouseReleaseEvent(QGraphicsScene* scene, QMouseEvent* event) = 0;
 };
 
-#endif // ABSTRACTCONTROLLER_H
+#endif // ABSTRACTTOOLCONTROLLER_H
 
