@@ -11,6 +11,7 @@
 #include "../controller/generalcontroller.h"
 #include "../controller/erasercontroller.h"
 #include "../camera/cameramanager.h"
+#include "../error/errormanager.h"
 
 #include <QApplication>
 #include <QFileDialog>
@@ -64,6 +65,9 @@ public slots:
     // Communication Main Window <--> Camera Manager
     void onCameraChoosen(int cameraId);
 
+    // Communication Main Window <--> Error Manager
+    void restartCameraSelection();
+
 signals:
     void stratCalibration(int, int);
     void quitProg();
@@ -89,6 +93,7 @@ private:
     QAction* color;
 
     GeneralController* controller;
+    ErrorManager* errorManager;
 
     void startTrackingManager(int cameraId);
     void tryCameraMode();

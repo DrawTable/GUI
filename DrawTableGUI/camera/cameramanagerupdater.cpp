@@ -16,6 +16,7 @@ void CameraManagerUpdater::process() {
             cv::imshow(windowName, frame);
         }
     }
+    cv::destroyAllWindows();
 
     for (unsigned int i = 0; i < captures.size(); i++) {
         cv::VideoCapture* cap = captures.at(i);

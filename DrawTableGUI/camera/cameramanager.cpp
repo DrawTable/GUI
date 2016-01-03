@@ -77,6 +77,7 @@ void CameraManager::onUpdaterFinished() {
     for (unsigned int i = 0; i < captures.size(); i++) {
         std::string windowName = "Camera #" + std::to_string(i);
         cv::destroyWindow(windowName);
+        qDebug() << "BOUUUM\n";
     }
 }
 
