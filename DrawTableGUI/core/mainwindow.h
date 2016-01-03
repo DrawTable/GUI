@@ -75,6 +75,7 @@ private:
     Drawing* drawing;
     DrawingController* controller;
     ErrorManager* errorManager;
+    CameraManager* cm;
 
     void startTrackingManager(int cameraId);
     void tryCameraMode();

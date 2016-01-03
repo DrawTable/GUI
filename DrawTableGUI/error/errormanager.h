@@ -13,7 +13,6 @@ public:
     static ErrorManager* getInstance();
 public slots:
     // slots internes
-    void restartCalibration();
     void selectCamera();
     void quitApplication();
 
@@ -29,7 +28,6 @@ private:
     int nbTry;
 
 signals:
-    void startCalibration();
     void cameraSelection();
     void quitApp();
 };

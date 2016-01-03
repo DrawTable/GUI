@@ -7,20 +7,14 @@ TrackingManager::TrackingManager(int cameraId, QObject *parent) : QObject(parent
     this->cameraId = cameraId;
 }
 
-/*
-1. Attendre que la GUI soit prête pour la calibration
-2. Lancer la callibration (simule avec sleep)
-2.a Si la calibration et ok envoit un signal calibrationSucess
-2.b Sil la calibration n’a pas marché, envoi un signal calibrationError avec la raison et recommence la calibration
-3. Commencer le tracking (simule en lançant la webcam et en lisant les frame, jusqu’a ce que l’on arrête le programme)
-4. Avant de quitter le programme. demande une interuption du thread pour tout libérer (SIGNAL : QApplication::aboutToQuit())
-*/
 void TrackingManager::process() {
     emit showGreenScreen();
 }
 
 // Lance le processus de calibration
 void TrackingManager::onStratCalibration(int width, int height) {
+    qDebug() << "TM::onStratCalibration";
+
     Mat frame;
 
     // Lancement de la capture avec la webcam
@@ -32,6 +26,7 @@ void TrackingManager::onStratCalibration(int width, int height) {
         cap->release();
         emit calibrationError(1);
         cerr << "la lecture de la frame a échoué" << endl;
+        emit finished();
         return;
     }
 
@@ -50,18 +45,12 @@ void TrackingManager::onStratCalibration(int width, int height) {
         cerr << err.getErrorTitle() << ":\n" << err.getErrorMessage() << endl;
         cap->release();
         emit calibrationError(1);
+        emit finished();
         return;
     }
 
-    bool success = true;
-    if (success) {
-        emit calibrationSuccess();
-        mainLoop();
-    } else {
-        int errorCode = -1;
-        emit calibrationError(errorCode);
-        return;
-    }
+    emit calibrationSuccess();
+    mainLoop();
 }
 
 // Boucle principal du thread

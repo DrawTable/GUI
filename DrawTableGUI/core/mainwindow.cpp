@@ -63,8 +63,11 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     // initialisation de l'error manager et liaison des signaux
     errorManager = ErrorManager::getInstance();
     connect(errorManager, SIGNAL(cameraSelection()), this, SLOT(restartCameraSelection()));
-    connect(errorManager, SIGNAL(startCalibration()), this, SLOT(onShowGreenScreen()));
     connect(errorManager, SIGNAL(quitApp()), this, SLOT(onQuitTriggered()));
+
+    // Lancement du Camera Manager
+    cm = CameraManager::getInstance();
+    connect(cm, SIGNAL(cameraChoosen(int)), this, SLOT(onCameraChoosen(int)));
 
     tryCameraMode();
 }
@@ -73,8 +76,6 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::tryCameraMode() {
-    // Lancement du Camera Manager
-    CameraManager* cm = CameraManager::getInstance();
     cm->initCameras();
 
     if (cm->countCameras() < 1) {
@@ -89,13 +90,12 @@ Please check the angle of the camera you want to use, so your working board is e
 To choose a camera, click on the chosen camera's screen into it's window."));
 
         cm->listCameras();
-
-        connect(cm, SIGNAL(cameraChoosen(int)), this, SLOT(onCameraChoosen(int)));
     }
 }
 
 // Lance le Tracking Manager une fois que l'utilisateur a choisi la caméra à utiliser
 void MainWindow::onCameraChoosen(int cameraId) {
+    qDebug() << "ON CAMERA CHOSEN";
     QMessageBox::information(this, tr("Camera chosen"),
                              QString("You chose the camera #") +
                              QString::fromStdString(std::to_string(cameraId)) +
@@ -127,6 +127,8 @@ void MainWindow::startTrackingManager(int cameraId) {
 
 // Affiche un écran vert pour le calibrage
 void MainWindow::onShowGreenScreen() {
+    qDebug() << "MW::onShowGreenScreen";
+
     // afficher un écran vert pour le calibrage
     toolBar->hide();
     menuBar()->hide();
@@ -152,8 +154,8 @@ void MainWindow::onCalibrationSuccess() {
     QBrush bgColor(Qt::black);
     drawing->setBackgroundBrush(bgColor);
 
-    QMessageBox::information(this, tr("Calibration successfull"),
-                             tr("Calibration sucessfull, the software is now ready to use !"));
+    QMessageBox::information(this, tr("Calibration successful"),
+                             tr("Calibration sucessful, the software is now ready to use !"));
 
     // on retire le flag pour éviter de la bloquer en premier plan
     eFlags &= ~Qt::WindowStaysOnTopHint;
@@ -161,8 +163,6 @@ void MainWindow::onCalibrationSuccess() {
     showFullScreen();
 
     controller->enable();
-
-
 }
 
 // Quand la calibration a échouée

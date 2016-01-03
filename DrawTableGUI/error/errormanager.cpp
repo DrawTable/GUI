@@ -44,10 +44,6 @@ void ErrorManager::onCalibrationError(int errorCode){
     select->setText("Select");
     QObject::connect(select, SIGNAL(clicked()), this, SLOT(selectCamera()));
 
-    QPushButton* restart = new QPushButton();
-    restart->setText("Restart");
-    QObject::connect(restart, SIGNAL(clicked()),this, SLOT(restartCalibration()));
-
     QPushButton* quit = new QPushButton();
     quit->setText("Quit");
     QObject::connect(quit, SIGNAL(clicked()), this, SLOT(quitApplication()));
@@ -55,7 +51,6 @@ void ErrorManager::onCalibrationError(int errorCode){
     QHBoxLayout* buttonsLayout = new QHBoxLayout();
     buttonsLayout->addStretch(1);
     buttonsLayout->addWidget(select);
-    buttonsLayout->addWidget(restart);
     buttonsLayout->addWidget(quit);
     buttonsLayout->addStretch(1);
 
@@ -69,11 +64,6 @@ void ErrorManager::onCalibrationError(int errorCode){
     dialog->setLayout(globalLayout);
     dialog->exec();
 
-}
-
-void ErrorManager::restartCalibration(){
-    emit startCalibration();
-    dialog->close();
 }
 
 void ErrorManager::selectCamera(){
