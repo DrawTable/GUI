@@ -22,15 +22,13 @@ ErrorManager* ErrorManager::getInstance(){
 void ErrorManager::onCalibrationError(int errorCode){
     Q_UNUSED(errorCode);
 
-    QString line1 = "An error occured during the calibration.\n\n";
-    QString line2 = "Please check the list bellow :\n";
-    QString line3 = "1. you moved your camera\n";
-    QString line4 = "2. your camera is shutdown\n";
-    QString line5 = "3. your camera is obstructed\n";
-    QString line6 = "4. your camera is no longer connected to your computer\n\n";
-    QString line7 = "If it's the 1st point, please restart to camera's selection step by using the 'select' button.\n";
-    QString line8 = "If it's one of the other points, fix it and restart the calibration by using the 'restart' button.";
-    QString textIntro = line1 % line2 % line3 % line4 % line5 %line6 % line7 % line8;
+    QString textIntro = "An error occured during the calibration.\n\n\
+1. Did you moved your camera?\n\
+2. Can the camera see the screen entirely?\n\
+3. Is your camera obstructed?\n\
+4. Is your camera still accessible by your OS?\n\
+5. Is your camera connected to your computer?\n\n\
+Please restart to camera's selection step by using the 'restart' button.\n";
 
     QLabel* textLabel = new QLabel();
     textLabel->setText(textIntro);
@@ -40,9 +38,9 @@ void ErrorManager::onCalibrationError(int errorCode){
     textLayout->addWidget(textLabel, 0, Qt::AlignCenter);
     textLayout->addStretch(1);
 
-    QPushButton* select = new QPushButton();
-    select->setText("Select");
-    QObject::connect(select, SIGNAL(clicked()), this, SLOT(selectCamera()));
+    QPushButton* restart = new QPushButton();
+    restart->setText("Restart");
+    QObject::connect(restart, SIGNAL(clicked()), this, SLOT(selectCamera()));
 
     QPushButton* quit = new QPushButton();
     quit->setText("Quit");
@@ -50,7 +48,7 @@ void ErrorManager::onCalibrationError(int errorCode){
 
     QHBoxLayout* buttonsLayout = new QHBoxLayout();
     buttonsLayout->addStretch(1);
-    buttonsLayout->addWidget(select);
+    buttonsLayout->addWidget(restart);
     buttonsLayout->addWidget(quit);
     buttonsLayout->addStretch(1);
 
