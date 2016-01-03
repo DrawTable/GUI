@@ -61,7 +61,7 @@ OpenFileDialog::OpenFileDialog(QWidget *parent) : QDialog(parent) {
     input->setFixedHeight(50);
     input->setStyleSheet("color: white; font: 14pt;");
 
-    open = new QPushButton("Save");
+    open = new QPushButton("Open");
     open->setFixedSize(QSize(150, 50));
     open->setStyleSheet("QPushButton{color: white; border: 0px; font: 14pt;} QPushButton::hover{border: 2px solid white;}");
     connect(open, SIGNAL(clicked(bool)), this, SLOT(onOpenClicked()));
@@ -69,7 +69,7 @@ OpenFileDialog::OpenFileDialog(QWidget *parent) : QDialog(parent) {
     cancel = new QPushButton("Cancel");
     cancel->setFixedSize(QSize(150, 50));
     cancel->setStyleSheet("QPushButton{color: white; border: 0px; font: 14pt;} QPushButton::hover{border: 2px solid white;}");
-    connect(cancel, SIGNAL(clicked(bool)), this, SLOT(close()));
+    connect(cancel, SIGNAL(clicked(bool)), this, SLOT(onCancelClicked()));
 
     hlayout = new QHBoxLayout();
     hlayout->addWidget(input);
@@ -82,6 +82,8 @@ OpenFileDialog::OpenFileDialog(QWidget *parent) : QDialog(parent) {
     keyboard = new Keyboard(input, this);
     keyboard->setStyleSheet("font: 14pt;");
     keyboard->hide();
+    connect(keyboard, SIGNAL(enterClicked()), this, SLOT(onOpenClicked()));
+
     layout->addWidget(keyboard);
 
     /* window */
@@ -102,6 +104,11 @@ void OpenFileDialog::onViewClicked(QModelIndex index) {
 
 void OpenFileDialog::onOpenClicked() {
     FileDialog::fileName = path->text();
+    close();
+}
+
+void OpenFileDialog::onCancelClicked() {
+    FileDialog::fileName = "";
     close();
 }
 

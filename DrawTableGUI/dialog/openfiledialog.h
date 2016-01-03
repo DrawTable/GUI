@@ -28,6 +28,7 @@ class OpenFileDialog : public QDialog {
 private slots:
     void onViewClicked(QModelIndex index);
     void onOpenClicked();
+    void onCancelClicked();
     void onDriveClicked();
 
 public:

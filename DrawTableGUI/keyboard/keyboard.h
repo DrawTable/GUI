@@ -28,10 +28,14 @@ class Keyboard : public QWidget {
     void addModelToRow(QHBoxLayout* rowLayout, const QList<KeyModel>& rowModel);
 
 private slots:
-    void onKeyPressed();
-    void onShiftPressed();
-    void onBackspacePressed();
-    void onAlphanumPressed();
+    void onKeyClicked();
+    void onShiftClicked();
+    void onBackspaceClicked();
+    void onAlphanumClicked();
+    void onEnterClicked();
+
+signals:
+    enterClicked();
 
 public:
     Keyboard(Input* input, QWidget *parent = 0);

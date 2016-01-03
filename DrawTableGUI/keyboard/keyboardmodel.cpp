@@ -6,7 +6,7 @@ const QList<KeyModel> KeyboardModel::FIRST_ROW = QList<KeyModel>()
 
 const QList<KeyModel> KeyboardModel::SECOND_ROW = QList<KeyModel>()
         << KeyModel("a", "!") << KeyModel("s", "@") << KeyModel("d", "#") << KeyModel("f", "$") << KeyModel("g", "%")
-        << KeyModel("h", "&") << KeyModel("j", "*") << KeyModel("k", "?") << KeyModel("l", "/");
+        << KeyModel("h", "&&") << KeyModel("j", "*") << KeyModel("k", "?") << KeyModel("l", "/");
 
 const QList<KeyModel> KeyboardModel::THIRD_ROW = QList<KeyModel>()
         << KeyModel("y", "_") << KeyModel("x", "\"") << KeyModel("c", "'") << KeyModel("v", "(") << KeyModel("b", ")")

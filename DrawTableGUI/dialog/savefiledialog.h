@@ -28,6 +28,7 @@ class SaveFileDialog : /*public QWidget,*/ public QDialog {
 private slots:
     void onViewClicked(QModelIndex index);
     void onSaveClicked();
+    void onCancelClicked();
     void onDriveClicked();
 
 public:
