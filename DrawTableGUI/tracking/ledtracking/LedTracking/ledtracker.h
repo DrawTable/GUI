@@ -4,7 +4,8 @@
 #include <opencv2/opencv.hpp>
 #include <QDebug>
 
-#define DEBUG false
+#define DEBUG_MAIN true  // show original and foreground
+#define DEBUG true       // show histograms, threshold, etc..
 
 #define NUM_CHANNELS_HIST 3
 #define RANGE_BIN_SIZE 2
@@ -26,14 +27,13 @@ using namespace cv;
  * et renvoie les coordonnées (x,y) de sa position sur l'image.
  *
  * Cette classe effectue le calibrage de la couleur de la led à détecter
- * en construisons un modèle probalistic. Les paramètres de ce modèle
+ * en construisant un modèle probalistic. Les paramètres de ce modèle
  * sont :
  *
  *     1. La distribution des couleurs de la LED (Couleur, saturation, brillance)
  *     2. La Taille de la Led
  *
  * Ce calibrage sert à ne pas confondre la LED avec un element qui lui ressemble.
- *
  */
 
 class LedTracker{
@@ -41,10 +41,12 @@ class LedTracker{
 public:
      enum MODE {NONE, CALIBRATION, TRACKING};
      enum OBJECT_TYPE {POINTER, STYLUS};
+     enum TRACKING_METHOD {FAST, PRECISION};
 private:
 
     MODE current_mode = MODE::NONE;
     OBJECT_TYPE object_type = OBJECT_TYPE::STYLUS;
+    TRACKING_METHOD tracking_method = FAST;
 
     struct Params{
         int lowH;
@@ -78,7 +80,7 @@ private:
               v_hist_model;
 
         unsigned long nbSampleInModel = 0;
-        const int nbSampleRequired = 40;
+        const int nbSampleRequired = 100;
 
         MatND h_hist_buffer,
               s_hist_buffer,
@@ -127,7 +129,6 @@ private:
             ledTracker(parent), // parent
             W(512),H(400)       // image size
         {
-
             ///// Init values to represent histogramms in an image
             // bins width
             h_bin_w = cvRound( (double) W/bins[0]);
@@ -312,13 +313,11 @@ private:
 
                 if(new_value >= probability_min[0] && !rangeMinFound){
                     bin_ranges[0] = i + 1;
-//                    qDebug("RangeMin: %d,", bin_ranges[0]);
                     rangeMinFound = probability_min[0] != -1;
                 }
 
                 if(new_value >= probability_min[1] && !rangeMaxFound){
                     bin_ranges[1] = i + 1;
-//                    qDebug("RangeMax: %d,", bin_ranges[1]);
                     rangeMaxFound = probability_min[1] != -1;
                 }
 
@@ -331,7 +330,9 @@ private:
         void showModelHist(){          
             Mat h_hist_cumul, s_hist_cumul, v_hist_cumul;
             processHistogramAnalysis(&h_hist_model, &s_hist_model,&v_hist_model, &h_hist_cumul, &s_hist_cumul, &v_hist_cumul);
-            showHistograms(h_hist_cumul, s_hist_cumul, v_hist_cumul);
+
+            if(DEBUG)
+                showHistograms(h_hist_cumul, s_hist_cumul, v_hist_cumul);
         }
 
         void showHistograms(Mat h_hist, Mat s_hist, Mat v_hist){
@@ -383,7 +384,6 @@ private:
         }
 
         void drawLines(){
-
              //copy originals
             orig_hist_images.at(0).copyTo(h_hist_image);
             orig_hist_images.at(1).copyTo(s_hist_image);
@@ -442,12 +442,10 @@ private:
 //                   ok &= minWhiteArea <= whiteArea && whiteArea <= maxWhiteArea;
                    if(ok){
                        contours_result.push_back(c);
-//                       polylines(result, contours_result, true, Scalar(0,255,0), CV_FILLED);
 //                       cout << "OK : " << area <<   " in [" << minArea<< ":" << maxArea << "]" << endl;
                     } else {
 //                       cout << "rejected: " << area <<   " not in [" << minArea<< ":" << maxArea << "]" << endl;
                        contours_skipped.push_back(c);
-//                       polylines(result, contours_result, true, Scalar(0,0,255), CV_FILLED);
                    }
                 });
 
@@ -457,7 +455,7 @@ private:
 
             }
 
-            if(DEBUG){
+            if(DEBUG_MAIN){
                 namedWindow("result", 0);
                 imshow("result", result);
             }
@@ -467,7 +465,6 @@ private:
             return results[1];
         }
     };
-
     ModelHistogram ledModel;
 
 public:
@@ -494,14 +491,15 @@ public:
     }
 
     void activateDebugAnalysis(){
-
-        namedWindow("threshold", 0);
-        createTrackbar("lowH", "threshold", &lowH, 179, onThresholdChanged);
-        createTrackbar("lowS", "threshold", &lowS, 255, onThresholdChanged);
-        createTrackbar("lowV", "threshold", &lowV, 255, onThresholdChanged);
-        createTrackbar("highH", "threshold", &highH, 179, onThresholdChanged);
-        createTrackbar("highS", "threshold", &highS, 255, onThresholdChanged);
-        createTrackbar("highV", "threshold", &highV, 255, onThresholdChanged);
+        if(DEBUG){
+            namedWindow("threshold", 0);
+            createTrackbar("lowH", "threshold", &lowH, 179, onThresholdChanged);
+            createTrackbar("lowS", "threshold", &lowS, 255, onThresholdChanged);
+            createTrackbar("lowV", "threshold", &lowV, 255, onThresholdChanged);
+            createTrackbar("highH", "threshold", &highH, 179, onThresholdChanged);
+            createTrackbar("highS", "threshold", &highS, 255, onThresholdChanged);
+            createTrackbar("highV", "threshold", &highV, 255, onThresholdChanged);
+        }
     } 
 
     void threshold_circular(Mat* hsv, Scalar low, Scalar high, Mat* thresholded){
@@ -554,20 +552,36 @@ public:
         Mat masked;
         image.copyTo(masked, thresholded);
 
-        namedWindow("threshold",0);
-        imshow("threshold", masked);
+        if(DEBUG){
+            namedWindow("threshold",0);
+            imshow("threshold", masked);
+            ledModel.drawLines();
+        }
 
-        ledModel.drawLines();
+
     }
 
-    void processFilterByArea(){
-        if(!thresholded.empty()){
-            Mat filterByArea = ledModel.estimateLedByThreshold();
-//            Point center = FindLedCenter(result);
-            Point center = FindLightCenter(filterByArea);
-            if(center.x > 0 && center.y > 0){
-                drawCross(image, center, Scalar(0,0,255), 20, 3);
+    Point findObjectPosition(TRACKING_METHOD method){
+
+        Point pos(-1,-1);
+        switch(method){
+        case FAST:
+            if(!thresholded.empty()){
+                Mat filterByArea = ledModel.estimateLedByThreshold();
+                pos = FindLightCenter(filterByArea);
+                if(DEBUG_MAIN && pos.x > 0 && pos.y > 0){
+                    drawCross(image, pos, Scalar(0,0,255), 20, 3);
+                }
             }
+            break;
+        case PRECISION:
+            break;
+        }
+        return pos;
+    }
+
+    void getPointfilterByArea(){
+        if(!thresholded.empty()){
         }
     }
 
@@ -664,27 +678,22 @@ public:
                 ledModel.calcHistograms(mask_roi, mask_hist);
                 processThreshold();
                 showMaskRoi();
-                showImagesAnalysis();
                 break;
             case CALIBRATION:
                 if(!processForeground())
                     break;                  // foreground empty nothing todo
                 ledModel.calcHistograms(mask_roi, mask_hist, true);
                 showMaskRoi();
-                showImagesAnalysis();
                 break;
             case TRACKING:
                 processThreshold();
-                this->processFilterByArea();
-
-                if(DEBUG){
-                    namedWindow("original", 0);
-                    imshow("original", image);
-                }
+                this->findObjectPosition(tracking_method);
                 break;
             default:
                 break;
         }
+
+        showMainImages();
     }
 
     bool processForeground(){
@@ -717,17 +726,23 @@ public:
                 bitwise_and(maskH, mask_people, mask_people);  // merge All
             }
 
+            erode(mask_people, mask_people, getStructuringElement(MORPH_ELLIPSE, Size(10,10)));
+            dilate(mask_people, mask_people, getStructuringElement(MORPH_ELLIPSE, Size(10,10)));
+            dilate(mask_people, mask_people, getStructuringElement(MORPH_ELLIPSE, Size(10,10)));
+            erode(mask_people, mask_people, getStructuringElement(MORPH_ELLIPSE, Size(10,10)));
+
             bitwise_and(mask_people, foreground, foreground);
 
-            Mat masked;
-            image.copyTo(masked, mask_people);
-            namedWindow("mask_people", 0);
-            imshow("mask_people", masked);
+            if(DEBUG){
+                Mat masked;
+                image.copyTo(masked, mask_people);
+                namedWindow("mask_people", 0);
+                imshow("mask_people", masked);
+            }
         }
 
         // calculate bouding rect for moving foreground
         rect_mask_roi = getMaxBoundingRect(foreground);
-        cout << rect_mask_roi << endl;
         if(rect_mask_roi.area() == 0) return false;
 
         // mask foreground and isolate in region of interset window
@@ -785,9 +800,9 @@ public:
     }
 
     void showMainImages(){
-        if(DEBUG){
-            namedWindow("original");
-            namedWindow("foreground");
+        if(DEBUG_MAIN){
+            namedWindow("original",0);
+            namedWindow("foreground",0);
             imshow("original", image);
             imshow("foreground", foreground);
         }
@@ -797,7 +812,11 @@ public:
         current_mode = mode;
     }
 
-    void setObjectType(LedTracker::OBJECT_TYPE type){
+    void setTrackingMethod(TRACKING_METHOD method){
+        tracking_method = method;
+    }
+
+    void setObjectType(OBJECT_TYPE type){
         object_type = type;
     }
 

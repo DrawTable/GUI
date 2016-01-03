@@ -72,7 +72,7 @@ void ErrorManager::selectCamera(){
 }
 
 void ErrorManager::quitApplication(){
-    emit quitApp();
+     emit quitApp();
     dialog->close();
 }
 

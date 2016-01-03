@@ -81,6 +81,7 @@ private:
     DrawingController* controller;
     ErrorManager* errorManager;
     CameraManager* cm;
+    TrackingManager* worker;
     QProgressDialog* stylusCalibrationProgress;
     void startTrackingManager(int cameraId);
     void tryCameraMode();

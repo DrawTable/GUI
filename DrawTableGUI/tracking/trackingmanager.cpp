@@ -14,43 +14,44 @@ void TrackingManager::process() {
 // Lance le processus de calibration
 void TrackingManager::onStratCalibration(int width, int height) {
     qDebug() << "TM::onStratCalibration";
+//    sleep(10);
+//    Mat frame;
 
-    Mat frame;
+//    // Lancement de la capture avec la webcam
+//    cap = new VideoCapture(cameraId);
 
-    // Lancement de la capture avec la webcam
-    cap = new VideoCapture(cameraId);
+//    // Lecture d'une image
+//    if (!cap->read(frame)) {
+//        // Erreur: la lecture de la frame a échoué
+//        cap->release();
+//        emit calibrationError(1);
+//        cout << "la lecture de la frame a échoué" << endl;
+//        qDebug() << "TM::onStratCalibration";
+//        emit finished();
+//        return;
+//    }
 
-    // Lecture d'une image
-    if (!cap->read(frame)) {
-        // Erreur: la lecture de la frame a échoué
-        cap->release();
-        emit calibrationError(1);
-        cerr << "la lecture de la frame a échoué" << endl;
-        emit finished();
-        return;
-    }
 
-    //namedWindow("frame", WINDOW_KEEPRATIO);
-    //imshow("frame", frame);
+//    namedWindow("frame", WINDOW_KEEPRATIO);
+//    imshow("frame", frame);
 
-    ScreenDetector sd(frame, width, height);
+//    ScreenDetector sd(frame, width, height);
+//    ScreenDetector::Error err;
 
-    ScreenDetector::Error err;
+//    // Récupération de la matrice de transformation
+//    transformMatrix = sd.getTransformationMatrix(err);
 
-    // Récupération de la matrice de transformation
-    transformMatrix = sd.getTransformationMatrix(err);
+//    // always check error before using the transformatrix
+//    if(err.hasError()){
+//        cout << err.getErrorTitle() << ":\n" << err.getErrorMessage() << endl;
+//        cap->release();
+//        emit calibrationError(1);
+//        emit finished();
+//        return;
+//    }
 
-    // always check error before using the transformatrix
-    if(err.hasError()){
-        cerr << err.getErrorTitle() << ":\n" << err.getErrorMessage() << endl;
-        cap->release();
-        emit calibrationError(1);
-        emit finished();
-        return;
-    }
-
-   emit calibrationSuccess();
-    mainLoop();
+//   emit calibrationSuccess();
+//   mainLoop();
 }
 
 void TrackingManager::onStartStylusCalibration()

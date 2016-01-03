@@ -3,18 +3,17 @@
 
 void testVideo(){
 
-    VideoCapture cap(0);
+    VideoCapture cap(1);
     if(!cap.isOpened())
         return;
 
     waitKey(1);
     LedTracker* lt = LedTracker::getInstance();
     lt->activateDebugAnalysis();
-    lt->setObjectType(LedTracker::STYLUS);
+    lt->setObjectType(LedTracker::POINTER);
     Mat frame;
 
     for(;;){
-
         cap >> frame;
         if(frame.empty())
         return;
@@ -37,7 +36,6 @@ void testVideo(){
             break;
         }
     }
-
 }
 
 
