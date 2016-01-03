@@ -12,22 +12,21 @@
 #include "../camera/cameramanager.h"
 
 #include <QApplication>
-#include <QFileDialog>
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPainter>
 #include <QPixmap>
-#include <QMenuBar>
 #include <QColorDialog>
 #include <QDebug>
 #include <QRect>
 #include <QDesktopWidget>
 #include <QMainWindow>
 #include <QAction>
-#include <QToolBar>
-#include <QToolButton>
 #include <QMenu>
 #include <QThread>
+#include "toolbar.h"
+
+class ToolBar;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -51,7 +50,7 @@ public slots:
     void onColorTriggered();
     void onUndoTriggered();
     void onRedoTriggered();
-    void onThicknessChanged();
+    void onThicknessChanged(QAction *action);
     void onQuitTriggered();
     void openFile();
 
@@ -68,25 +67,8 @@ signals:
     void quitProg();
 
 private:
-    QToolBar* toolBar;
-    QToolButton* thickness;
+    ToolBar* toolBar;
     Drawing* drawing;
-
-    QAction* menu;
-    QAction* newImg;
-    QAction* open;
-    QAction* save;
-    QAction* print;
-    QAction* quit;
-    QAction* pen;
-    QAction* dash;
-    QAction* eraser;
-    QAction* ellipse;
-    QAction* rectangle;
-    QAction* undo;
-    QAction* redo;
-    QAction* color;
-
     DrawingController* controller;
 
     void startTrackingManager(int cameraId);

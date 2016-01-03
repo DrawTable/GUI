@@ -35,7 +35,7 @@ private slots:
     void onEnterClicked();
 
 signals:
-    enterClicked();
+    void enterClicked();
 
 public:
     VirtualKeyboard(Input* input, QWidget *parent = 0);

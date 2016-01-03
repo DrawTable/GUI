@@ -24,6 +24,7 @@ unix {
 
 SOURCES += main.cpp \
     core/mainwindow.cpp \
+    core/menu.cpp \
     tool/pencontroller.cpp \
     tool/dashcontroller.cpp \
     tool/rectanglecontroller.cpp \
@@ -41,14 +42,15 @@ SOURCES += main.cpp \
     keyboard/keyboardmodel.cpp \
     keyboard/keyboardbutton.cpp \
     keyboard/virtualkeyboard.cpp \
-    dialog/menudialog.cpp \
     dialog/savefiledialog.cpp \
     dialog/openfiledialog.cpp \
     dialog/filedialog.cpp \
     drawing/drawing.cpp \
-    drawing/drawingcontroller.cpp
+    drawing/drawingcontroller.cpp \
+    core/toolbar.cpp
 
 HEADERS += core/mainwindow.h \
+    core/menu.h \
     tool/abstracttoolcontroller.h \
     tool/pencontroller.h \
     tool/dashcontroller.h \
@@ -68,12 +70,12 @@ HEADERS += core/mainwindow.h \
     keyboard/keymodel.h \
     keyboard/keyboardmodel.h \
     keyboard/keyboardbutton.h \
-    dialog/menudialog.h \
     dialog/savefiledialog.h \
     dialog/openfiledialog.h \
     dialog/filedialog.h \
     drawing/drawing.h \
-    drawing/drawingcontroller.h
+    drawing/drawingcontroller.h \
+    core/toolbar.h
 
 RESOURCES += \
     icons.qrc

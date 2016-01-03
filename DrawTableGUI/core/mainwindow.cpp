@@ -6,8 +6,8 @@
 #include "../tool/ellipsecontroller.h"
 #include "../tool/erasercontroller.h"
 #include "../drawing/drawingcontroller.h"
-#include "../dialog/menudialog.h"
 #include "../dialog/filedialog.h"
+#include "menu.h"
 
 #include <QApplication>
 #include <QFileDialog>
@@ -20,116 +20,28 @@
 #include <QMessageBox>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
-    // Creation de la vue
+
+    /* tool bar */
+    toolBar = new ToolBar(this);
+    connect(toolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(updateToolBarActions(QAction*)));
+    addToolBar(Qt::BottomToolBarArea, toolBar);
+
+    /* drawing */
+
     QBrush bgColor(Qt::black);
     drawing = new Drawing(this);
     drawing->setBackgroundBrush(bgColor);
     drawing->setStyleSheet("border: 0px;");
     drawing->scene()->setSceneRect(0, 0, maximumWidth(), maximumHeight());
 
-    // Creation des actions de la toolbar
-    menu = new QAction(this);
-    menu->setIcon(QIcon(":/tool/icons/menu.png"));
-    connect(menu, SIGNAL(triggered()), this, SLOT(onMenuTriggered()));
-
-    pen = new QAction(this);
-    pen->setCheckable(true);
-    pen->setChecked(true);
-    pen->setIcon(QIcon(":/tool/icons/pen.png"));
-    connect(pen, SIGNAL(triggered(bool)), this, SLOT(onPenTriggered(bool)));
-
-    undo = new QAction(this);
-    undo->setIcon(QIcon(":/tool/icons/undo.png"));
-    connect(undo, SIGNAL(triggered()), this, SLOT(onUndoTriggered()));
-
-    redo = new QAction(this);
-    redo->setIcon(QIcon(":/tool/icons/redo.png"));
-    connect(redo, SIGNAL(triggered()), this, SLOT(onRedoTriggered()));
-
-    dash = new QAction(this);
-    dash->setCheckable(true);
-    dash->setIcon(QIcon(":/tool/icons/dash.png"));
-    connect(dash, SIGNAL(triggered(bool)), this, SLOT(onDashTriggered(bool)));
-
-    eraser = new QAction(this);
-    eraser->setCheckable(true);
-    eraser->setIcon(QIcon(":/tool/icons/eraser.png"));
-    connect(eraser, SIGNAL(triggered(bool)), this, SLOT(onEraserTriggered(bool)));
-
-    ellipse = new QAction(this);
-    ellipse->setCheckable(true);
-    ellipse->setIcon(QIcon(":/tool/icons/ellipse.png"));
-    connect(ellipse, SIGNAL(triggered(bool)), this, SLOT(onEllipseTriggered(bool)));
-
-    rectangle = new QAction(this);
-    rectangle->setCheckable(true);
-    rectangle->setIcon(QIcon(":/tool/icons/rectangle.png"));
-    connect(rectangle, SIGNAL(triggered(bool)), this, SLOT(onRectangleTriggered(bool)));
-
-    color = new QAction(this);
-    color->setIcon(QIcon(":/tool/icons/color.png"));
-    connect(color, SIGNAL(triggered()), this, SLOT(onColorTriggered()));
-
-    QList<QIcon> icons;
-    for (int i = 0; i < 6; ++i) {
-        icons << QIcon(QString(":/tool/icons/thickness%1.png").arg(i + 1));
-    }
-
-    QStringList thicknesses;
-    thicknesses << "1 px"  << "3 px" << "5 px"  << "7 px" << "10 px" << "15 px";
-
-    QMenu* thicknessMenu = new QMenu(this);
-    for (int i = 0; i < thicknesses.count(); ++i) {
-        QAction *action = new QAction(icons.at(i), thicknesses.at(i), this);
-        action->setData(thicknesses.at(i).split(" ")[0].toInt());
-        action->setCheckable(true);
-        connect(action, SIGNAL(triggered()), this, SLOT(onThicknessChanged()));
-        thicknessMenu->addAction(action);
-    }
-    thicknessMenu->actions().first()->setChecked(true);
-    thicknessMenu->setStyleSheet("background: rgb(46,46,46);");
-
-    thickness = new QToolButton(this);
-    thickness->setIcon(QIcon(":/tool/icons/thickness.png"));
-    thickness->setPopupMode(QToolButton::InstantPopup);
-    thickness->setMenu(thicknessMenu);
-    thickness->setStyleSheet("QToolButton::menu-indicator{image: none;}");
-
-    // Creation de la toolbar et integration des actions
-    QWidget* spacer1 = new QWidget();
-    spacer1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    QWidget* spacer2 = new QWidget();
-    spacer2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    toolBar = new QToolBar(tr("Tools"));
-    toolBar->addAction(menu);
-    toolBar->addWidget(spacer1);
-    toolBar->addAction(pen);
-    toolBar->addAction(eraser);
-    toolBar->addSeparator();
-    toolBar->addWidget(thickness);
-    toolBar->addSeparator();
-    toolBar->addAction(undo);
-    toolBar->addAction(redo);
-    toolBar->addSeparator();
-    toolBar->addAction(dash);
-    toolBar->addAction(ellipse);
-    toolBar->addAction(rectangle);
-    toolBar->addSeparator();
-    toolBar->addAction(color);
-    toolBar->addWidget(spacer2);
-    toolBar->setFloatable(false);
-    toolBar->setMovable(false);
-    toolBar->setStyleSheet("QToolBar{ background: rgb(46,46,46); border: 0px; }");
-    connect(toolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(updateToolBarActions(QAction*)));
-    addToolBar(Qt::BottomToolBarArea, toolBar);
-    onPenTriggered(false);
-
-    // Creation du controleur principale
+    /* drawing controller */
     controller = new DrawingController(drawing);
 
-    // Integration de la vue a la GUI
-    setCentralWidget(drawing);
+    /* window */
 
+    setCursor(Qt::ArrowCursor);
+    onPenTriggered(false);
+    setCentralWidget(drawing);
     showFullScreen();
     menuBar()->hide();
 
@@ -252,36 +164,36 @@ void MainWindow::updateToolBarActions(QAction* action) {
 
 void MainWindow::onPenTriggered(bool checked) {
     if (checked) { controller->setDrawController(PenController::getInstance()); }
-    else { pen->setChecked(true); }
+    else { toolBar->getPen()->setChecked(true); }
     drawing->setCursor(QCursor(QPixmap(":/cursor/icons/pen.ico")));
 }
 
 void MainWindow::onDashTriggered(bool checked) {
     if (checked) { controller->setDrawController(DashController::getInstance()); }
-    else { dash->setChecked(true); }
+    else { toolBar->getDash()->setChecked(true); }
     drawing->setCursor(Qt::CrossCursor);
 }
 
 void MainWindow::onEraserTriggered(bool checked) {
     if (checked) { controller->setDrawController(EraserController::getInstance()); }
-    else { eraser->setChecked(true); }
+    else { toolBar->getEraser()->setChecked(true); }
     drawing->setCursor(QCursor(QPixmap(":/cursor/icons/eraser.ico")));
 }
 
 void MainWindow::onEllipseTriggered(bool checked) {
     if (checked) { controller->setDrawController(EllipseController::getInstance()); }
-    else { ellipse->setChecked(true); }
+    else { toolBar->getEllipse()->setChecked(true); }
     drawing->setCursor(Qt::CrossCursor);
 }
 
 void MainWindow::onRectangleTriggered(bool checked) {
     if (checked) { controller->setDrawController(RectangleController::getInstance()); }
-    else { rectangle->setChecked(true);}
+    else { toolBar->getRectangle()->setChecked(true);}
     drawing->setCursor(Qt::CrossCursor);
 }
 
 void MainWindow::onMenuTriggered() {
-    MenuDialog dialog(this);
+    Menu dialog(this);
     dialog.exec();
 }
 
@@ -382,13 +294,7 @@ void MainWindow::onRedoTriggered() {
     controller->redo();
 }
 
-void MainWindow::onThicknessChanged() {
-    const QList<QAction*>& actions = thickness->menu()->actions();
-    foreach (QAction* a, actions) {
-        a->setChecked(false);
-    }
-    QAction* action = qobject_cast<QAction*>(sender());
-    action->setChecked(true);
+void MainWindow::onThicknessChanged(QAction* action) {
     QPen* pen = controller->getPen();
     pen->setWidth(qvariant_cast<int>(action->data()));
 }
