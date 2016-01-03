@@ -15,8 +15,6 @@ CameraManager* CameraManager::getInstance() {
 }
 
 void CameraManager::initCameras() {
-    captures.clear();
-
     // Tentative de détection de 10 caméras
     for (int i = 0; i < 10; i++) {
         cv::VideoCapture* cap = new cv::VideoCapture(i);
@@ -40,7 +38,6 @@ void CameraManager::listCameras() {
 
         std::string windowName = "Camera #" + std::to_string(i);
         cv::namedWindow(windowName, cv::WINDOW_KEEPRATIO);
-        cv::imshow(windowName, frame);
 
         cv::setMouseCallback(windowName, mouseHandler, (void *) (intptr_t) i);
     }
@@ -82,8 +79,14 @@ void CameraManager::onUpdaterFinished() {
     for (unsigned int i = 0; i < captures.size(); i++) {
         std::string windowName = "Camera #" + std::to_string(i);
         cv::destroyWindow(windowName);
+
+        cv::VideoCapture* cap = captures.at(i);
+        cap->release();
+
         qDebug() << "BOUUUM\n";
     }
+
+    captures.clear();
 }
 
 void CameraManager::startUpdater() {

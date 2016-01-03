@@ -29,6 +29,7 @@ void TrackingManager::onStratCalibration(int width, int height) {
     // Lecture d'une image
     if (!cap->read(frame)) {
         // Erreur: la lecture de la frame a échoué
+        cap->release();
         emit calibrationError(1);
         cerr << "la lecture de la frame a échoué" << endl;
         return;
@@ -47,6 +48,7 @@ void TrackingManager::onStratCalibration(int width, int height) {
     // always check error before using the transformatrix
     if(err.hasError()){
         cerr << err.getErrorTitle() << ":\n" << err.getErrorMessage() << endl;
+        cap->release();
         emit calibrationError(1);
         return;
     }
