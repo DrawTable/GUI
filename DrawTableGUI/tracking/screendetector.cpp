@@ -22,8 +22,6 @@ Mat ScreenDetector::getTransformationMatrix(Error& error)
     // convert image to HSV
     cvtColor(img, hsv, CV_BGR2HSV);
 
-
-
     // threshold the image
     inRange(hsv, hsvMin, hsvMax, thresholded);
 
@@ -103,8 +101,8 @@ Mat ScreenDetector::transformImage(std::vector<Point> rect)
 //    int heightB  = std::sqrt( std::pow( std::abs(tr.y - br.y) ,2) + std::pow( std::abs(tr.x - br.x),2));
 //    height = std::max(heightA, heightB);
 
-    width = 1920;
-    height = 1080;
+    width = 1280;
+    height = 800;
 
     Point2f src[4];
     src[0] = rect.at(0);

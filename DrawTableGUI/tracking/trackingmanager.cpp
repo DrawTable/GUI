@@ -54,7 +54,7 @@ void TrackingManager::onStratCalibration(int width, int height) {
     bool success = true;
     if (success) {
         emit calibrationSuccess();
-        mainLoop();
+//        mainLoop();
     } else {
         int errorCode = -1;
         emit calibrationError(errorCode);
