@@ -95,7 +95,6 @@ To choose a camera, click on the chosen camera's screen into it's window."));
 
 // Lance le Tracking Manager une fois que l'utilisateur a choisi la caméra à utiliser
 void MainWindow::onCameraChoosen(int cameraId) {
-    qDebug() << "ON CAMERA CHOSEN";
     QMessageBox::information(this, tr("Camera chosen"),
                              QString("You chose the camera #") +
                              QString::fromStdString(std::to_string(cameraId)) +
@@ -127,8 +126,6 @@ void MainWindow::startTrackingManager(int cameraId) {
 
 // Affiche un écran vert pour le calibrage
 void MainWindow::onShowGreenScreen() {
-    qDebug() << "MW::onShowGreenScreen";
-
     // afficher un écran vert pour le calibrage
     toolBar->hide();
     menuBar()->hide();

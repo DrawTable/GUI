@@ -13,8 +13,6 @@ void TrackingManager::process() {
 
 // Lance le processus de calibration
 void TrackingManager::onStratCalibration(int width, int height) {
-    qDebug() << "TM::onStratCalibration";
-
     Mat frame;
 
     // Lancement de la capture avec la webcam
