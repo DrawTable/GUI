@@ -48,7 +48,9 @@ SOURCES += main.cpp \
     drawing/drawing.cpp \
     drawing/drawingcontroller.cpp \
     core/toolbar.cpp \
-    error/errormanager.cpp
+    error/errormanager.cpp \
+    tracking/ledtracking/ledtracker.cpp \
+    tracking/ledtracking/main.cpp
 
 HEADERS += core/mainwindow.h \
     core/menu.h \
@@ -77,7 +79,9 @@ HEADERS += core/mainwindow.h \
     drawing/drawing.h \
     drawing/drawingcontroller.h \
     core/toolbar.h \
-    error/errormanager.h
+    error/errormanager.h \
+    tracking/ledtracking/ledtracker.h \
+    tracking/ledtracking/threadcapture.h
 
 RESOURCES += \
     icons.qrc

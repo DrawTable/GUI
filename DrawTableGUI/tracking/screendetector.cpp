@@ -67,7 +67,6 @@ Mat ScreenDetector::getTransformationMatrix(Error& error)
     }
 
     if(DEBUG){
-        cout << "show debug window" << endl;
         namedWindow("debug", WINDOW_KEEPRATIO);
         namedWindow("thresholded_calibration", WINDOW_KEEPRATIO);
         Mat debug = Mat::zeros(img.rows, img.cols, CV_8UC3);
@@ -76,8 +75,6 @@ Mat ScreenDetector::getTransformationMatrix(Error& error)
         imshow("thresholded_calibration", thresholded);
     }
 
-//    return Mat::zeros(img.rows, img.cols, CV_8UC1);
-    // get a transformation matrix
     return transformImage(approximatedScreen);
 }
 
@@ -91,18 +88,6 @@ Mat ScreenDetector::transformImage(std::vector<Point> rect)
     tr = rect.at(1);
     br = rect.at(2);
     bl = rect.at(3);
-
-    // find max width
-//    int widthA  = std::sqrt( std::pow( std::abs(br.y - bl.y) ,2) + std::pow( std::abs(br.x - bl.x),2));
-//    int widthB  = std::sqrt( std::pow( std::abs(tr.y - tl.y) ,2) + std::pow( std::abs(tr.x - tl.x),2));
-//    width = std::max(widthA, widthB);
-
-//    int heightA  = std::sqrt( std::pow( std::abs(tl.y - bl.y) ,2) + std::pow( std::abs(tl.x - bl.x),2));
-//    int heightB  = std::sqrt( std::pow( std::abs(tr.y - br.y) ,2) + std::pow( std::abs(tr.x - br.x),2));
-//    height = std::max(heightA, heightB);
-
-    width = 1280;
-    height = 800;
 
     Point2f src[4];
     src[0] = rect.at(0);

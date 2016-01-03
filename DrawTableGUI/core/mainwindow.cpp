@@ -140,9 +140,9 @@ void MainWindow::onStylusCalibrationError(int errorCode){
 }
 
 void MainWindow::onStylusCalibrationProgress(int value){
+    qDebug() << value << " progress";
     stylusCalibrationProgress->setValue(value);
 }
-
 
 // Affiche un écran vert pour le calibrage
 void MainWindow::onShowGreenScreen() {
@@ -162,6 +162,8 @@ void MainWindow::onShowGreenScreen() {
 
 // Quand la calibration a réussie
 void MainWindow::onCalibrationSuccess() {
+
+    qDebug() << "onCalibrationSuccess" << endl;
     // force la main window en premier plan pour 'cacher les fenetres de la camera
     Qt::WindowFlags eFlags = windowFlags ();
     eFlags |= Qt::WindowStaysOnTopHint;
@@ -182,10 +184,12 @@ void MainWindow::onCalibrationSuccess() {
     showFullScreen();
     controller->enable();
 
-    stylusCalibrationProgress = new QProgressDialog("Please draw something with your stylus", "cancel", 0, 100, this);
-    QTimer* t = new QTimer(this);
-    connect(t, SIGNAL(timeout()), worker, SLOT(onStartStylusCalibration()));
-    t->start(0);
+    QMessageBox::information(this, tr("Stylus Calibration"),
+                             tr("...."));
+
+    stylusCalibrationProgress = new QProgressDialog("Please draw something with your stylus", "cancel", 0, 10, this);
+    stylusCalibrationProgress->setAutoClose(true);
+    QTimer::singleShot(0, worker, SLOT(onStartStylusCalibration()));
     stylusCalibrationProgress->show();
 }
 

@@ -11,13 +11,15 @@ void CameraManagerUpdater::process() {
             cv::VideoCapture* cap = captures.at(i);
             cv::Mat frame;
             cap->read(frame);
-
             std::string windowName = "Camera #" + std::to_string(i);
             cv::imshow(windowName, frame);
         }
     }
 
-    cv::destroyAllWindows();
+    for (unsigned int i = 0; i < captures.size(); i++) {
+        std::string windowName = "Camera #" + std::to_string(i);
+        cv::destroyWindow(windowName);
+    }
 
     emit finished();
 }

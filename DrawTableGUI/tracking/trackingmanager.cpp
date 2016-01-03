@@ -13,64 +13,54 @@ void TrackingManager::process() {
 
 // Lance le processus de calibration
 void TrackingManager::onStratCalibration(int width, int height) {
-    qDebug() << "TM::onStratCalibration";
-//    sleep(10);
-//    Mat frame;
+    Mat frame;
 
-//    // Lancement de la capture avec la webcam
-//    cap = new VideoCapture(cameraId);
+    // Lancement de la capture avec la webcam
+    cap = new VideoCapture(cameraId);
 
-//    // Lecture d'une image
-//    if (!cap->read(frame)) {
-//        // Erreur: la lecture de la frame a échoué
-//        cap->release();
-//        emit calibrationError(1);
-//        cout << "la lecture de la frame a échoué" << endl;
-//        qDebug() << "TM::onStratCalibration";
-//        emit finished();
-//        return;
-//    }
+    // Lecture d'une image
+    if (!cap->read(frame)) {
+        // Erreur: la lecture de la frame a échoué
+        cap->release();
+        emit calibrationError(1);
+        cout << "la lecture de la frame a échoué" << endl;
+        qDebug() << "TM::onStratCalibration";
+        emit finished();
+        return;
+    }
 
+    ScreenDetector sd(frame, width, height);
+    ScreenDetector::Error err;
 
-//    namedWindow("frame", WINDOW_KEEPRATIO);
-//    imshow("frame", frame);
+    // Récupération de la matrice de transformation
+    transformMatrix = sd.getTransformationMatrix(err);
 
-//    ScreenDetector sd(frame, width, height);
-//    ScreenDetector::Error err;
+    // always check error before using the transformatrix
+    if(err.hasError()){
+        cout << err.getErrorTitle() << ":\n" << err.getErrorMessage() << endl;
+        cap->release();
+        emit calibrationError(1);
+        emit finished();
+        return;
+    }
 
-//    // Récupération de la matrice de transformation
-//    transformMatrix = sd.getTransformationMatrix(err);
-
-//    // always check error before using the transformatrix
-//    if(err.hasError()){
-//        cout << err.getErrorTitle() << ":\n" << err.getErrorMessage() << endl;
-//        cap->release();
-//        emit calibrationError(1);
-//        emit finished();
-//        return;
-//    }
-
-//   emit calibrationSuccess();
-//   mainLoop();
+   emit calibrationSuccess();
 }
 
 void TrackingManager::onStartStylusCalibration()
 {
     qDebug() << "Start Calibration" << endl;
-
-    for(int i=0; i < 100; i++){
-        usleep(500);
+    for(int i=0; i <= 10; i++){
+        QThread::sleep(1);
         emit stylusCalibrationProgress(i);
+        qDebug() << "step" << i << endl;
     }
 
     qDebug() << "Calibration Finished" << endl;
 
     bool success = true;
-    if(success)
-        emit stylusCalibrationSuccess();
-    else
-        emit stylusCalibrationError(1);
-
+    emit stylusCalibrationSuccess();
+    mainLoop();
 }
 
 // Boucle principal du thread
@@ -80,7 +70,7 @@ void TrackingManager::mainLoop() {
     ctrl.start();
     bool click = false;
     bool release = false;
-    LedDetector* ledDetector = LedDetector::getInstance();
+    // ledTracker
     Point stylusPoint;
     forever {
         Mat frame;
@@ -93,7 +83,7 @@ void TrackingManager::mainLoop() {
 
         // Tracking de la led
        ledDetector->setImage(frame);
-       stylusPoint = ledDetector->debugLedDetection();
+       // process get point
 
        // Envoie les coordonnées du stylet afin de bouger la souris
        if(stylusPoint.x > 0 && stylusPoint.y > 0 && stylusPoint.x < 1440 && stylusPoint.y < 800){
@@ -105,6 +95,7 @@ void TrackingManager::mainLoop() {
                ctrl.mousePressed();
                release = false;
            }
+
        } else {
            click = false;
            if(!release){
