@@ -6,6 +6,7 @@ DrawingController::DrawingController(Drawing* drawing) {
     this->drawing = drawing;
     this->drawController = PenController::getInstance();
     this->pen = new QPen(Qt::white);
+    this->pen->setWidth(5);
     this->drawing->setController(this);
 }
 
