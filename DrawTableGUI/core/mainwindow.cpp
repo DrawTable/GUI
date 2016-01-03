@@ -1,3 +1,17 @@
+/**
+ * Projet  :   DrawTable
+ * Fichier :   MainWindow.cpp
+ *
+ * Auteurs :   Bron Sacha
+ *             Pellet Marc
+ *             Villa David
+ *
+ *
+ * Description :
+ *
+ *
+ */
+
 #include "mainwindow.h"
 
 #include "../tool/pencontroller.h"
@@ -18,6 +32,7 @@
 #include <QMenuBar>
 #include <QColorDialog>
 #include <QMessageBox>
+
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
 
@@ -45,6 +60,12 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     showFullScreen();
     menuBar()->hide();
 
+    // initialisation de l'error manager et liaison des signaux
+    errorManager = ErrorManager::getInstance();
+    connect(errorManager, SIGNAL(cameraSelection()), this, SLOT(restartCameraSelection()));
+    connect(errorManager, SIGNAL(startCalibration()), this, SLOT(onShowGreenScreen()));
+    connect(errorManager, SIGNAL(quitApp()), this, SLOT(onQuitTriggered()));
+
     tryCameraMode();
 }
 
@@ -52,20 +73,26 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::tryCameraMode() {
+    qDebug() << "1";
     // Lancement du Camera Manager
     CameraManager* cm = CameraManager::getInstance();
+    qDebug() << "2";
     if (cm->countCameras() < 1) {
         QMessageBox::information(this, tr("No camera found"),
                                  tr("It seems you don't have any camera plugged or integrated.\n\
 If you do have a camera, check if your OS recognizes it."));
         controller->enable();
     } else {
+        qDebug() << "3";
         QMessageBox::information(this, tr("Select your camera"),
             tr("When you will click on 'ok', your camera(s) will be displayed on a personnal windows.\n\
 Please check the angle of the camera you want to use, so your working board is entirely in sight.\n\
 To choose a camera, click on the chosen camera's screen into it's window."));
+        qDebug() << "4";
         cm->listCameras();
+        qDebug() << "5";
         connect(cm, SIGNAL(cameraChoosen(int)), this, SLOT(onCameraChoosen(int)));
+        qDebug() << "6";
     }
 }
 
@@ -74,8 +101,8 @@ void MainWindow::onCameraChoosen(int cameraId) {
     QMessageBox::information(this, tr("Camera chosen"),
                              QString("You chose the camera #") +
                              QString::fromStdString(std::to_string(cameraId)) +
-                             QString(".\n Start the calibration by clicking 'ok'. This operation shouldn't take more than few seconds.") +
-                             QString("Please don't move the camera or do anything while the calibration still running."));
+                             QString(".\nStart the calibration by clicking 'ok'. This operation shouldn't take more than few seconds.") +
+                             QString(" Please don't move the camera or do anything while the calibration still running."));
     startTrackingManager(cameraId);
 }
 
@@ -95,7 +122,7 @@ void MainWindow::startTrackingManager(int cameraId) {
     connect(worker, SIGNAL(showGreenScreen()), this, SLOT(onShowGreenScreen()));
     connect(this, SIGNAL(stratCalibration(int, int)), worker, SLOT(onStratCalibration(int, int)));
     connect(worker, SIGNAL(calibrationSuccess()), this, SLOT(onCalibrationSuccess()));
-    connect(worker, SIGNAL(calibrationError(int)), this, SLOT(onCalibrationError(int)));
+    connect(worker, SIGNAL(calibrationError(int)), errorManager, SLOT(onCalibrationError(int)));
 
     thread->start();
 }
@@ -120,10 +147,9 @@ void MainWindow::onCalibrationSuccess() {
     Qt::WindowFlags eFlags = windowFlags ();
     eFlags |= Qt::WindowStaysOnTopHint;
     setWindowFlags(eFlags);
-    //showFullScreen();
 
+    showFullScreen();
     toolBar->show();
-    //menuBar()->show();
 
     QBrush bgColor(Qt::black);
     drawing->setBackgroundBrush(bgColor);
@@ -320,7 +346,7 @@ void MainWindow::onQuitTriggered()
               // Nothing Happend
               break;
           default:
-              // should never be reached
+              // should never been reached
               break;
         }
 
@@ -337,7 +363,11 @@ void MainWindow::openFile() {
 
 void MainWindow::onColorTriggered(){
     QPen* pen = controller->getPen();
-    QColorDialog* colorDialog = new QColorDialog(this);
-    QColor selectedColor = colorDialog->getColor(pen->color(),this);
+    QColorDialog* colorDialog = new QColorDialog(pen->color(), this);
+    QColor selectedColor = colorDialog->getColor(pen->color(), this);
     pen->setColor(selectedColor);
+}
+
+void MainWindow::restartCameraSelection(){
+    tryCameraMode();
 }

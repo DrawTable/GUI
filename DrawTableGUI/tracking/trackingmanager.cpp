@@ -34,8 +34,8 @@ void TrackingManager::onStratCalibration(int width, int height) {
         return;
     }
 
-    namedWindow("frame", WINDOW_KEEPRATIO);
-    imshow("frame", frame);
+    //namedWindow("frame", WINDOW_KEEPRATIO);
+    //imshow("frame", frame);
 
     ScreenDetector sd(frame, width, height);
 

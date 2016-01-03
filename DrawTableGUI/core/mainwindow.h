@@ -10,6 +10,7 @@
 #include "../tool/ellipsecontroller.h"
 #include "../tool/erasercontroller.h"
 #include "../camera/cameramanager.h"
+#include "../error/errormanager.h"
 
 #include <QApplication>
 #include <QPrinter>
@@ -62,6 +63,9 @@ public slots:
     // Communication Main Window <--> Camera Manager
     void onCameraChoosen(int cameraId);
 
+    // Communication Main Window <--> Error Manager
+    void restartCameraSelection();
+
 signals:
     void stratCalibration(int, int);
     void quitProg();
@@ -70,6 +74,7 @@ private:
     ToolBar* toolBar;
     Drawing* drawing;
     DrawingController* controller;
+    ErrorManager* errorManager;
 
     void startTrackingManager(int cameraId);
     void tryCameraMode();
