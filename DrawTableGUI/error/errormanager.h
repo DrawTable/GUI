@@ -29,9 +29,9 @@ private:
     int nbTry;
 
 signals:
-    startCalibration();
-    cameraSelection();
-    quitApp();
+    void startCalibration();
+    void cameraSelection();
+    void quitApp();
 };
 
 
