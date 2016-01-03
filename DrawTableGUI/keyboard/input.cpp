@@ -9,6 +9,6 @@ void Input::focusInEvent(QFocusEvent *e) {
     keyboard->show();
 }
 
-void Input::setKeyboard(Keyboard *keyboard) {
+void Input::setKeyboard(VirtualKeyboard *keyboard) {
     this->keyboard = keyboard;
 }

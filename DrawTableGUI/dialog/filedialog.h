@@ -1,11 +1,11 @@
-#ifndef FILEDIALOG_H
-#define FILEDIALOG_H
+#ifndef SYSTEMFILEDIALOG_H
+#define SYSTEMFILEDIALOG_H
 
 #include <QString>
 #include "savefiledialog.h"
 #include "openfiledialog.h"
 
-class FileDialog {
+class SystemFileDialog {
     friend class SaveFileDialog;
     friend class OpenFileDialog;
 
@@ -16,4 +16,4 @@ public:
     static QString getOpenFileName();
 };
 
-#endif // FILEDIALOG_H
+#endif // SYSTEMFILEDIALOG_H

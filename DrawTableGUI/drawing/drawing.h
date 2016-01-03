@@ -1,29 +1,29 @@
-#ifndef TABLE_H
-#define TABLE_H
+#ifndef DRAWING_H
+#define DRAWING_H
 
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QMouseEvent>
-#include "../controller/generalcontroller.h"
+#include "drawingcontroller.h"
 
-class GeneralController;
+class DrawingController;
 
 /**
- * @brief The Table class
+ * @brief The Drawing class
  *
- * Vue utilisée pour le dessin, elle possède une redéfinition des
+ * Classe modèle de dessin, elle possède une redéfinition des
  * méthode appelée lors des QMouseEvent qui en délégue la gestion
  * au GeneralController
  *  *
  */
-class Table : public QGraphicsView {
+class Drawing : public QGraphicsView {
     Q_OBJECT
 
 public:
-    Table(QWidget* parent = 0);
+    Drawing(QWidget* parent = 0);
 
-    GeneralController* getController() const;
-    void setController(GeneralController* controller);
+    DrawingController* getController() const;
+    void setController(DrawingController* controller);
 
 protected:
     virtual void mouseDoubleClickEvent(QMouseEvent* event);
@@ -34,9 +34,9 @@ protected:
 private:
     /**
      * @brief controller
-     * Contrôleur associé à la vue
+     * Contrôleur associé au dessin
      */
-    GeneralController* controller;
+    DrawingController* controller;
 };
 
-#endif // TABLE_H
+#endif // DRAWING_H

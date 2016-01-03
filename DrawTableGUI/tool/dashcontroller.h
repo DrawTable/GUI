@@ -1,16 +1,16 @@
 #ifndef DASHCONTROLLER_H
 #define DASHCONTROLLER_H
 
-#include "abstractcontroller.h"
+#include "abstracttoolcontroller.h"
 #include <QGraphicsLineItem>
 
 /**
  * @brief The DashController class
  *
- * Contrôleur gérant le dessin de trait droit, hérite de AbstractController
+ * Contrôleur gérant le dessin de trait droit, hérite de AbstractToolController.
  *
  */
-class DashController : public AbstractController {
+class DashController : public AbstractToolController {
 
 public:
     virtual ~DashController();

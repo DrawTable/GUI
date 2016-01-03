@@ -1,7 +1,7 @@
 #ifndef RECTANGLECONTROLLER_H
 #define RECTANGLECONTROLLER_H
 
-#include "abstractcontroller.h"
+#include "abstracttoolcontroller.h"
 #include <QPoint>
 #include <QGraphicsRectItem>
 
@@ -9,10 +9,10 @@
 /**
  * @brief The RectangleController class
  *
- * Contrôleur gérant le dessin de rectangles, hérite de AbstractController
+ * Contrôleur gérant le dessin de rectangles, hérite de AbstractToolController
  *
  */
-class RectangleController : public AbstractController {
+class RectangleController : public AbstractToolController {
 
 public:
     virtual ~RectangleController();

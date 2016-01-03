@@ -19,6 +19,7 @@ public:
     static CameraManager* instance;
     static CameraManager* getInstance();
 
+    void initCameras();
     void listCameras();
     void startUpdater();
     int countCameras();

@@ -1,35 +1,34 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "../view/table.h"
-#include "../controller/generalcontroller.h"
+#include "../drawing/drawing.h"
+#include "../drawing/drawingcontroller.h"
 #include "../tracking/trackingmanager.h"
-#include "../controller/pencontroller.h"
-#include "../controller/dashcontroller.h"
-#include "../controller/rectanglecontroller.h"
-#include "../controller/ellipsecontroller.h"
-#include "../controller/generalcontroller.h"
-#include "../controller/erasercontroller.h"
+#include "../tool/pencontroller.h"
+#include "../tool/dashcontroller.h"
+#include "../tool/rectanglecontroller.h"
+#include "../tool/ellipsecontroller.h"
+#include "../tool/erasercontroller.h"
 #include "../camera/cameramanager.h"
+#include "../error/errormanager.h"
 
 #include <QApplication>
-#include <QFileDialog>
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPainter>
 #include <QProgressDialog>
 #include <QPixmap>
-#include <QMenuBar>
 #include <QColorDialog>
 #include <QDebug>
 #include <QRect>
 #include <QDesktopWidget>
 #include <QMainWindow>
 #include <QAction>
-#include <QToolBar>
-#include <QToolButton>
 #include <QMenu>
 #include <QThread>
+#include "toolbar.h"
+
+class ToolBar;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -53,7 +52,7 @@ public slots:
     void onColorTriggered();
     void onUndoTriggered();
     void onRedoTriggered();
-    void onThicknessChanged();
+    void onThicknessChanged(QAction *action);
     void onQuitTriggered();
     void openFile();
 
@@ -69,36 +68,20 @@ public slots:
     // Communication Main Window <--> Camera Manager
     void onCameraChoosen(int cameraId);
 
+    // Communication Main Window <--> Error Manager
+    void restartCameraSelection();
 
 signals:
     void stratCalibration(int, int);
     void quitProg();
 
 private:
-    QToolBar* toolBar;
-    QToolButton* thickness;
-    Table* table;
-
-    QAction* menu;
-    QAction* newImg;
-    QAction* open;
-    QAction* save;
-    QAction* print;
-    QAction* quit;
-    QAction* pen;
-    QAction* dash;
-    QAction* eraser;
-    QAction* ellipse;
-    QAction* rectangle;
-    QAction* undo;
-    QAction* redo;
-    QAction* color;
-
-    GeneralController* controller;
-    TrackingManager* worker;
-
+    ToolBar* toolBar;
+    Drawing* drawing;
+    DrawingController* controller;
+    ErrorManager* errorManager;
+    CameraManager* cm;
     QProgressDialog* stylusCalibrationProgress;
-
     void startTrackingManager(int cameraId);
     void tryCameraMode();
 };

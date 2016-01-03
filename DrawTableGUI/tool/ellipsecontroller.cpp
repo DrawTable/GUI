@@ -2,7 +2,7 @@
 
 EllipseController* EllipseController::instance = nullptr;
 
-EllipseController::EllipseController() : AbstractController(), origin(), item(nullptr) {
+EllipseController::EllipseController() : AbstractToolController(), origin(), item(nullptr) {
 }
 
 EllipseController::~EllipseController() {
