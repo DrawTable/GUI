@@ -70,10 +70,6 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     color->setIcon(QIcon(":/tool/icons/color.png"));
     connect(color, SIGNAL(triggered()), this, SLOT(onColorTriggered()));
 
-    mode = new QAction(this);
-    mode->setIcon(QIcon(":/tool/icons/mode.png"));
-    connect(mode, SIGNAL(triggered()), this, SLOT(onModeTriggered()));
-
     QList<QIcon> icons;
     for (int i = 0; i < 6; ++i) {
         icons << QIcon(QString(":/tool/icons/thickness%1.png").arg(i + 1));
@@ -121,7 +117,6 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     toolBar->addSeparator();
     toolBar->addAction(color);
     toolBar->addWidget(spacer2);
-    toolBar->addAction(mode);
     toolBar->setFloatable(false);
     toolBar->setMovable(false);
     toolBar->setStyleSheet("QToolBar{ background: rgb(46,46,46); border: 0px; }");
@@ -369,10 +364,6 @@ void MainWindow::onUndoTriggered() {
 
 void MainWindow::onRedoTriggered() {
     controller->redo();
-}
-
-void MainWindow::onModeTriggered() {
-    // TODO
 }
 
 void MainWindow::onThicknessChanged() {

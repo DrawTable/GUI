@@ -52,7 +52,6 @@ public slots:
     void onColorTriggered();
     void onUndoTriggered();
     void onRedoTriggered();
-    void onModeTriggered();
     void onThicknessChanged();
     void onQuitTriggered();
     void openFile();
@@ -88,9 +87,6 @@ private:
     QAction* undo;
     QAction* redo;
     QAction* color;
-    QAction* mode;
-
-
 
     GeneralController* controller;
 
