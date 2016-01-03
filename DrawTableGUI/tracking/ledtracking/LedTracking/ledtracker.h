@@ -669,14 +669,17 @@ public:
 
         switch (current_mode) {
             case NONE:
-                processForeground();
+                if(!processForeground())
+                    break;
+                rect_mask_roi.area();
                 ledModel.calcHistograms(mask_roi, mask_hist);
                 processThreshold();
                 showMaskRoi();
                 showImagesAnalysis();
                 break;
             case CALIBRATION:
-                processForeground();
+                if(!processForeground())
+                    break;
                 ledModel.calcHistograms(mask_roi, mask_hist, true);
                 showMaskRoi();
                 showImagesAnalysis();
@@ -691,14 +694,45 @@ public:
         }
     }
 
-    void processForeground(){
+    bool processForeground(){
+
+
         backgroundSubtractor->apply(image, foreground, learningRate);
         removeNoise(foreground);
 
+        cout << "1" << endl;
         if(object_type == STYLUS){
+            cout << "2" << endl;
             Mat mask_people;
-            threshold_circular(&hsv, default_stylus_params.low_mask_people,  default_stylus_params.high_mask_people, &mask_people);
+//            threshold_circular(&hsv, default_stylus_params.low_mask_people,  default_stylus_params.high_mask_people, &mask_people);
+//            bitwise_and(mask_people, foreground, foreground);
+
+            // Hue range is circular [0:179] deg
+            if(default_stylus_params.low_mask_people[0] <= default_stylus_params.high_mask_people[0]){
+                cout << "3" << endl;
+                // min Hue value <= max value (i.e [20:160])
+//                cout << "inRange: " << default_stylus_params.low_mask_people << " : " << default_stylus_params.high_mask_people << endl;
+                inRange(hsv, default_stylus_params.low_mask_people, default_stylus_params.high_mask_people, mask_people);
+            } else {
+                // min Hue value >= max value (i.e: [160:20])
+                vector<Mat> hsv_planes;
+                split(hsv,hsv_planes);
+
+                Mat maskH, maskS, maskV;
+                inRange(hsv_planes[0], default_stylus_params.high_mask_people[0], default_stylus_params.low_mask_people[0], maskH);    // inRange Hue (max -> min)
+                inRange(hsv_planes[1], default_stylus_params.low_mask_people[1], default_stylus_params.high_mask_people[1], maskS);    // inRange Sat (normal)
+                inRange(hsv_planes[2], default_stylus_params.low_mask_people[2], default_stylus_params.high_mask_people[2], maskV);    // inRange Val (normal)
+
+                bitwise_and(maskS, maskV, mask_people);        // merge Sat & Val
+                bitwise_not(maskH, maskH);                     // invese Hue range
+                bitwise_and(maskH, mask_people, mask_people);  // merge All
+            }
+
+            cout << "4" << endl;
             bitwise_and(mask_people, foreground, foreground);
+//            Mat result;
+//            bitwise_and(mask_people, foreground, result);
+//            result.copyTo(foreground);
 
             Mat masked;
             image.copyTo(masked, mask_people);
@@ -706,14 +740,18 @@ public:
             imshow("mask_people", masked);
         }
 
+        cout << "5" << endl;
+
         // calculate bouding rect for moving foreground
         rect_mask_roi = getMaxBoundingRect(foreground);
-        if(!rect_mask_roi.area()) return;
+        cout << rect_mask_roi << endl;
+        if(rect_mask_roi.area() == 0) return false;
 
         // mask foreground and isolate in region of interset window
         hsv.copyTo(mask_roi, foreground);
         mask_roi = mask_roi(rect_mask_roi);
         mask_hist = foreground(rect_mask_roi);
+        return true;
     }
 
     void showMaskRoi(bool rgb = true){
@@ -776,8 +814,10 @@ public:
     LedTracker(): ledModel(this){
         backgroundSubtractor = createBackgroundSubtractorMOG2(500, 60, false);
         // default mask to remove people form the foreground when using stylus
-        default_stylus_params.low_mask_people = Scalar(113,89,108);
-        default_stylus_params.high_mask_people = Scalar(42,255,255);
+//        default_stylus_params.low_mask_people = Scalar(134,89,108);
+//        default_stylus_params.high_mask_people = Scalar(10,255,255);
+        default_stylus_params.low_mask_people = Scalar(134,0,0);
+        default_stylus_params.high_mask_people = Scalar(179,255,255);
         default_stylus_params.lowH = 134;
         default_stylus_params.highH = 10;
     }
