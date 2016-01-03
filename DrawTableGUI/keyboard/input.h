@@ -2,21 +2,21 @@
 #define INPUT_H
 
 #include <QLineEdit>
-#include "keyboard.h"
+#include "virtualkeyboard.h"
 
-class Keyboard;
+class VirtualKeyboard;
 
 class Input : public QLineEdit {
     Q_OBJECT
 
-    Keyboard* keyboard;
+    VirtualKeyboard* keyboard;
 
 protected:
     virtual void focusInEvent(QFocusEvent *e);
 
 public:
     explicit Input(QWidget *parent = 0);
-    void setKeyboard(Keyboard* keyboard);
+    void setKeyboard(VirtualKeyboard* keyboard);
 };
 
 #endif // INPUT_H

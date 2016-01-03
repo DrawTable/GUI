@@ -79,7 +79,7 @@ OpenFileDialog::OpenFileDialog(QWidget *parent) : QDialog(parent) {
     layout->addLayout(hlayout);
 
     /* keyboard */
-    keyboard = new Keyboard(input, this);
+    keyboard = new VirtualKeyboard(input, this);
     keyboard->setStyleSheet("font: 14pt;");
     keyboard->hide();
     connect(keyboard, SIGNAL(enterClicked()), this, SLOT(onOpenClicked()));
@@ -103,12 +103,12 @@ void OpenFileDialog::onViewClicked(QModelIndex index) {
 }
 
 void OpenFileDialog::onOpenClicked() {
-    FileDialog::fileName = path->text();
+    SystemFileDialog::fileName = path->text();
     close();
 }
 
 void OpenFileDialog::onCancelClicked() {
-    FileDialog::fileName = "";
+    SystemFileDialog::fileName = "";
     close();
 }
 

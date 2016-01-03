@@ -1,16 +1,16 @@
 #ifndef ELLIPSECONTROLLER_H
 #define ELLIPSECONTROLLER_H
 
-#include "abstractcontroller.h"
+#include "abstracttoolcontroller.h"
 #include <QPoint>
 #include <QGraphicsEllipseItem>
 
 /**
  * @brief The EllipseController class
  *
- * Contrôleur gérant le dessin d'élipse, hérite de AbstractController
+ * Contrôleur gérant le dessin d'élipse, hérite de AbstractToolController
  */
-class EllipseController : public AbstractController {
+class EllipseController : public AbstractToolController {
 
 public:
     virtual ~EllipseController();

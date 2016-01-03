@@ -1,32 +1,32 @@
-#ifndef GENERALCONTROLLER_H
-#define GENERALCONTROLLER_H
+#ifndef DRAWINGCONTROLLER_H
+#define DRAWINGCONTROLLER_H
 
-#include "abstractcontroller.h"
-#include "../view/table.h"
+#include "../tool/abstracttoolcontroller.h"
+#include "drawing.h"
 #include <QGraphicsItem>
 
-class Table;
+class Drawing;
 
 /**
- * @brief The GeneralController class
+ * @brief The DrawingController class
  *
- * Contrôleur général de l'application gérant quel outil utiliser avec quel brosse
- * ainsi que la pile des actions effectuées pour les fonction undo() et redo()
+ * Contrôleur général de l'application de dessin gérant quel outil utiliser avec quelle brosse
+ * ainsi que la pile des actions effectuées pour les fonction undo() et redo().
  *
  */
-class GeneralController {
+class DrawingController {
 
 public:
 
     /**
-     * @brief GeneralController
-     * @param view : vue associée au contrôleur
+     * @brief DrawingController
+     * @param drawing : dessin associée au contrôleur
      */
-    GeneralController(Table* view);
-    ~GeneralController();
+    DrawingController(Drawing* drawing);
+    ~DrawingController();
 
-    void setDrawController(AbstractController* drawController);
-    AbstractController* getDrawController();
+    void setDrawController(AbstractToolController* drawController);
+    AbstractToolController* getDrawController();
     void setPen(QPen* pen);
     QPen* getPen();
     void setBrush(QBrush* brush);
@@ -53,16 +53,16 @@ private:
     /**
      * @brief drawController
      *
-     * Instsance du contrôleur de dessin utilisé actuelement
+     * Instsance du contrôleur de dessin utilisé actuellement
      *
      */
-    AbstractController* drawController;
+    AbstractToolController* drawController;
 
     /**
-     * @brief view
-     * Vue sur laquel le contrôleur travail
+     * @brief drawing
+     * Dessin sur laquel le contrôleur travaille
      */
-    Table* view;
+    Drawing* drawing;
 
     /**
      * @brief pen
@@ -92,4 +92,4 @@ private:
     bool isEnable = false;
 };
 
-#endif // GENERALCONTROLLER_H
+#endif // DRAWINGCONTROLLER_H

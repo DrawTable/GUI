@@ -2,7 +2,7 @@
 
 EraserController* EraserController::instance = nullptr;
 
-EraserController::EraserController() : AbstractController() {
+EraserController::EraserController() : AbstractToolController() {
 }
 
 EraserController::~EraserController() {

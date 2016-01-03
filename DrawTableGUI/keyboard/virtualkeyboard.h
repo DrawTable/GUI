@@ -1,5 +1,5 @@
-#ifndef KEYBOARD_H
-#define KEYBOARD_H
+#ifndef VIRTUALKEYBOARD_H
+#define VIRTUALKEYBOARD_H
 
 #include <QWidget>
 #include <QHBoxLayout>
@@ -10,7 +10,7 @@
 
 class Input;
 
-class Keyboard : public QWidget {
+class VirtualKeyboard : public QWidget {
     Q_OBJECT
 
     QList<KeyButton*> keys;
@@ -38,8 +38,8 @@ signals:
     enterClicked();
 
 public:
-    Keyboard(Input* input, QWidget *parent = 0);
-    ~Keyboard();
+    VirtualKeyboard(Input* input, QWidget *parent = 0);
+    ~VirtualKeyboard();
 };
 
-#endif // KEYBOARD_H
+#endif // VIRTUALKEYBOARD_H

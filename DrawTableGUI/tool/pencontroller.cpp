@@ -2,7 +2,7 @@
 
 PenController* PenController::instance = nullptr;
 
-PenController::PenController() : AbstractController() {
+PenController::PenController() : AbstractToolController() {
 }
 
 PenController::~PenController() {

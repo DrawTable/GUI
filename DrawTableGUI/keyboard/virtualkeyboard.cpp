@@ -1,10 +1,10 @@
-#include "keyboard.h"
+#include "virtualkeyboard.h"
 
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QDesktopWidget>
 
-Keyboard::Keyboard(Input *input, QWidget *parent) : QWidget(parent), input(input) {
+VirtualKeyboard::VirtualKeyboard(Input *input, QWidget *parent) : QWidget(parent), input(input) {
 
     input->setKeyboard(this);
     setFixedHeight(parent->height() / 2);
@@ -84,11 +84,11 @@ Keyboard::Keyboard(Input *input, QWidget *parent) : QWidget(parent), input(input
     setStyleSheet("background: black; border: 0px;");
 }
 
-Keyboard::~Keyboard() {
+VirtualKeyboard::~VirtualKeyboard() {
 
 }
 
-void Keyboard::addModelToRow(QHBoxLayout* rowLayout, const QList<KeyModel>& rowModel) {
+void VirtualKeyboard::addModelToRow(QHBoxLayout* rowLayout, const QList<KeyModel>& rowModel) {
     foreach (KeyModel model, rowModel) {
         KeyButton* key = new KeyButton(model);
         key->setFixedHeight(height() / 5);
@@ -98,31 +98,31 @@ void Keyboard::addModelToRow(QHBoxLayout* rowLayout, const QList<KeyModel>& rowM
     }
 }
 
-void Keyboard::onKeyClicked() {
+void VirtualKeyboard::onKeyClicked() {
     KeyButton* key = qobject_cast<KeyButton*>(sender());
     if (!key) { return; }
     input->setText(input->text().append(key->text()));
     input->setFocus();
 }
 
-void Keyboard::onShiftClicked() {
+void VirtualKeyboard::onShiftClicked() {
     shiftModifier = !shiftModifier;
     foreach (KeyButton* key, keys) { key->shift(shiftModifier); }
 }
 
-void Keyboard::onBackspaceClicked() {
+void VirtualKeyboard::onBackspaceClicked() {
     QString s = input->text();
     s.truncate(s.size() -1);
     input->setText(s);
     input->setFocus();
 }
 
-void Keyboard::onAlphanumClicked() {
+void VirtualKeyboard::onAlphanumClicked() {
     symbolModifier = !symbolModifier;
     foreach (KeyButton* key, keys) { key->invert(symbolModifier); }
     alphanum->invert(symbolModifier);
 }
 
-void Keyboard::onEnterClicked() {
+void VirtualKeyboard::onEnterClicked() {
     emit enterClicked();
 }

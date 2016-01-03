@@ -1,11 +1,11 @@
 #include "mainwindow.h"
 
-#include "../controller/pencontroller.h"
-#include "../controller/dashcontroller.h"
-#include "../controller/rectanglecontroller.h"
-#include "../controller/ellipsecontroller.h"
-#include "../controller/generalcontroller.h"
-#include "../controller/erasercontroller.h"
+#include "../tool/pencontroller.h"
+#include "../tool/dashcontroller.h"
+#include "../tool/rectanglecontroller.h"
+#include "../tool/ellipsecontroller.h"
+#include "../tool/erasercontroller.h"
+#include "../drawing/drawingcontroller.h"
 #include "../dialog/menudialog.h"
 #include "../dialog/filedialog.h"
 
@@ -22,10 +22,10 @@
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     // Creation de la vue
     QBrush bgColor(Qt::black);
-    table = new Table(this);
-    table->setBackgroundBrush(bgColor);
-    table->setStyleSheet("border: 0px;");
-    table->scene()->setSceneRect(0, 0, maximumWidth(), maximumHeight());
+    drawing = new Drawing(this);
+    drawing->setBackgroundBrush(bgColor);
+    drawing->setStyleSheet("border: 0px;");
+    drawing->scene()->setSceneRect(0, 0, maximumWidth(), maximumHeight());
 
     // Creation des actions de la toolbar
     menu = new QAction(this);
@@ -125,10 +125,10 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     onPenTriggered(false);
 
     // Creation du controleur principale
-    controller = new GeneralController(table);
+    controller = new DrawingController(drawing);
 
     // Integration de la vue a la GUI
-    setCentralWidget(table);
+    setCentralWidget(drawing);
 
     showFullScreen();
     menuBar()->hide();
@@ -195,7 +195,7 @@ void MainWindow::onShowGreenScreen() {
     menuBar()->hide();
 
     QBrush bgColor(Qt::green);
-    table->setBackgroundBrush(bgColor);
+    drawing->setBackgroundBrush(bgColor);
 
     // Lance le processus de calibration
     QRect rec = QApplication::desktop()->screenGeometry();
@@ -214,7 +214,7 @@ void MainWindow::onCalibrationSuccess() {
     //menuBar()->show();
 
     QBrush bgColor(Qt::black);
-    table->setBackgroundBrush(bgColor);
+    drawing->setBackgroundBrush(bgColor);
 
     QMessageBox::information(this, tr("Calibration successfull"),
                              tr("Calibration sucessfull, the software is now ready to use !"));
@@ -238,7 +238,7 @@ void MainWindow::onCalibrationError(int errorCode) {
     //menuBar()->show();
 
     QBrush bgColor(Qt::black);
-    table->setBackgroundBrush(bgColor);
+    drawing->setBackgroundBrush(bgColor);
 }
 
 void MainWindow::updateToolBarActions(QAction* action) {
@@ -253,31 +253,31 @@ void MainWindow::updateToolBarActions(QAction* action) {
 void MainWindow::onPenTriggered(bool checked) {
     if (checked) { controller->setDrawController(PenController::getInstance()); }
     else { pen->setChecked(true); }
-    table->setCursor(QCursor(QPixmap(":/cursor/icons/pen.ico")));
+    drawing->setCursor(QCursor(QPixmap(":/cursor/icons/pen.ico")));
 }
 
 void MainWindow::onDashTriggered(bool checked) {
     if (checked) { controller->setDrawController(DashController::getInstance()); }
     else { dash->setChecked(true); }
-    table->setCursor(Qt::CrossCursor);
+    drawing->setCursor(Qt::CrossCursor);
 }
 
 void MainWindow::onEraserTriggered(bool checked) {
     if (checked) { controller->setDrawController(EraserController::getInstance()); }
     else { eraser->setChecked(true); }
-    table->setCursor(QCursor(QPixmap(":/cursor/icons/eraser.ico")));
+    drawing->setCursor(QCursor(QPixmap(":/cursor/icons/eraser.ico")));
 }
 
 void MainWindow::onEllipseTriggered(bool checked) {
     if (checked) { controller->setDrawController(EllipseController::getInstance()); }
     else { ellipse->setChecked(true); }
-    table->setCursor(Qt::CrossCursor);
+    drawing->setCursor(Qt::CrossCursor);
 }
 
 void MainWindow::onRectangleTriggered(bool checked) {
     if (checked) { controller->setDrawController(RectangleController::getInstance()); }
     else { rectangle->setChecked(true);}
-    table->setCursor(Qt::CrossCursor);
+    drawing->setCursor(Qt::CrossCursor);
 }
 
 void MainWindow::onMenuTriggered() {
@@ -286,15 +286,15 @@ void MainWindow::onMenuTriggered() {
 }
 
 void MainWindow::onSaveTriggered() {
-    QString fileName = FileDialog::getSaveFileName();
+    QString fileName = SystemFileDialog::getSaveFileName();
     // creation du conteneur
-    QPixmap pixmap(table->width(), table->height());
+    QPixmap pixmap(drawing->width(), drawing->height());
     // creation du painter allant servir à effectuer notre rendu
     QPainter painter(&pixmap);
     // selection qualite
     painter.setRenderHint(QPainter::HighQualityAntialiasing);
     // generation du rendu
-    table->render(&painter);
+    drawing->render(&painter);
     // enregistrement
     pixmap.save(fileName);
     painter.end();
@@ -342,10 +342,10 @@ void MainWindow::onNewTriggered() {
         switch (ret) {
           case QMessageBox::Save:
               onSaveTriggered();
-              table->scene()->clear();
+              drawing->scene()->clear();
               controller->resetUndoHistory();
           case QMessageBox::Discard:
-              table->scene()->clear();
+              drawing->scene()->clear();
               controller->resetUndoHistory();
               break;
           case QMessageBox::Cancel:
@@ -357,7 +357,7 @@ void MainWindow::onNewTriggered() {
         }
 
     }else{
-        table->scene()->clear();
+        drawing->scene()->clear();
         controller->resetUndoHistory();
     }
 }
@@ -369,7 +369,7 @@ void MainWindow::onPrintTriggered() {
     if (QPrintDialog(&printer).exec() == QDialog::Accepted) {
         QPainter painter(&printer);
         painter.setRenderHint(QPainter::Antialiasing);
-        table->render(&painter);
+        drawing->render(&painter);
         painter.end();
     }
 }
@@ -424,9 +424,9 @@ void MainWindow::onQuitTriggered()
 }
 
 void MainWindow::openFile() {
-    QString fileName = FileDialog::getOpenFileName();
+    QString fileName = SystemFileDialog::getOpenFileName();
     QPixmap img(fileName);
-    table->scene()->addPixmap(img);
+    drawing->scene()->addPixmap(img);
 }
 
 void MainWindow::onColorTriggered(){
