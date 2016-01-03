@@ -431,7 +431,7 @@ void MainWindow::openFile() {
 
 void MainWindow::onColorTriggered(){
     QPen* pen = controller->getPen();
-    QColorDialog* colorDialog = new QColorDialog(this);
-    QColor selectedColor = colorDialog->getColor(pen->color(),this);
+    QColorDialog* colorDialog = new QColorDialog(pen->color(), this);
+    QColor selectedColor = colorDialog->getColor(pen->color(), this);
     pen->setColor(selectedColor);
 }
