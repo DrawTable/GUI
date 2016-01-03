@@ -18,6 +18,7 @@
 #include <QMenuBar>
 #include <QColorDialog>
 #include <QMessageBox>
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     // Creation de la vue
@@ -170,7 +171,7 @@ void MainWindow::onCameraChoosen(int cameraId) {
 // Crée et démarre un thread qui gère le tracking du stylet
 void MainWindow::startTrackingManager(int cameraId) {
     QThread* thread = new QThread;
-    TrackingManager* worker = new TrackingManager(cameraId);
+    worker = new TrackingManager(cameraId);
     worker->moveToThread(thread);
 
     // Lancement et arrêt du thread
@@ -180,13 +181,31 @@ void MainWindow::startTrackingManager(int cameraId) {
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 
     // Communication Main Window <--> Tracking Manager
-    connect(worker, SIGNAL(showGreenScreen()), this, SLOT(onShowGreenScreen()));
     connect(this, SIGNAL(stratCalibration(int, int)), worker, SLOT(onStratCalibration(int, int)));
+    connect(worker, SIGNAL(showGreenScreen()), this, SLOT(onShowGreenScreen()));
     connect(worker, SIGNAL(calibrationSuccess()), this, SLOT(onCalibrationSuccess()));
     connect(worker, SIGNAL(calibrationError(int)), this, SLOT(onCalibrationError(int)));
 
+    // stylus calibration
+    connect(worker, SIGNAL(stylusCalibrationSuccess()), this, SLOT(onStylusCalibrationSuccess()));
+    connect(worker, SIGNAL(stylusCalibrationError(int)), this, SLOT(onStylusCalibrationError(int)));
+    connect(worker, SIGNAL(stylusCalibrationProgress(int)), this, SLOT(onStylusCalibrationProgress(int)));
+
     thread->start();
 }
+
+
+void MainWindow::onStylusCalibrationSuccess(){
+    qDebug()  << "[MainWindow] stylus calibration Success";
+}
+void MainWindow::onStylusCalibrationError(int errorCode){
+    qDebug()  << "[MainWindow] stylus calibration Error: " << errorCode;
+}
+
+void MainWindow::onStylusCalibrationProgress(int value){
+    stylusCalibrationProgress->setValue(value);
+}
+
 
 // Affiche un écran vert pour le calibrage
 void MainWindow::onShowGreenScreen() {
@@ -223,10 +242,13 @@ void MainWindow::onCalibrationSuccess() {
     eFlags &= ~Qt::WindowStaysOnTopHint;
     setWindowFlags(eFlags);
     showFullScreen();
-
     controller->enable();
 
-
+    stylusCalibrationProgress = new QProgressDialog("Please draw something with your stylus", "cancel", 0, 100, this);
+    QTimer* t = new QTimer(this);
+    connect(t, SIGNAL(timeout()), worker, SLOT(onStartStylusCalibration()));
+    t->start(0);
+    stylusCalibrationProgress->show();
 }
 
 // Quand la calibration a échouée

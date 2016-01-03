@@ -4,7 +4,7 @@
 #include <opencv2/opencv.hpp>
 #include <QDebug>
 
-#define DEBUG true
+#define DEBUG false
 
 #define NUM_CHANNELS_HIST 3
 #define RANGE_BIN_SIZE 2
@@ -133,13 +133,6 @@ private:
             h_bin_w = cvRound( (double) W/bins[0]);
             s_bin_w = cvRound( (double) W/bins[1]);
             v_bin_w = cvRound( (double) W/bins[2]);
-
-            // windows
-            if(DEBUG){
-                namedWindow("result", 0);
-                createTrackbar("min area", "result", &minArea, DEFAULT_MAX_AREA, parent->onMinMaxAreaChanged);
-                createTrackbar("max area", "result", &maxArea, DEFAULT_MAX_AREA, parent->onMinMaxAreaChanged);
-            }
 
             orig_hist_images.resize(NUM_CHANNELS_HIST);
         }
@@ -412,6 +405,9 @@ private:
             line(v_hist_image, Point( W * v_median / 179.0, 0), Point(W * v_median / 179.0, H-1), Scalar(0,255,255), 1);
 
             // draw copies
+            namedWindow("h_hist", 0);
+            namedWindow("s_hist", 0);
+            namedWindow("v_hist", 0);
             imshow("h_hist", h_hist_image);
             imshow("s_hist", s_hist_image);
             imshow("v_hist", v_hist_image);
@@ -462,6 +458,7 @@ private:
             }
 
             if(DEBUG){
+                namedWindow("result", 0);
                 imshow("result", result);
             }
 
@@ -489,11 +486,6 @@ public:
         LedTracker::getInstance()->processThreshold();
     }
 
-    static void onMinMaxAreaChanged(int,void*){
-        LedTracker::getInstance()->processFilterByArea();
-
-    }
-
     /////////////// methode non-statics //////////////////
     void setFrame(Mat frame){
         image = frame;
@@ -502,9 +494,7 @@ public:
     }
 
     void activateDebugAnalysis(){
-        namedWindow("original", 0);
-        namedWindow("foreground", 0);
-        namedWindow("roi", 0);
+
         namedWindow("threshold", 0);
         createTrackbar("lowH", "threshold", &lowH, 179, onThresholdChanged);
         createTrackbar("lowS", "threshold", &lowS, 255, onThresholdChanged);
@@ -578,7 +568,6 @@ public:
             if(center.x > 0 && center.y > 0){
                 drawCross(image, center, Scalar(0,0,255), 20, 3);
             }
-
         }
     }
 
@@ -670,7 +659,7 @@ public:
         switch (current_mode) {
             case NONE:
                 if(!processForeground())
-                    break;
+                    break;                  // foreground empty nothing todo
                 rect_mask_roi.area();
                 ledModel.calcHistograms(mask_roi, mask_hist);
                 processThreshold();
@@ -679,7 +668,7 @@ public:
                 break;
             case CALIBRATION:
                 if(!processForeground())
-                    break;
+                    break;                  // foreground empty nothing todo
                 ledModel.calcHistograms(mask_roi, mask_hist, true);
                 showMaskRoi();
                 showImagesAnalysis();
@@ -687,7 +676,11 @@ public:
             case TRACKING:
                 processThreshold();
                 this->processFilterByArea();
-                imshow("original", image);
+
+                if(DEBUG){
+                    namedWindow("original", 0);
+                    imshow("original", image);
+                }
                 break;
             default:
                 break;
@@ -696,20 +689,16 @@ public:
 
     bool processForeground(){
 
-
         backgroundSubtractor->apply(image, foreground, learningRate);
         removeNoise(foreground);
 
-        cout << "1" << endl;
         if(object_type == STYLUS){
-            cout << "2" << endl;
             Mat mask_people;
 //            threshold_circular(&hsv, default_stylus_params.low_mask_people,  default_stylus_params.high_mask_people, &mask_people);
 //            bitwise_and(mask_people, foreground, foreground);
 
             // Hue range is circular [0:179] deg
             if(default_stylus_params.low_mask_people[0] <= default_stylus_params.high_mask_people[0]){
-                cout << "3" << endl;
                 // min Hue value <= max value (i.e [20:160])
 //                cout << "inRange: " << default_stylus_params.low_mask_people << " : " << default_stylus_params.high_mask_people << endl;
                 inRange(hsv, default_stylus_params.low_mask_people, default_stylus_params.high_mask_people, mask_people);
@@ -728,19 +717,13 @@ public:
                 bitwise_and(maskH, mask_people, mask_people);  // merge All
             }
 
-            cout << "4" << endl;
             bitwise_and(mask_people, foreground, foreground);
-//            Mat result;
-//            bitwise_and(mask_people, foreground, result);
-//            result.copyTo(foreground);
 
             Mat masked;
             image.copyTo(masked, mask_people);
             namedWindow("mask_people", 0);
             imshow("mask_people", masked);
         }
-
-        cout << "5" << endl;
 
         // calculate bouding rect for moving foreground
         rect_mask_roi = getMaxBoundingRect(foreground);
@@ -755,12 +738,15 @@ public:
     }
 
     void showMaskRoi(bool rgb = true){
-        Mat toRgb;
-        if(rgb){
-            cvtColor(mask_roi, toRgb, CV_HSV2BGR);
-            imshow("roi", toRgb);
-        } else {
-            imshow("roi", mask_roi);
+        if(DEBUG){
+            namedWindow("roi", 0);
+            if(rgb){
+                Mat rgb_image;
+                cvtColor(mask_roi, rgb_image, CV_HSV2BGR);
+                imshow("roi", rgb_image);
+            } else {
+                imshow("roi", mask_roi);
+            }
         }
     }
 
@@ -798,9 +784,13 @@ public:
         }
     }
 
-    void showImagesAnalysis(){
-        imshow("original", image);
-        imshow("foreground", foreground);
+    void showMainImages(){
+        if(DEBUG){
+            namedWindow("original");
+            namedWindow("foreground");
+            imshow("original", image);
+            imshow("foreground", foreground);
+        }
     }
 
     void setMode(LedTracker::MODE mode){
@@ -813,11 +803,8 @@ public:
 
     LedTracker(): ledModel(this){
         backgroundSubtractor = createBackgroundSubtractorMOG2(500, 60, false);
-        // default mask to remove people form the foreground when using stylus
-//        default_stylus_params.low_mask_people = Scalar(134,89,108);
-//        default_stylus_params.high_mask_people = Scalar(10,255,255);
-        default_stylus_params.low_mask_people = Scalar(134,0,0);
-        default_stylus_params.high_mask_people = Scalar(179,255,255);
+        default_stylus_params.low_mask_people = Scalar(134,0,0);            // 134,89,108
+        default_stylus_params.high_mask_people = Scalar(179,255,255);       // 10,255,255
         default_stylus_params.lowH = 134;
         default_stylus_params.highH = 10;
     }

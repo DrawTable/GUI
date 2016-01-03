@@ -17,6 +17,7 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPainter>
+#include <QProgressDialog>
 #include <QPixmap>
 #include <QMenuBar>
 #include <QColorDialog>
@@ -61,8 +62,13 @@ public slots:
     void onCalibrationSuccess();
     void onCalibrationError(int errorCode);
 
+    void onStylusCalibrationProgress(int value);
+    void onStylusCalibrationSuccess();
+    void onStylusCalibrationError(int errorCode);
+
     // Communication Main Window <--> Camera Manager
     void onCameraChoosen(int cameraId);
+
 
 signals:
     void stratCalibration(int, int);
@@ -89,6 +95,9 @@ private:
     QAction* color;
 
     GeneralController* controller;
+    TrackingManager* worker;
+
+    QProgressDialog* stylusCalibrationProgress;
 
     void startTrackingManager(int cameraId);
     void tryCameraMode();

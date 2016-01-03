@@ -21,10 +21,14 @@ private:
 public slots:
     void process();
     void onStratCalibration(int width, int height);
+    void onStartStylusCalibration();
 
 signals:
     void showGreenScreen();
     void calibrationSuccess();
+    void stylusCalibrationSuccess();
+    void stylusCalibrationError(int errorCode);
+    void stylusCalibrationProgress(int);
     void calibrationError(int errorCode);
 
     void mouseMove(int x, int y);

@@ -62,6 +62,25 @@ void TrackingManager::onStratCalibration(int width, int height) {
     }
 }
 
+void TrackingManager::onStartStylusCalibration()
+{
+    qDebug() << "Start Calibration" << endl;
+
+    for(int i=0; i < 100; i++){
+        usleep(500);
+        emit stylusCalibrationProgress(i);
+    }
+
+    qDebug() << "Calibration Finished" << endl;
+
+    bool success = true;
+    if(success)
+        emit stylusCalibrationSuccess();
+    else
+        emit stylusCalibrationError(1);
+
+}
+
 // Boucle principal du thread
 void TrackingManager::mainLoop() {
 
