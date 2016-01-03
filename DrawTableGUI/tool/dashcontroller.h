@@ -5,10 +5,11 @@
 #include <QGraphicsLineItem>
 
 /**
- * @brief The DashController class
+ * @brief Controller to draw a straight line.
  *
- * Contrôleur gérant le dessin de trait droit, hérite de AbstractToolController.
+ * This controller inherits from AbstractToolController.
  *
+ * Plese refer the the AbstractToolController documentation to see functions' usage.
  */
 class DashController : public AbstractToolController {
 

@@ -4,6 +4,10 @@
 #include "keyboardbutton.h"
 #include "keymodel.h"
 
+
+/**
+ * @brief A button for the VirtualKeyboard
+ */
 class KeyButton : public KeyboardButton {
     Q_OBJECT
 

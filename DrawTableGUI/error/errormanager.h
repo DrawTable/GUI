@@ -4,13 +4,21 @@
 #include <QObject>
 #include <QDialog>
 
-#include <QDebug>
-
+/**
+ * @brief Error Handler
+ *
+ * The purpose of this class is to show a pop-up when there is an error with the calibration process.
+ * Some information of why the calibration may have fail is shown to the user and then,
+ * the user has to choice to restart the calibration or to quit the program.
+ *
+ * This class is a Singleton.
+ */
 class ErrorManager : public QObject {
     Q_OBJECT
 
 public:
     static ErrorManager* getInstance();
+
 public slots:
     // slots internes
     void selectCamera();
@@ -34,4 +42,3 @@ signals:
 
 
 #endif // ERRORMANAGER
-

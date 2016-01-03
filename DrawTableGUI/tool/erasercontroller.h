@@ -5,14 +5,13 @@
 #include <QGraphicsPathItem>
 #include <QPainterPath>
 
-
 /**
- * @brief The EraserController class
+ * @brief Controller to erase any line.
  *
- * Contrôleur gérant la fonction d'effacement, hérite de AbstractToolController
+ * This controller inherits from AbstractToolController.
  *
+ * Plese refer the the AbstractToolController documentation to see functions' usage.
  */
-
 class EraserController : public AbstractToolController {
 
 public:

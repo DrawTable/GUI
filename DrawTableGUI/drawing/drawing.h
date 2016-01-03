@@ -9,12 +9,10 @@
 class DrawingController;
 
 /**
- * @brief The Drawing class
+ * @brief Draw zone
  *
- * Classe modèle de dessin, elle possède une redéfinition des
- * méthode appelée lors des QMouseEvent qui en délégue la gestion
- * au GeneralController
- *  *
+ * This view inherits from a QGraphicsView and redefines mouse events handlers.
+ * Those handlers will then delegate everything to the DrawingController.
  */
 class Drawing : public QGraphicsView {
     Q_OBJECT

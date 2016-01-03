@@ -61,7 +61,6 @@ Please restart to camera's selection step by using the 'restart' button.\n";
     dialog->setWindowTitle("Calibration failure");
     dialog->setLayout(globalLayout);
     dialog->exec();
-
 }
 
 void ErrorManager::selectCamera(){

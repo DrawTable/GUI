@@ -10,6 +10,14 @@
 
 class Input;
 
+/**
+ * @brief The VirtualKeyboard
+ *
+ * The virtual keyboard allows the user to type some text using just the stylus.
+ * You can see it as a smartphone keyboard.
+ *
+ * It is used when the user tries to open or save a file via the OpenFileDialog and the SaveFileDialog classes.
+ */
 class VirtualKeyboard : public QWidget {
     Q_OBJECT
 

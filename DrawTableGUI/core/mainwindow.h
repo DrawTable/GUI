@@ -29,6 +29,13 @@
 
 class ToolBar;
 
+/**
+ * @brief Main class launching everything.
+ *
+ * This class is called by Qt when the application starts.
+ * It creates the draw area and its ToolBar, the menu.
+ * It also launches the calibration and receives its responses (success and errors).
+ */
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
@@ -67,8 +74,10 @@ public slots:
     void restartCameraSelection();
 
 signals:
+    /**
+     * Ask the TrackingManager to start the calibration process.
+     */
     void stratCalibration(int, int);
-    void quitProg();
 
 private:
     ToolBar* toolBar;
