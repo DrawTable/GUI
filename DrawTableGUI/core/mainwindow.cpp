@@ -69,10 +69,18 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     cm = CameraManager::getInstance();
     connect(cm, SIGNAL(cameraChoosen(int)), this, SLOT(onCameraChoosen(int)));
 
+    launchMouseHandler();
+
     tryCameraMode();
 }
 
 MainWindow::~MainWindow() {
+}
+
+void MainWindow::launchMouseHandler() {
+    QProcess* process = new QProcess;
+    process->start("java Server");
+    process->waitForStarted();
 }
 
 void MainWindow::tryCameraMode() {

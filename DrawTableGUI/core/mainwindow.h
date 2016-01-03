@@ -25,6 +25,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QThread>
+#include <QProcess>
 #include "toolbar.h"
 
 class ToolBar;
@@ -88,6 +89,7 @@ private:
 
     void startTrackingManager(int cameraId);
     void tryCameraMode();
+    void launchMouseHandler();
 };
 
 #endif // MAINWINDOW_H
