@@ -73,26 +73,24 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::tryCameraMode() {
-    qDebug() << "1";
     // Lancement du Camera Manager
     CameraManager* cm = CameraManager::getInstance();
-    qDebug() << "2";
+    cm->initCameras();
+
     if (cm->countCameras() < 1) {
         QMessageBox::information(this, tr("No camera found"),
                                  tr("It seems you don't have any camera plugged or integrated.\n\
 If you do have a camera, check if your OS recognizes it."));
         controller->enable();
     } else {
-        qDebug() << "3";
         QMessageBox::information(this, tr("Select your camera"),
             tr("When you will click on 'ok', your camera(s) will be displayed on a personnal windows.\n\
 Please check the angle of the camera you want to use, so your working board is entirely in sight.\n\
 To choose a camera, click on the chosen camera's screen into it's window."));
-        qDebug() << "4";
+
         cm->listCameras();
-        qDebug() << "5";
+
         connect(cm, SIGNAL(cameraChoosen(int)), this, SLOT(onCameraChoosen(int)));
-        qDebug() << "6";
     }
 }
 

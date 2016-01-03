@@ -4,14 +4,6 @@ CameraManager* CameraManager::instance = 0;
 
 CameraManager::CameraManager()
 {
-    // Tentative de détection de 10 caméras
-    for (int i = 0; i < 10; i++) {
-        cv::VideoCapture* cap = new cv::VideoCapture(i);
-        if (cap->isOpened()) {
-            qDebug() << "Camera #" << i << " is working.";
-            captures.push_back(cap);
-        }
-    }
 }
 
 CameraManager* CameraManager::getInstance() {
@@ -20,6 +12,19 @@ CameraManager* CameraManager::getInstance() {
     }
 
     return instance;
+}
+
+void CameraManager::initCameras() {
+    captures.clear();
+
+    // Tentative de détection de 10 caméras
+    for (int i = 0; i < 10; i++) {
+        cv::VideoCapture* cap = new cv::VideoCapture(i);
+        if (cap->isOpened()) {
+            qDebug() << "Camera #" << i << " is working.";
+            captures.push_back(cap);
+        }
+    }
 }
 
 int CameraManager::countCameras() {
