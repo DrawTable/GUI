@@ -140,7 +140,7 @@ private:
     QBrush* brush;
     QList<QGraphicsItem*> lastActions;
     QList<QGraphicsItem*> nextActions;
-    bool modifToSave;
+    bool modifToSave = false;
     bool isEnable = false;
 };
 
