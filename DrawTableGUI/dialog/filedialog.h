@@ -5,7 +5,8 @@
 #include "savefiledialog.h"
 #include "openfiledialog.h"
 
-class SystemFileDialog {
+class SystemFileDialog
+{
     friend class SaveFileDialog;
     friend class OpenFileDialog;
 

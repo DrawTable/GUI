@@ -17,7 +17,8 @@
  * A SaveFileDialog window is shown when the user tries to save a drawing.
  * It will also handle the usage of a VirtualKeyboard allowing the user to type the name of the file he wants to save with the stylus.
  */
-class SaveFileDialog : public QDialog {
+class SaveFileDialog : public QDialog
+{
     Q_OBJECT
 
     QLabel* title;

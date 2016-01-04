@@ -8,18 +8,22 @@
 
 ErrorManager* ErrorManager::instance = 0;
 
-ErrorManager::ErrorManager(){
+ErrorManager::ErrorManager()
+{
     nbTry = 0;
 }
 
-ErrorManager* ErrorManager::getInstance(){
-    if (instance == nullptr){
+ErrorManager* ErrorManager::getInstance()
+{
+    if (instance == nullptr)
+    {
         instance = new ErrorManager();
     }
     return instance;
 }
 
-void ErrorManager::onCalibrationError(int errorCode){
+void ErrorManager::onCalibrationError(int errorCode)
+{
     Q_UNUSED(errorCode);
 
     QString textIntro = "An error occured during the calibration.\n\n\
@@ -63,13 +67,15 @@ Please restart to camera's selection step by using the 'restart' button.\n";
     dialog->exec();
 }
 
-void ErrorManager::selectCamera(){
+void ErrorManager::selectCamera()
+{
     emit cameraSelection();
     dialog->close();
 }
 
-void ErrorManager::quitApplication(){
-     emit quitApp();
+void ErrorManager::quitApplication()
+{
+    emit quitApp();
     dialog->close();
 }
 

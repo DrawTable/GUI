@@ -4,8 +4,10 @@
 #include <QHBoxLayout>
 #include <QDir>
 #include <QFrame>
+#include <QScrollBar>
 
-SaveFileDialog::SaveFileDialog(QWidget *parent) : QDialog(parent) {
+SaveFileDialog::SaveFileDialog(QWidget *parent) : QDialog(parent)
+{
 
     /* layouts */
 
@@ -50,6 +52,7 @@ SaveFileDialog::SaveFileDialog(QWidget *parent) : QDialog(parent) {
     view->setModel(model);
     view->setRootIndex(model->setRootPath(path->text()));
     view->setStyleSheet("QListView{border: 2px solid white; } QListView::item{color: white; height: 50px;} QListView::item:hover{border: 2px solid white; } QListView::item:selected{border: 2px solid white;}");
+    view->verticalScrollBar()->setStyleSheet("QScrollBar:vertical { width: 45px; }");
 
     connect(view, SIGNAL(clicked(QModelIndex)), this, SLOT(onViewClicked(QModelIndex)));
 
@@ -93,26 +96,33 @@ SaveFileDialog::SaveFileDialog(QWidget *parent) : QDialog(parent) {
     showFullScreen();
 }
 
-void SaveFileDialog::onViewClicked(QModelIndex index) {
+void SaveFileDialog::onViewClicked(QModelIndex index)
+{
     path->setText(model->fileInfo(index).absoluteFilePath());
-    if (model->fileInfo(index).isDir()) {
+    if (model->fileInfo(index).isDir())
+    {
         view->setRootIndex(model->setRootPath(path->text()));
-    } else if (model->fileInfo(index).isFile()) {
+    }
+    else if (model->fileInfo(index).isFile())
+    {
         input->setText(model->fileInfo(index).fileName());
     }
 }
 
-void SaveFileDialog::onSaveClicked() {
+void SaveFileDialog::onSaveClicked()
+{
     SystemFileDialog::fileName = path->text() + QDir::separator() + input->text();
     close();
 }
 
-void SaveFileDialog::onCancelClicked() {
+void SaveFileDialog::onCancelClicked()
+{
     SystemFileDialog::fileName = "";
     close();
 }
 
-void SaveFileDialog::onDriveClicked() {
+void SaveFileDialog::onDriveClicked()
+{
     path->setText("");
     view->setRootIndex(model->setRootPath(path->text()));
 }

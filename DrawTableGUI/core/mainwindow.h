@@ -38,7 +38,8 @@ class ToolBar;
  * It creates the draw area and its ToolBar, the menu.
  * It also launches the calibration and receives its responses (success and errors).
  */
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 
 public:

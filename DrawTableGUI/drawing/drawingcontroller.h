@@ -13,7 +13,8 @@ class Drawing;
  * General controller of the application handling drawing tools and its parameters (color, thickness).
  * It also handles a stack of user's actions to allow him to use the undo and redo functions.
  */
-class DrawingController {
+class DrawingController
+{
 
 public:
 

@@ -1,17 +1,3 @@
-/**
- * Projet  :   DrawTable
- * Fichier :   MainWindow.cpp
- *
- * Auteurs :   Bron Sacha
- *             Pellet Marc
- *             Villa David
- *
- *
- * Description :
- *
- *
- */
-
 #include "mainwindow.h"
 #include "tracking/ledtracking/ledtracker.h"
 #include "../tool/pencontroller.h"
@@ -34,8 +20,8 @@
 #include <QMessageBox>
 #include <QTimer>
 
-
-MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
+MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent)
+{
 
     /* tool bar */
     toolBar = new ToolBar(this);
@@ -76,26 +62,32 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     tryCameraMode();
 }
 
-MainWindow::~MainWindow() {
+MainWindow::~MainWindow()
+{
 }
 
-void MainWindow::launchMouseHandler() {
+void MainWindow::launchMouseHandler()
+{
     QProcess* process = new QProcess;
     process->start("java Server");
     process->waitForStarted();
 }
 
-void MainWindow::tryCameraMode() {
+void MainWindow::tryCameraMode()
+{
     cm->initCameras();
 
-    if (cm->countCameras() < 1) {
+    if (cm->countCameras() < 1)
+    {
         QMessageBox::information(this, tr("No camera found"),
                                  tr("It seems you don't have any camera plugged or integrated.\n\
 If you do have a camera, check if your OS recognizes it."));
         controller->enable();
-    } else {
+    }
+    else
+    {
         QMessageBox::information(this, tr("Select your camera"),
-            tr("When you will click on 'ok', your camera(s) will be displayed on a personnal windows.\n\
+                                 tr("When you will click on 'ok', your camera(s) will be displayed on a personnal windows.\n\
 Please check the angle of the camera you want to use, so your working board is entirely in sight.\n\
 To choose a camera, click on the chosen camera's screen into it's window."));
 
@@ -104,7 +96,8 @@ To choose a camera, click on the chosen camera's screen into it's window."));
 }
 
 // Lance le Tracking Manager une fois que l'utilisateur a choisi la caméra à utiliser
-void MainWindow::onCameraChoosen(int cameraId) {
+void MainWindow::onCameraChoosen(int cameraId)
+{
     QMessageBox::information(this, tr("Camera chosen"),
                              QString("You chose the camera #") +
                              QString::fromStdString(std::to_string(cameraId)) +
@@ -114,7 +107,8 @@ void MainWindow::onCameraChoosen(int cameraId) {
 }
 
 // Crée et démarre un thread qui gère le tracking du stylet
-void MainWindow::startTrackingManager(int cameraId) {
+void MainWindow::startTrackingManager(int cameraId)
+{
     QThread* thread = new QThread;
     worker = new TrackingManager(cameraId);
     worker->moveToThread(thread);
@@ -140,20 +134,24 @@ void MainWindow::startTrackingManager(int cameraId) {
 }
 
 
-void MainWindow::onStylusCalibrationSuccess(){
+void MainWindow::onStylusCalibrationSuccess()
+{
     qDebug()  << "[MainWindow] stylus calibration Success";
 
 }
-void MainWindow::onStylusCalibrationError(int errorCode){
+void MainWindow::onStylusCalibrationError(int errorCode)
+{
     qDebug()  << "[MainWindow] stylus calibration Error: " << errorCode;
 }
 
-void MainWindow::onStylusCalibrationProgress(int value){
+void MainWindow::onStylusCalibrationProgress(int value)
+{
     stylusCalibrationProgress->setValue(value);
 }
 
 // Affiche un écran vert pour le calibrage
-void MainWindow::onShowGreenScreen() {
+void MainWindow::onShowGreenScreen()
+{
     // afficher un écran vert pour le calibrage
     toolBar->hide();
     menuBar()->hide();
@@ -167,7 +165,8 @@ void MainWindow::onShowGreenScreen() {
 }
 
 // Quand la calibration a réussie
-void MainWindow::onCalibrationSuccess() {
+void MainWindow::onCalibrationSuccess()
+{
 
     qDebug() << "onCalibrationSuccess" << endl;
     // force la main window en premier plan pour 'cacher les fenetres de la camera
@@ -199,7 +198,8 @@ void MainWindow::onCalibrationSuccess() {
 }
 
 // Quand la calibration a échouée
-void MainWindow::onCalibrationError(int errorCode) {
+void MainWindow::onCalibrationError(int errorCode)
+{
     Q_UNUSED(errorCode)
 
     // TODO implementation
@@ -209,56 +209,100 @@ void MainWindow::onCalibrationError(int errorCode) {
     drawing->setBackgroundBrush(bgColor);
 }
 
-void MainWindow::updateToolBarActions(QAction* action) {
-    if (action->isCheckable()){
+void MainWindow::updateToolBarActions(QAction* action)
+{
+    if (action->isCheckable())
+    {
         const QList<QAction*>& actions = toolBar->actions();
-        foreach (QAction* a, actions) {
-            if (a != action) { a->setChecked(false); }
+        foreach (QAction* a, actions)
+        {
+            if (a != action)
+            {
+                a->setChecked(false);
+            }
         }
     }
 }
 
-void MainWindow::onPenTriggered(bool checked) {
-    if (checked) { controller->setDrawController(PenController::getInstance()); }
-    else { toolBar->getPen()->setChecked(true); }
+void MainWindow::onPenTriggered(bool checked)
+{
+    if (checked)
+    {
+        controller->setDrawController(PenController::getInstance());
+    }
+    else
+    {
+        toolBar->getPen()->setChecked(true);
+    }
     drawing->setCursor(QCursor(QPixmap(":/cursor/icons/pen.ico")));
 }
 
-void MainWindow::onDashTriggered(bool checked) {
-    if (checked) { controller->setDrawController(DashController::getInstance()); }
-    else { toolBar->getDash()->setChecked(true); }
+void MainWindow::onDashTriggered(bool checked)
+{
+    if (checked)
+    {
+        controller->setDrawController(DashController::getInstance());
+    }
+    else
+    {
+        toolBar->getDash()->setChecked(true);
+    }
     drawing->setCursor(Qt::CrossCursor);
 }
 
-void MainWindow::onEraserTriggered(bool checked) {
-    if (checked) { controller->setDrawController(EraserController::getInstance()); }
-    else { toolBar->getEraser()->setChecked(true); }
+void MainWindow::onEraserTriggered(bool checked)
+{
+    if (checked)
+    {
+        controller->setDrawController(EraserController::getInstance());
+    }
+    else
+    {
+        toolBar->getEraser()->setChecked(true);
+    }
     drawing->setCursor(QCursor(QPixmap(":/cursor/icons/eraser.ico")));
 }
 
-void MainWindow::onEllipseTriggered(bool checked) {
-    if (checked) { controller->setDrawController(EllipseController::getInstance()); }
-    else { toolBar->getEllipse()->setChecked(true); }
+void MainWindow::onEllipseTriggered(bool checked)
+{
+    if (checked)
+    {
+        controller->setDrawController(EllipseController::getInstance());
+    }
+    else
+    {
+        toolBar->getEllipse()->setChecked(true);
+    }
     drawing->setCursor(Qt::CrossCursor);
 }
 
-void MainWindow::onRectangleTriggered(bool checked) {
-    if (checked) { controller->setDrawController(RectangleController::getInstance()); }
-    else { toolBar->getRectangle()->setChecked(true);}
+void MainWindow::onRectangleTriggered(bool checked)
+{
+    if (checked)
+    {
+        controller->setDrawController(RectangleController::getInstance());
+    }
+    else
+    {
+        toolBar->getRectangle()->setChecked(true);
+    }
     drawing->setCursor(Qt::CrossCursor);
 }
 
-void MainWindow::onMenuTriggered() {
+void MainWindow::onMenuTriggered()
+{
     Menu dialog(this);
     dialog.exec();
 }
 
-void MainWindow::onSaveTriggered() {
+void MainWindow::onSaveTriggered()
+{
     QString fileName = SystemFileDialog::getSaveFileName();
     QString suffix = QFileInfo(fileName).suffix().toLower();
 
     // Ajout du suffix .png si celui précisé par l'utilisateur n'est pas géré
-    if (suffix != QString("png") && suffix != QString("jpg") && suffix != QString("bmp")) {
+    if (suffix != QString("png") && suffix != QString("jpg") && suffix != QString("bmp"))
+    {
         fileName += QString(".png");
     }
 
@@ -276,8 +320,10 @@ void MainWindow::onSaveTriggered() {
     controller->setToSave(false);
 }
 
-void MainWindow::onOpenTriggered() {
-    if(controller->toSave()){
+void MainWindow::onOpenTriggered()
+{
+    if(controller->toSave())
+    {
         QMessageBox msgBox;
         msgBox.setText("The document has been modified.");
         msgBox.setInformativeText("Do you want to save your changes?");
@@ -287,28 +333,36 @@ void MainWindow::onOpenTriggered() {
         msgBox.setWindowFlags(Qt::FramelessWindowHint);
         int ret = msgBox.exec();
 
-        switch (ret) {
-          case QMessageBox::Save:
-              onSaveTriggered();
-              openFile();
-          case QMessageBox::Discard:
-              openFile();
-              break;
-          case QMessageBox::Cancel:
-              // Nothing Happend
-              break;
-          default:
-              // should never be reached
-              break;
+        switch (ret)
+        {
+        case QMessageBox::Save:
+            onSaveTriggered();
+            openFile();
+            controller->resetUndoHistory();
+            break;
+        case QMessageBox::Discard:
+            openFile();
+            controller->resetUndoHistory();
+            break;
+        case QMessageBox::Cancel:
+            // Nothing Happend
+            break;
+        default:
+            // should never be reached
+            break;
         }
 
-    }else{
+    }
+    else
+    {
         openFile();
     }
 }
 
-void MainWindow::onNewTriggered() {
-    if(controller->toSave()){
+void MainWindow::onNewTriggered()
+{
+    if(controller->toSave())
+    {
         QMessageBox msgBox;
         msgBox.setText("The document has been modified.");
         msgBox.setInformativeText("Do you want to save your changes?");
@@ -318,34 +372,40 @@ void MainWindow::onNewTriggered() {
         msgBox.setWindowFlags(Qt::FramelessWindowHint);
         int ret = msgBox.exec();
 
-        switch (ret) {
-          case QMessageBox::Save:
-              onSaveTriggered();
-              drawing->scene()->clear();
-              controller->resetUndoHistory();
-          case QMessageBox::Discard:
-              drawing->scene()->clear();
-              controller->resetUndoHistory();
-              break;
-          case QMessageBox::Cancel:
-              // Nothing Happend
-              break;
-          default:
-              // should never be reached
-              break;
+        switch (ret)
+        {
+        case QMessageBox::Save:
+            onSaveTriggered();
+            drawing->scene()->clear();
+            controller->resetUndoHistory();
+            break;
+        case QMessageBox::Discard:
+            drawing->scene()->clear();
+            controller->resetUndoHistory();
+            break;
+        case QMessageBox::Cancel:
+            // Nothing Happend
+            break;
+        default:
+            // should never be reached
+            break;
         }
 
-    }else{
+    }
+    else
+    {
         drawing->scene()->clear();
         controller->resetUndoHistory();
     }
 }
 
-void MainWindow::onPrintTriggered() {
+void MainWindow::onPrintTriggered()
+{
     QPrinter printer;
     printer.setPageSize(QPrinter::A4);
     printer.setOrientation(QPrinter::Landscape);
-    if (QPrintDialog(&printer).exec() == QDialog::Accepted) {
+    if (QPrintDialog(&printer).exec() == QDialog::Accepted)
+    {
         QPainter painter(&printer);
         painter.setRenderHint(QPainter::Antialiasing);
         drawing->render(&painter);
@@ -353,22 +413,26 @@ void MainWindow::onPrintTriggered() {
     }
 }
 
-void MainWindow::onUndoTriggered() {
+void MainWindow::onUndoTriggered()
+{
     controller->undo();
 }
 
-void MainWindow::onRedoTriggered() {
+void MainWindow::onRedoTriggered()
+{
     controller->redo();
 }
 
-void MainWindow::onThicknessChanged(QAction* action) {
+void MainWindow::onThicknessChanged(QAction* action)
+{
     QPen* pen = controller->getPen();
     pen->setWidth(qvariant_cast<int>(action->data()));
 }
 
 void MainWindow::onQuitTriggered()
 {
-    if(controller->toSave()){
+    if(controller->toSave())
+    {
         QMessageBox msgBox;
         msgBox.setText("The document has been modified.");
         msgBox.setInformativeText("Do you want to save your changes?");
@@ -378,39 +442,45 @@ void MainWindow::onQuitTriggered()
         msgBox.setWindowFlags(Qt::FramelessWindowHint);
         int ret = msgBox.exec();
 
-        switch (ret) {
-          case QMessageBox::Save:
-              onSaveTriggered();
-              QApplication::quit();
-          case QMessageBox::Discard:
-              QApplication::quit();
-              break;
-          case QMessageBox::Cancel:
-              // Nothing Happend
-              break;
-          default:
-              // should never been reached
-              break;
+        switch (ret)
+        {
+        case QMessageBox::Save:
+            onSaveTriggered();
+            QApplication::quit();
+        case QMessageBox::Discard:
+            QApplication::quit();
+            break;
+        case QMessageBox::Cancel:
+            // Nothing Happend
+            break;
+        default:
+            // should never been reached
+            break;
         }
 
-    }else{
+    }
+    else
+    {
         QApplication::quit();
     }
 }
 
-void MainWindow::openFile() {
+void MainWindow::openFile()
+{
     QString fileName = SystemFileDialog::getOpenFileName();
     QPixmap img(fileName);
     drawing->scene()->addPixmap(img);
 }
 
-void MainWindow::onColorTriggered(){
+void MainWindow::onColorTriggered()
+{
     QPen* pen = controller->getPen();
     QColorDialog* colorDialog = new QColorDialog(pen->color(), this);
     QColor selectedColor = colorDialog->getColor(pen->color(), this);
     pen->setColor(selectedColor);
 }
 
-void MainWindow::restartCameraSelection(){
+void MainWindow::restartCameraSelection()
+{
     tryCameraMode();
 }

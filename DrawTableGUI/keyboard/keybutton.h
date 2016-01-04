@@ -8,7 +8,8 @@
 /**
  * @brief A button for the VirtualKeyboard
  */
-class KeyButton : public KeyboardButton {
+class KeyButton : public KeyboardButton
+{
     Q_OBJECT
 
     KeyModel model;

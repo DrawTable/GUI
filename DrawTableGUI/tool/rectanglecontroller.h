@@ -12,7 +12,8 @@
  *
  * Plese refer the the AbstractToolController documentation to see functions' usage.
  */
-class RectangleController : public AbstractToolController {
+class RectangleController : public AbstractToolController
+{
 
 public:
     virtual ~RectangleController();

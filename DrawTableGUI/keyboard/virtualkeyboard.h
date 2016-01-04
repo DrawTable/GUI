@@ -18,7 +18,8 @@ class Input;
  *
  * It is used when the user tries to open or save a file via the OpenFileDialog and the SaveFileDialog classes.
  */
-class VirtualKeyboard : public QWidget {
+class VirtualKeyboard : public QWidget
+{
     Q_OBJECT
 
     QList<KeyButton*> keys;

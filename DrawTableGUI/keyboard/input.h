@@ -10,7 +10,8 @@ class VirtualKeyboard;
  * @brief An Input with a VirtualKeyboard.
  * This class describes an Input that make a VirtualKeyboard appears when the user clicks on it.
  */
-class Input : public QLineEdit {
+class Input : public QLineEdit
+{
     Q_OBJECT
 
     VirtualKeyboard* keyboard;

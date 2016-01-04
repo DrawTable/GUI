@@ -5,9 +5,12 @@ CameraManagerUpdater::CameraManagerUpdater(std::vector<cv::VideoCapture*> captur
     this->captures = captures;
 }
 
-void CameraManagerUpdater::process() {
-    while (!stopped) {
-        for (unsigned int i = 0; i < captures.size(); i++) {
+void CameraManagerUpdater::process()
+{
+    while (!stopped)
+    {
+        for (unsigned int i = 0; i < captures.size(); i++)
+        {
             cv::VideoCapture* cap = captures.at(i);
             cv::Mat frame;
             cap->read(frame);
@@ -16,7 +19,8 @@ void CameraManagerUpdater::process() {
         }
     }
 
-    for (unsigned int i = 0; i < captures.size(); i++) {
+    for (unsigned int i = 0; i < captures.size(); i++)
+    {
         std::string windowName = "Camera #" + std::to_string(i);
         cv::destroyWindow(windowName);
     }
@@ -24,6 +28,7 @@ void CameraManagerUpdater::process() {
     emit finished();
 }
 
-void CameraManagerUpdater::stopUpdater() {
+void CameraManagerUpdater::stopUpdater()
+{
     stopped = true;
 }

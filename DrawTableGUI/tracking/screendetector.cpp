@@ -41,7 +41,8 @@ Mat ScreenDetector::getTransformationMatrix(Error& error)
     int nbContours = contours.size();
     cout << nbContours << " contours found, debug: " << DEBUG << endl;
 
-    if(nbContours == 0) {
+    if(nbContours == 0)
+    {
         error.setError("Unable to find the screen",
                        "The camera doesn't detect any screen or green element."
                        "Please check if your screen is turned on and directed toward the screen");
@@ -51,22 +52,26 @@ Mat ScreenDetector::getTransformationMatrix(Error& error)
     sort(contours.begin(), contours.end(), contour_compare_area);
 
     // find the contour with the biggest area that have 4 points when approximated
-    for(int i=0; i < nbContours; ++i){
+    for(int i=0; i < nbContours; ++i)
+    {
         approxPolyDP(contours.at(i), approximatedScreen, approximateEpsilon * arcLength(contours.at(i), true), true);
         // our screen has 4 point when approximated
-        if(approximatedScreen.size() == 4){
+        if(approximatedScreen.size() == 4)
+        {
             approxFound = true;
             break;
         }
     }
 
-    if(!approxFound){
+    if(!approxFound)
+    {
         error.setError("Unable to find the screen properly",
                        "It seems that the screen is not fully detectable by the camera. Try to reduce light in your room");
         return img;
     }
 
-    if(DEBUG){
+    if(DEBUG)
+    {
         namedWindow("debug", WINDOW_KEEPRATIO);
         namedWindow("thresholded_calibration", WINDOW_KEEPRATIO);
         Mat debug = Mat::zeros(img.rows, img.cols, CV_8UC3);
@@ -105,7 +110,8 @@ Mat ScreenDetector::transformImage(std::vector<Point> rect)
     Mat transformMatrix;
     transformMatrix = getPerspectiveTransform(src, dst);
 
-    if(DEBUG){
+    if(DEBUG)
+    {
         Mat warped;
         namedWindow("warped", WINDOW_KEEPRATIO);
         warpPerspective(img, warped, transformMatrix, Size(interfaceWidth, interfaceHeight));
@@ -134,10 +140,13 @@ std::vector<Point> ScreenDetector::getOrderedPoints(std::vector<Point> rect)
     int diff1 = tl.y - rect.at(1).y;
     int diff2 = tl.y - rect.at(2).y;
 
-    if(diff1 < diff2){
+    if(diff1 < diff2)
+    {
         tr = rect.at(2);
         bl = rect.at(1);
-    } else {
+    }
+    else
+    {
         tr = rect.at(1);
         bl = rect.at(2);
     }
@@ -150,11 +159,13 @@ std::vector<Point> ScreenDetector::getOrderedPoints(std::vector<Point> rect)
     return rect;
 }
 
-bool ScreenDetector::contour_compare_area(const std::vector<cv::Point> c1, const std::vector<cv::Point> c2) {
+bool ScreenDetector::contour_compare_area(const std::vector<cv::Point> c1, const std::vector<cv::Point> c2)
+{
     return contourArea(c1) > contourArea(c2);
 }
 
-bool ScreenDetector::compare_points(const cv::Point& p1, const cv::Point& p2) {
+bool ScreenDetector::compare_points(const cv::Point& p1, const cv::Point& p2)
+{
     return (p1.x + p1.y) < (p2.x + p2.y);
 }
 

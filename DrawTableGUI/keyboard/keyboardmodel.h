@@ -7,7 +7,8 @@
 /**
  * @brief A model describing the view for the VirtualKeyboard
  */
-class KeyboardModel {
+class KeyboardModel
+{
 
 public:
     const static QList<KeyModel> FIRST_ROW;
