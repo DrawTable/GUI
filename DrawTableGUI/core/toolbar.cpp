@@ -1,6 +1,7 @@
 #include "toolbar.h"
 
-ToolBar::ToolBar(MainWindow* parent) : QToolBar(parent) {
+ToolBar::ToolBar(MainWindow* parent) : QToolBar(parent)
+{
 
     /* actions creation */
 
@@ -47,7 +48,8 @@ ToolBar::ToolBar(MainWindow* parent) : QToolBar(parent) {
     connect(color, SIGNAL(triggered()), this, SLOT(onColorTriggered()));
 
     QList<QIcon> icons;
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < 6; ++i)
+    {
         icons << QIcon(QString(":/tool/icons/thickness%1.png").arg(i + 1));
     }
 
@@ -55,7 +57,8 @@ ToolBar::ToolBar(MainWindow* parent) : QToolBar(parent) {
     thicknesses << "1 px"  << "3 px" << "5 px"  << "7 px" << "10 px" << "15 px";
 
     QMenu* thicknessMenu = new QMenu(this);
-    for (int i = 0; i < thicknesses.count(); ++i) {
+    for (int i = 0; i < thicknesses.count(); ++i)
+    {
         QAction *action = new QAction(icons.at(i), thicknesses.at(i), this);
         action->setData(thicknesses.at(i).split(" ")[0].toInt());
         action->setCheckable(true);
@@ -101,109 +104,160 @@ ToolBar::ToolBar(MainWindow* parent) : QToolBar(parent) {
     setStyleSheet("QToolBar{ background: rgb(46,46,46); border: 0px; opacity: 0.2; }");
 }
 
-void ToolBar::onThicknessChanged() {
+void ToolBar::onThicknessChanged()
+{
     const QList<QAction*>& actions = thickness->menu()->actions();
-    foreach (QAction* a, actions) {
+    foreach (QAction* a, actions)
+    {
         a->setChecked(false);
     }
     QAction* action = qobject_cast<QAction*>(sender());
     action->setChecked(true);
 
     MainWindow* window = qobject_cast<MainWindow*>(parent());
-    if (!window) { return; }
+    if (!window)
+    {
+        return;
+    }
     window->onThicknessChanged(action);
 }
 
-void ToolBar::onPenTriggered(bool checked) {
+void ToolBar::onPenTriggered(bool checked)
+{
     MainWindow* window = qobject_cast<MainWindow*>(parent());
-    if (!window) { return; }
+    if (!window)
+    {
+        return;
+    }
     window->onPenTriggered(checked);
 }
 
-void ToolBar::onDashTriggered(bool checked) {
+void ToolBar::onDashTriggered(bool checked)
+{
     MainWindow* window = qobject_cast<MainWindow*>(parent());
-    if (!window) { return; }
+    if (!window)
+    {
+        return;
+    }
     window->onDashTriggered(checked);
 }
 
-void ToolBar::onEraserTriggered(bool checked) {
+void ToolBar::onEraserTriggered(bool checked)
+{
     MainWindow* window = qobject_cast<MainWindow*>(parent());
-    if (!window) { return; }
+    if (!window)
+    {
+        return;
+    }
     window->onEraserTriggered(checked);
 }
 
-void ToolBar::onEllipseTriggered(bool checked) {
+void ToolBar::onEllipseTriggered(bool checked)
+{
     MainWindow* window = qobject_cast<MainWindow*>(parent());
-    if (!window) { return; }
+    if (!window)
+    {
+        return;
+    }
     window->onEllipseTriggered(checked);
 }
 
-void ToolBar::onRectangleTriggered(bool checked) {
+void ToolBar::onRectangleTriggered(bool checked)
+{
     MainWindow* window = qobject_cast<MainWindow*>(parent());
-    if (!window) { return; }
+    if (!window)
+    {
+        return;
+    }
     window->onRectangleTriggered(checked);
 }
 
-void ToolBar::onMenuTriggered() {
+void ToolBar::onMenuTriggered()
+{
     MainWindow* window = qobject_cast<MainWindow*>(parent());
-    if (!window) { return; }
+    if (!window)
+    {
+        return;
+    }
     window->onMenuTriggered();
 }
 
-void ToolBar::onUndoTriggered() {
+void ToolBar::onUndoTriggered()
+{
     MainWindow* window = qobject_cast<MainWindow*>(parent());
-    if (!window) { return; }
+    if (!window)
+    {
+        return;
+    }
     window->onUndoTriggered();
 }
 
-void ToolBar::onRedoTriggered() {
+void ToolBar::onRedoTriggered()
+{
     MainWindow* window = qobject_cast<MainWindow*>(parent());
-    if (!window) { return; }
+    if (!window)
+    {
+        return;
+    }
     window->onRedoTriggered();
 }
 
-void ToolBar::onColorTriggered(){
+void ToolBar::onColorTriggered()
+{
     MainWindow* window = qobject_cast<MainWindow*>(parent());
-    if (!window) { return; }
+    if (!window)
+    {
+        return;
+    }
     window->onColorTriggered();
 }
 
-QToolButton* ToolBar::getThickness() {
+QToolButton* ToolBar::getThickness()
+{
     return thickness;
 }
 
-QAction* ToolBar::getMenu() {
+QAction* ToolBar::getMenu()
+{
     return menu;
 }
 
-QAction* ToolBar::getPen() {
+QAction* ToolBar::getPen()
+{
     return pen;
 }
 
-QAction* ToolBar::getDash() {
+QAction* ToolBar::getDash()
+{
     return dash;
 }
 
-QAction* ToolBar::getEraser() {
+QAction* ToolBar::getEraser()
+{
     return eraser;
 }
 
-QAction* ToolBar::getEllipse() {
+QAction* ToolBar::getEllipse()
+{
     return ellipse;
 }
 
-QAction* ToolBar::getRectangle() {
+QAction* ToolBar::getRectangle()
+{
     return rectangle;
 }
 
-QAction* ToolBar::getUndo() {
+QAction* ToolBar::getUndo()
+{
     return undo;
 }
 
-QAction* ToolBar::getRedo() {
+QAction* ToolBar::getRedo()
+{
     return redo;
 }
 
-QAction* ToolBar::getColor() {
+QAction* ToolBar::getColor()
+{
     return color;
 }

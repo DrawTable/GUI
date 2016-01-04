@@ -36,19 +36,21 @@ using namespace cv;
  * Ce calibrage sert à ne pas confondre la LED avec un element qui lui ressemble.
  */
 
-class LedTracker{
+class LedTracker
+{
 
 public:
-     enum MODE {NONE, CALIBRATION, TRACKING};
-     enum OBJECT_TYPE {POINTER, STYLUS};
-     enum TRACKING_METHOD {FAST, PRECISION};
+    enum MODE {NONE, CALIBRATION, TRACKING};
+    enum OBJECT_TYPE {POINTER, STYLUS};
+    enum TRACKING_METHOD {FAST, PRECISION};
 private:
 
     MODE current_mode = MODE::NONE;
     OBJECT_TYPE object_type = OBJECT_TYPE::STYLUS;
     TRACKING_METHOD tracking_method = FAST;
 
-    struct Params{
+    struct Params
+    {
         int lowH;
         int highH;
         Scalar low_mask_people;
@@ -71,7 +73,8 @@ private:
     Mat foreground;
 
     // modeles probabilistes de la LED à détecter
-    class ModelHistogram {
+    class ModelHistogram
+    {
 
         LedTracker* ledTracker;
 
@@ -106,8 +109,8 @@ private:
         float range_val[RANGE_BIN_SIZE] = {0, MAX_VAL};
 
         const float *h_range = {range_hue},
-                    *s_range = {range_sat},
-                    *v_range = {range_val};
+                     *s_range = {range_sat},
+                      *v_range = {range_val};
 
         vector<Mat> hsv_planes;
 
@@ -138,27 +141,33 @@ private:
             orig_hist_images.resize(NUM_CHANNELS_HIST);
         }
 
-        int getNbSampleRequired(){
+        int getNbSampleRequired()
+        {
             return nbSampleRequired;
         }
 
-        int getNbSampleInModel(){
+        int getNbSampleInModel()
+        {
             return nbSampleInModel;
         }
 
-        void calcHistograms(Mat hsv_img, Mat mask = Mat(), bool cumulate_in_model = false){
+        void calcHistograms(Mat hsv_img, Mat mask = Mat(), bool cumulate_in_model = false)
+        {
 
             Mat saved_h_hist_model,saved_s_hist_model,saved_v_hist_model;
             Mat *h_hist, *s_hist, *v_hist;
 
             // store values in the probability model of the object to track
-            if(cumulate_in_model){
+            if(cumulate_in_model)
+            {
                 h_hist = &h_hist_model;
                 s_hist = &s_hist_model;
                 v_hist = &v_hist_model;
 
-            // use temp histograms
-            } else {
+                // use temp histograms
+            }
+            else
+            {
                 h_hist = &h_hist_buffer,
                 s_hist = &s_hist_buffer,
                 v_hist = &v_hist_buffer;
@@ -168,7 +177,8 @@ private:
             split(hsv_img, hsv_planes);
 
             // save current hist
-            if(cumulate_in_model){
+            if(cumulate_in_model)
+            {
                 h_hist_model.copyTo(saved_h_hist_model);
                 s_hist_model.copyTo(saved_s_hist_model);
                 v_hist_model.copyTo(saved_v_hist_model);
@@ -178,11 +188,13 @@ private:
             calcHist(&hsv_planes[1], 1, 0, mask, *s_hist, 1, &bins[1], &s_range, uniform, cumulate_in_model);
             calcHist(&hsv_planes[2], 1, 0, mask, *v_hist, 1, &bins[2], &v_range, uniform, cumulate_in_model);
 
-            if(cumulate_in_model){
+            if(cumulate_in_model)
+            {
                 double correlation = 0;
                 bool correlationOk = false;
 
-                if(nbSampleInModel != 0){
+                if(nbSampleInModel != 0)
+                {
                     correlation += compareHist(saved_h_hist_model, h_hist_model, CV_COMP_CORREL);
                     correlation += compareHist(saved_s_hist_model, s_hist_model, CV_COMP_CORREL);
                     correlation += compareHist(saved_v_hist_model, v_hist_model, CV_COMP_CORREL);
@@ -197,11 +209,14 @@ private:
                     minWhiteArea = whiteArea < minWhiteArea ? whiteArea : minWhiteArea;
                     maxWhiteArea = whiteArea > maxWhiteArea ? whiteArea : maxWhiteArea;
 
-                } else {
+                }
+                else
+                {
                     correlationOk = true;
                 }
 
-                if(!correlationOk){
+                if(!correlationOk)
+                {
                     h_hist_model = Mat::zeros(h_hist_model.rows, h_hist_model.cols, h_hist_model.type());
                     s_hist_model = Mat::zeros(s_hist_model.rows, s_hist_model.cols, s_hist_model.type());
                     v_hist_model = Mat::zeros(v_hist_model.rows, v_hist_model.cols, v_hist_model.type());
@@ -212,7 +227,9 @@ private:
                     maxArea = 0;
                     qDebug("correlation too low (%f), reset model", correlation);
                     return;
-                } else {
+                }
+                else
+                {
                     nbSampleInModel++;
                     qDebug("%d/%d samples (%f) size [%d - %d] white [%d, %d]", nbSampleInModel, nbSampleRequired,correlation, minArea, maxArea, minWhiteArea, maxWhiteArea);
                 }
@@ -222,15 +239,17 @@ private:
             processHistogramAnalysis(h_hist, s_hist, v_hist,
                                      &h_hist_cumul, &s_hist_cumul, &v_hist_cumul, &hsv_img, &mask);
 
-            if(DEBUG){
+            if(DEBUG)
+            {
                 showHistograms(h_hist_cumul, s_hist_cumul, v_hist_cumul);
             }
         }
 
         void processHistogramAnalysis(Mat *h_hist, Mat *s_hist, Mat *v_hist,
-                                      Mat *h_hist_cumul, Mat *s_hist_cumul, Mat *v_hist_cumul, Mat* hsv_img = nullptr, Mat* mask = nullptr ){
+                                      Mat *h_hist_cumul, Mat *s_hist_cumul, Mat *v_hist_cumul, Mat* hsv_img = nullptr, Mat* mask = nullptr )
+        {
 
-             if(h_hist->empty() || s_hist->empty() || v_hist->empty()) return;
+            if(h_hist->empty() || s_hist->empty() || v_hist->empty()) return;
 
             Vec2i acceptable_hue_range, acceptable_sat_range, acceptable_val_range;
 //            Vec2f probability_range_hue(0.2,0.9), probability_range_sat(0.08, -1), probability_range_val(0.08, -1);
@@ -244,10 +263,13 @@ private:
             double bin_width_sat = (range_sat[1] + 1)/(double)bins[1];
             double bin_width_val = (range_val[1] + 1)/(double)bins[2];
 
-            if(ledTracker->object_type == STYLUS){
+            if(ledTracker->object_type == STYLUS)
+            {
                 ledTracker->lowH = ledTracker->default_stylus_params.lowH;
                 ledTracker->highH = ledTracker->default_stylus_params.highH;
-            } else{
+            }
+            else
+            {
                 ledTracker->lowH = (acceptable_hue_range[0] * bin_width_hue);
                 ledTracker->highH = (acceptable_hue_range[1] * bin_width_hue);
             }
@@ -262,77 +284,91 @@ private:
             s_median = 0;
             v_median = 0;
 
-            if(hsv_img && mask && ledTracker->object_type != STYLUS){
+            if(hsv_img && mask && ledTracker->object_type != STYLUS)
+            {
                 Mat customHist;
                 customHist = Mat::zeros(180,1, h_hist->type());
-                for(int i=0; i < hsv_img->rows * hsv_img->cols; ++i){
+                for(int i=0; i < hsv_img->rows * hsv_img->cols; ++i)
+                {
                     Vec3b pixel = hsv_img->at<Vec3b>(i);
-                    if(pixel[1] >= ledTracker->lowS && pixel[1] <= ledTracker->highS){
+                    if(pixel[1] >= ledTracker->lowS && pixel[1] <= ledTracker->highS)
+                    {
                         customHist.at<float>(pixel[0]) += 1;
                     }
                 }
 
-               Vec2i new_hue_range;
-               Vec2f range_hue(0.01,0.09);
-               normalizeSum(&customHist, &customHist, new_hue_range, range_hue);
-               cout << "Estimated Hue Range: [" << ledTracker->lowH << "," <<  ledTracker->highH << "]" << endl;
-               cout << "Improved Hue Range: " << new_hue_range << endl;
-               ledTracker->lowH = MIN(ledTracker->lowH, new_hue_range[0]);
-               ledTracker->highH = MAX(ledTracker->highH, new_hue_range[1]);
+                Vec2i new_hue_range;
+                Vec2f range_hue(0.01,0.09);
+                normalizeSum(&customHist, &customHist, new_hue_range, range_hue);
+                cout << "Estimated Hue Range: [" << ledTracker->lowH << "," <<  ledTracker->highH << "]" << endl;
+                cout << "Improved Hue Range: " << new_hue_range << endl;
+                ledTracker->lowH = MIN(ledTracker->lowH, new_hue_range[0]);
+                ledTracker->highH = MAX(ledTracker->highH, new_hue_range[1]);
             }
 
-            if(DEBUG){
+            if(DEBUG)
+            {
                 qDebug(" Hue: [%d,%d]", ledTracker->lowH, ledTracker->highH);
                 qDebug(" Sat: [%d,%d]", ledTracker->lowS, ledTracker->highS);
                 qDebug(" Val: [%d,%d] \n", ledTracker->lowV, ledTracker->highV);
             }
         }
 
-        void normalizeSum(Mat *hist, Mat *dest, Vec2i &bin_ranges, Vec2f probability_min, Range thres = Range(0,0)){
+        void normalizeSum(Mat *hist, Mat *dest, Vec2i &bin_ranges, Vec2f probability_min, Range thres = Range(0,0))
+        {
             long histSize= hist->total();
             if(dest != hist &&
-                    (dest->total() != hist->total()|| dest->type() != hist->type())){
+                    (dest->total() != hist->total()|| dest->type() != hist->type()))
+            {
                 dest->create(hist->rows, hist->cols, hist->type());
             }
 
             bool rangeMinFound = false, rangeMaxFound = false;
             unsigned long sum = 0;
 
-            for(int i=0; i < histSize; ++i){
-                if(!thres.empty() && (i >= thres.start && i <= thres.end)){
+            for(int i=0; i < histSize; ++i)
+            {
+                if(!thres.empty() && (i >= thres.start && i <= thres.end))
+                {
                     hist->at<float>(i) = 0;
                 }
 
                 sum += (unsigned long)hist->at<float>(i);
             }
 
-            for(int i=0; i < histSize; ++i){
+            for(int i=0; i < histSize; ++i)
+            {
                 float hist_val = hist->at<float>(i);
                 double new_value = 0;
-                if(hist_val > 0){
+                if(hist_val > 0)
+                {
                     new_value =  hist_val/double(sum);
                 }
 
                 new_value += (i > 0 ? dest->at<float>(i-1): 0);
                 dest->at<float>(i) = new_value;
 
-                if(new_value >= probability_min[0] && !rangeMinFound){
+                if(new_value >= probability_min[0] && !rangeMinFound)
+                {
                     bin_ranges[0] = i + 1;
                     rangeMinFound = probability_min[0] != -1;
                 }
 
-                if(new_value >= probability_min[1] && !rangeMaxFound){
+                if(new_value >= probability_min[1] && !rangeMaxFound)
+                {
                     bin_ranges[1] = i + 1;
                     rangeMaxFound = probability_min[1] != -1;
                 }
 
-                if(bin_ranges[0] == bin_ranges[1]){
+                if(bin_ranges[0] == bin_ranges[1])
+                {
                     bin_ranges[1]++;
                 }
             }
         }
 
-        void showModelHist(){          
+        void showModelHist()
+        {
             Mat h_hist_cumul, s_hist_cumul, v_hist_cumul;
             processHistogramAnalysis(&h_hist_model, &s_hist_model,&v_hist_model, &h_hist_cumul, &s_hist_cumul, &v_hist_cumul);
 
@@ -340,17 +376,20 @@ private:
                 showHistograms(h_hist_cumul, s_hist_cumul, v_hist_cumul);
         }
 
-        void showHistograms(Mat h_hist, Mat s_hist, Mat v_hist){
+        void showHistograms(Mat h_hist, Mat s_hist, Mat v_hist)
+        {
 
             // init images
-            for(int i=0; i < orig_hist_images.size(); ++i){
+            for(int i=0; i < orig_hist_images.size(); ++i)
+            {
                 Mat buffer;
                 buffer = Mat::zeros(H,W, CV_8UC3);
                 orig_hist_images[i] = buffer;
             }
 
             // draw hue histogram
-            for(int i=1; i < bins[0]; ++i){
+            for(int i=1; i < bins[0]; ++i)
+            {
                 Scalar color(255,0,0);
                 rectangle(orig_hist_images[0],
                           Point((i-1)*h_bin_w, H),
@@ -359,7 +398,8 @@ private:
             }
 
             // draw saturation histogram
-            for(int i=1; i < bins[1]; ++i){
+            for(int i=1; i < bins[1]; ++i)
+            {
                 Scalar color(0,255,0);
                 rectangle(orig_hist_images[1],
                           Point((i-1)*s_bin_w, H),
@@ -368,7 +408,8 @@ private:
             }
 
             // draw value histogram
-            for(int i=1; i < bins[2]; ++i){
+            for(int i=1; i < bins[2]; ++i)
+            {
                 Scalar color(0,0,255);
                 rectangle(orig_hist_images[2],
                           Point((i-1)*v_bin_w, H),
@@ -379,7 +420,8 @@ private:
             showImages();
         }
 
-        void showImages(){
+        void showImages()
+        {
             namedWindow("h_hist", 0);
             namedWindow("s_hist", 0);
             namedWindow("v_hist", 0);
@@ -388,8 +430,9 @@ private:
             imshow("v_hist", orig_hist_images[2]);
         }
 
-        void drawLines(){
-             //copy originals
+        void drawLines()
+        {
+            //copy originals
             orig_hist_images.at(0).copyTo(h_hist_image);
             orig_hist_images.at(1).copyTo(s_hist_image);
             orig_hist_images.at(2).copyTo(v_hist_image);
@@ -418,7 +461,8 @@ private:
             imshow("v_hist", v_hist_image);
         }
 
-        void registerOrigHistImages(Mat h_hist_image, Mat s_hist_image, Mat v_hist_image){
+        void registerOrigHistImages(Mat h_hist_image, Mat s_hist_image, Mat v_hist_image)
+        {
             Mat buffer;
             h_hist_image.copyTo(buffer);
             orig_hist_images.push_back(buffer);
@@ -428,7 +472,8 @@ private:
             orig_hist_images.push_back(buffer);
         }
 
-        Mat estimateLedByThreshold(){
+        Mat estimateLedByThreshold()
+        {
             Mat im;
             Mat result = Mat::zeros(ledTracker->thresholded.rows, ledTracker->thresholded.cols, CV_8UC3);
             ledTracker->thresholded.copyTo(im);
@@ -438,20 +483,25 @@ private:
 
             ledTracker->findSortedContours(im, contours);
             long nbContours = contours.size();
-            if(nbContours > 0){
-                std::for_each(contours.begin(), contours.end(), [&](const Contour c){
-                   bool ok = false;
-                   double area = boundingRect(c).area();
-                   double whiteArea = ledTracker->getWhiteAreaOnRoi(boundingRect(c));
-                   ok = ((minArea - minArea*alpha_area) <= area && area <= (maxArea + maxArea*alpha_area));
+            if(nbContours > 0)
+            {
+                std::for_each(contours.begin(), contours.end(), [&](const Contour c)
+                {
+                    bool ok = false;
+                    double area = boundingRect(c).area();
+                    double whiteArea = ledTracker->getWhiteAreaOnRoi(boundingRect(c));
+                    ok = ((minArea - minArea*alpha_area) <= area && area <= (maxArea + maxArea*alpha_area));
 //                   ok &= minWhiteArea <= whiteArea && whiteArea <= maxWhiteArea;
-                   if(ok){
-                       contours_result.push_back(c);
+                    if(ok)
+                    {
+                        contours_result.push_back(c);
 //                       cout << "OK : " << area <<   " in [" << minArea<< ":" << maxArea << "]" << endl;
-                    } else {
+                    }
+                    else
+                    {
 //                       cout << "rejected: " << area <<   " not in [" << minArea<< ":" << maxArea << "]" << endl;
-                       contours_skipped.push_back(c);
-                   }
+                        contours_skipped.push_back(c);
+                    }
                 });
 
                 cout << endl;
@@ -460,7 +510,8 @@ private:
 
             }
 
-            if(DEBUG_MAIN){
+            if(DEBUG_MAIN)
+            {
                 namedWindow("result", 0);
                 imshow("result", result);
             }
@@ -478,25 +529,30 @@ public:
 
     //////////////// methodes statics ///////////////////
 
-    static LedTracker* getInstance(){
+    static LedTracker* getInstance()
+    {
         if(instance == nullptr)
             instance = new LedTracker();
         return instance;
     }
 
-    static void onThresholdChanged(int, void*){
+    static void onThresholdChanged(int, void*)
+    {
         LedTracker::getInstance()->processThreshold();
     }
 
     /////////////// methode non-statics //////////////////
-    void setFrame(Mat frame){
+    void setFrame(Mat frame)
+    {
         image = frame;
         image.copyTo(original);
         cvtColor(image, hsv, CV_BGR2HSV);
     }
 
-    void activateDebugAnalysis(){
-        if(DEBUG){
+    void activateDebugAnalysis()
+    {
+        if(DEBUG)
+        {
             namedWindow("threshold", 0);
             createTrackbar("lowH", "threshold", &lowH, 179, onThresholdChanged);
             createTrackbar("lowS", "threshold", &lowS, 255, onThresholdChanged);
@@ -505,14 +561,18 @@ public:
             createTrackbar("highS", "threshold", &highS, 255, onThresholdChanged);
             createTrackbar("highV", "threshold", &highV, 255, onThresholdChanged);
         }
-    } 
+    }
 
-    void threshold_circular(Mat* hsv, Scalar low, Scalar high, Mat* thresholded){
+    void threshold_circular(Mat* hsv, Scalar low, Scalar high, Mat* thresholded)
+    {
         // Hue range is circular [0:179] deg
-        if(low[0] <= high[0]){
+        if(low[0] <= high[0])
+        {
             // min Hue value <= max value (i.e [20:160])
             inRange(*hsv, low, high, *thresholded);
-        } else {
+        }
+        else
+        {
             // min Hue value >= max value (i.e: [160:20])
             vector<Mat> hsv_planes;
             split(*hsv,hsv_planes);
@@ -528,13 +588,17 @@ public:
         }
     }
 
-    void processThreshold(){
+    void processThreshold()
+    {
 
         // Hue range is circular [0:179] deg
-        if(lowH <= highH){
+        if(lowH <= highH)
+        {
             // min Hue value <= max value (i.e [20:160])
             inRange(hsv, Scalar(lowH, lowS, lowV), Scalar(highH, highS, highV), thresholded);
-        } else {
+        }
+        else
+        {
             // min Hue value >= max value (i.e: [160:20])
             vector<Mat> hsv_planes;
             split(hsv,hsv_planes);
@@ -557,23 +621,28 @@ public:
         Mat masked;
         image.copyTo(masked, thresholded);
 
-        if(DEBUG){
+        if(DEBUG)
+        {
             namedWindow("threshold",0);
             imshow("threshold", masked);
             ledModel.drawLines();
         }
     }
 
-    Point findObjectPosition(TRACKING_METHOD method){
+    Point findObjectPosition(TRACKING_METHOD method)
+    {
         processThreshold();
 
         Point pos(-1,-1);
-        switch(method){
+        switch(method)
+        {
         case FAST:
-            if(!thresholded.empty()){
+            if(!thresholded.empty())
+            {
                 Mat filterByArea = ledModel.estimateLedByThreshold();
                 pos = FindLightCenter(filterByArea);
-                if(DEBUG_MAIN && pos.x > 0 && pos.y > 0){
+                if(DEBUG_MAIN && pos.x > 0 && pos.y > 0)
+                {
                     drawCross(image, pos, Scalar(0,0,255), 20, 3);
                 }
             }
@@ -584,16 +653,20 @@ public:
         return pos;
     }
 
-    void getPointfilterByArea(){
-        if(!thresholded.empty()){
+    void getPointfilterByArea()
+    {
+        if(!thresholded.empty())
+        {
         }
     }
 
-    Point FindLightCenter(Mat img){
+    Point FindLightCenter(Mat img)
+    {
         Point p(-1,-1);
         Contours cts;
         findSortedContours(img, cts);
-        if(cts.size() > 0){
+        if(cts.size() > 0)
+        {
             Moments oMoments = moments(cts.at(0));
             double m01 = oMoments.m01;
             double m10 = oMoments.m10;
@@ -603,7 +676,8 @@ public:
         return p;
     }
 
-    double getWhiteAreaOnRoi(Rect rect_roi){
+    double getWhiteAreaOnRoi(Rect rect_roi)
+    {
         if(rect_roi.area() == 0)
             return 0;
         Mat roi = hsv(rect_roi);
@@ -611,14 +685,16 @@ public:
 
         inRange(roi, Scalar(0,0,0), Scalar(0,0,255), center_thresold);
 
-        if(DEBUG){
+        if(DEBUG)
+        {
             namedWindow("white", 0);
             imshow("white", center_thresold);
         }
 
         Contours cts;
         findSortedContours(center_thresold, cts);
-        if(cts.size() == 0){
+        if(cts.size() == 0)
+        {
             return 0;
         }
 
@@ -628,17 +704,20 @@ public:
         return 0;
     }
 
-    double getWhiteAreaOnRoi(){
+    double getWhiteAreaOnRoi()
+    {
         return getWhiteAreaOnRoi(rect_mask_roi);
     }
 
-    Point FindLedCenter(Mat img){
+    Point FindLedCenter(Mat img)
+    {
         Point p(-1,-1);
         Mat roi;
         Mat center_thresold;
 
         Rect rect = getMaxBoundingRect(img);
-        if(rect.area() == 0){
+        if(rect.area() == 0)
+        {
             return p;
         }
         roi = img(rect);
@@ -646,7 +725,8 @@ public:
         Contours cts;
 
         findSortedContours(center_thresold, cts);
-        if(cts.size() > 0){
+        if(cts.size() > 0)
+        {
             Moments oMoments = moments(cts.at(0));
             double m01 = oMoments.m01;
             double m10 = oMoments.m10;
@@ -656,82 +736,96 @@ public:
             p.y += rect.y;
         }
 
-        if(DEBUG){
+        if(DEBUG)
+        {
             namedWindow("ledCenter", 0);
             imshow("ledCenter", center_thresold);
         }
         return p;
     }
 
-    void drawCross(Mat &frame, Point center, Scalar color = Scalar(0,255,255), int size = 5, int thickness = 1){
+    void drawCross(Mat &frame, Point center, Scalar color = Scalar(0,255,255), int size = 5, int thickness = 1)
+    {
         line(frame, Point(center.x, center.y -size), Point(center.x,center.y + size ), color,thickness);
         line(frame, Point(center.x-size, center.y), Point(center.x + size,center.y), color, thickness);
     }
 
-    void processLedAnalysis(){
+    void processLedAnalysis()
+    {
 
-        if(isModelReady()){
+        if(isModelReady())
+        {
             current_mode = TRACKING;
         }
 
-        switch (current_mode) {
-            case NONE:
-                if(!processForeground())
-                    break;                  // foreground empty nothing todo
-                rect_mask_roi.area();
-                ledModel.calcHistograms(mask_roi, mask_hist);
-                processThreshold();
-                showMaskRoi();
-                break;
-            case CALIBRATION:
-                 calibrate();
-                break;
-            case TRACKING:
-                processThreshold();
-                this->findObjectPosition(tracking_method);
-                break;
-            default:
-                break;
+        switch (current_mode)
+        {
+        case NONE:
+            if(!processForeground())
+                break;                  // foreground empty nothing todo
+            rect_mask_roi.area();
+            ledModel.calcHistograms(mask_roi, mask_hist);
+            processThreshold();
+            showMaskRoi();
+            break;
+        case CALIBRATION:
+            calibrate();
+            break;
+        case TRACKING:
+            processThreshold();
+            this->findObjectPosition(tracking_method);
+            break;
+        default:
+            break;
         }
 
         showMainImages();
     }
 
-    void calibrate(){
+    void calibrate()
+    {
         if(!processForeground())
             return;                 // foreground empty nothing todo
         ledModel.calcHistograms(mask_roi, mask_hist, true);
         showMaskRoi();
     }
 
-    int getNbCalibrationSteps(){
+    int getNbCalibrationSteps()
+    {
         return ledModel.getNbSampleRequired();
     }
 
-    int getCurrentCalibrationStep(){
+    int getCurrentCalibrationStep()
+    {
         return ledModel.getNbSampleInModel();
     }
 
-    bool isModelReady(){
+    bool isModelReady()
+    {
         return getNbCalibrationSteps() == getCurrentCalibrationStep();
     }
 
-    bool processForeground(){
+    bool processForeground()
+    {
 
         backgroundSubtractor->apply(image, foreground, learningRate);
         removeNoise(foreground);
 
-        if(object_type == STYLUS){
+        if(object_type == STYLUS)
+        {
             Mat mask_people;
 //            threshold_circular(&hsv, default_stylus_params.low_mask_people,  default_stylus_params.high_mask_people, &mask_people);
 //            bitwise_and(mask_people, foreground, foreground);
 
             // Hue range is circular [0:179] deg
-            if(default_stylus_params.low_mask_people[0] <= default_stylus_params.high_mask_people[0]){
+            if(default_stylus_params.low_mask_people[0] <= default_stylus_params.high_mask_people[0])
+            {
                 // min Hue value <= max value (i.e [20:160])
 //                cout << "inRange: " << default_stylus_params.low_mask_people << " : " << default_stylus_params.high_mask_people << endl;
                 inRange(hsv, default_stylus_params.low_mask_people, default_stylus_params.high_mask_people, mask_people);
-            } else {
+            }
+            else
+            {
                 // min Hue value >= max value (i.e: [160:20])
                 vector<Mat> hsv_planes;
                 split(hsv,hsv_planes);
@@ -753,7 +847,8 @@ public:
 
             bitwise_and(mask_people, foreground, foreground);
 
-            if(DEBUG){
+            if(DEBUG)
+            {
                 Mat masked;
                 image.copyTo(masked, mask_people);
                 namedWindow("mask_people", 0);
@@ -772,20 +867,26 @@ public:
         return true;
     }
 
-    void showMaskRoi(bool rgb = true){
-        if(DEBUG){
+    void showMaskRoi(bool rgb = true)
+    {
+        if(DEBUG)
+        {
             namedWindow("roi", 0);
-            if(rgb){
+            if(rgb)
+            {
                 Mat rgb_image;
                 cvtColor(mask_roi, rgb_image, CV_HSV2BGR);
                 imshow("roi", rgb_image);
-            } else {
+            }
+            else
+            {
                 imshow("roi", mask_roi);
             }
         }
     }
 
-    void removeNoise(Mat im, bool deep = true){
+    void removeNoise(Mat im, bool deep = true)
+    {
         erode(im, im, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
         dilate(im, im, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
         if(!deep) return;
@@ -793,13 +894,15 @@ public:
         erode(im, im, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
     }
 
-    Rect getMaxBoundingRect(Mat mask){
+    Rect getMaxBoundingRect(Mat mask)
+    {
         Contours contours;
         Rect rect;
 
         // find contours
         findSortedContours(mask, contours);
-        if(contours.size() > 0){
+        if(contours.size() > 0)
+        {
             // get bounding rect of the max area contour
             rect = boundingRect(contours.at(0));
         }
@@ -807,20 +910,25 @@ public:
         return rect;
     }
 
-    void findSortedContours(Mat image, Contours& contours){
+    void findSortedContours(Mat image, Contours& contours)
+    {
         Mat im;
         image.copyTo(im);
         findContours(im, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
-        if(contours.size() > 0){
+        if(contours.size() > 0)
+        {
             // sort contours by area
-            sort(contours.begin(), contours.end(), [&](const Contour c1, const Contour c2){
+            sort(contours.begin(), contours.end(), [&](const Contour c1, const Contour c2)
+            {
                 return contourArea(c1) > contourArea(c2);
             });
         }
     }
 
-    void showMainImages(){
-        if(DEBUG_MAIN){
+    void showMainImages()
+    {
+        if(DEBUG_MAIN)
+        {
             namedWindow("original",0);
             namedWindow("foreground",0);
             imshow("original", image);
@@ -828,19 +936,23 @@ public:
         }
     }
 
-    void setMode(LedTracker::MODE mode){
+    void setMode(LedTracker::MODE mode)
+    {
         current_mode = mode;
     }
 
-    void setTrackingMethod(TRACKING_METHOD method){
+    void setTrackingMethod(TRACKING_METHOD method)
+    {
         tracking_method = method;
     }
 
-    void setObjectType(OBJECT_TYPE type){
+    void setObjectType(OBJECT_TYPE type)
+    {
         object_type = type;
     }
 
-    LedTracker(): ledModel(this){
+    LedTracker(): ledModel(this)
+    {
         backgroundSubtractor = createBackgroundSubtractorMOG2(500, 60, false);
         default_stylus_params.low_mask_people = Scalar(134,0,0);            // 134,89,108
         default_stylus_params.high_mask_people = Scalar(179,255,255);       // 10,255,255
@@ -848,7 +960,8 @@ public:
         default_stylus_params.highH = 10;
     }
 
-    ~LedTracker(){
+    ~LedTracker()
+    {
     }
 };
 

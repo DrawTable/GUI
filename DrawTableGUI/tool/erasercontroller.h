@@ -12,7 +12,8 @@
  *
  * Plese refer the the AbstractToolController documentation to see functions' usage.
  */
-class EraserController : public AbstractToolController {
+class EraserController : public AbstractToolController
+{
 
 public:
     virtual ~EraserController();

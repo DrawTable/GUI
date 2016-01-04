@@ -11,7 +11,8 @@
  *
  * Plese refer the the AbstractToolController documentation to see functions' usage.
  */
-class DashController : public AbstractToolController {
+class DashController : public AbstractToolController
+{
 
 public:
     virtual ~DashController();

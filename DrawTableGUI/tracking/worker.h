@@ -9,7 +9,8 @@
 #include <QThread>
 
 
-class Worker: public QObject{
+class Worker: public QObject
+{
     Q_OBJECT
     QTcpSocket* socket;
     const int PORT = 5003;

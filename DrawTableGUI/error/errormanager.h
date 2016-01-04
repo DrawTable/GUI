@@ -13,7 +13,8 @@
  *
  * This class is a Singleton.
  */
-class ErrorManager : public QObject {
+class ErrorManager : public QObject
+{
     Q_OBJECT
 
 public:

@@ -34,20 +34,31 @@ public:
      * Usage: Pass an error object as reference to a ScreenDetector method
      * and check Error::hasError() before using the returned value.
      */
-    class Error{
+    class Error
+    {
         friend class ScreenDetector;
         bool error = false;
         string title;
         string message;
-        void setError(string title, string message){
+        void setError(string title, string message)
+        {
             this->message = message;
             this->title = title;
             this->error = true;
         }
     public:
-        bool hasError() {return error;}
-        string getErrorTitle() const {return title;}
-        string getErrorMessage() const {return message;}
+        bool hasError()
+        {
+            return error;
+        }
+        string getErrorTitle() const
+        {
+            return title;
+        }
+        string getErrorMessage() const
+        {
+            return message;
+        }
     };
 
     ScreenDetector(Mat img, int width, int height);

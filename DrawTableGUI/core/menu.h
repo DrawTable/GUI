@@ -19,10 +19,12 @@
  * The Menu is created once by the MainWindow.
  *
  */
-class Menu : public QDialog {
+class Menu : public QDialog
+{
     Q_OBJECT
 
-    class MenuItem : public QPushButton {
+    class MenuItem : public QPushButton
+    {
     public:
         MenuItem(QString pictureOn, QString pictureOff, QWidget* parent = nullptr);
     };

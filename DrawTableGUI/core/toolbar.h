@@ -25,7 +25,8 @@ class MainWindow;
  * The ToolBar is created once by the MainWindow.
  *
  */
-class ToolBar : public QToolBar {
+class ToolBar : public QToolBar
+{
     Q_OBJECT
 
     QToolButton* thickness;

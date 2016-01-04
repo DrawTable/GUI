@@ -12,7 +12,8 @@
  * Abstract class containing every functions that controllers must implements.
  * Those function will then be called by the tools.
  */
-class AbstractToolController {
+class AbstractToolController
+{
 
 public:
 

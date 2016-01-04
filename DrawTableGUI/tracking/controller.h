@@ -9,7 +9,8 @@
  * @brief Mouse Controller
  * Controller for the tracking manager to move and click with the mouse.
  */
-class Controller: public QObject{
+class Controller: public QObject
+{
     Q_OBJECT
 
     QThread thread;

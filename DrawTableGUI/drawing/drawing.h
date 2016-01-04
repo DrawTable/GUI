@@ -14,7 +14,8 @@ class DrawingController;
  * This view inherits from a QGraphicsView and redefines mouse events handlers.
  * Those handlers will then delegate everything to the DrawingController.
  */
-class Drawing : public QGraphicsView {
+class Drawing : public QGraphicsView
+{
     Q_OBJECT
 
 public:

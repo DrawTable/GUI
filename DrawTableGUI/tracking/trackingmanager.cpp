@@ -7,19 +7,22 @@ TrackingManager::TrackingManager(int cameraId, QObject *parent) : QObject(parent
     this->cameraId = cameraId;
 }
 
-void TrackingManager::process() {
+void TrackingManager::process()
+{
     emit showGreenScreen();
 }
 
 // Lance le processus de calibration
-void TrackingManager::onStratCalibration(int width, int height) {
+void TrackingManager::onStratCalibration(int width, int height)
+{
     Mat frame;
 
     // Lancement de la capture avec la webcam
     cap = new VideoCapture(cameraId);
 
     // Lecture d'une image
-    if (!cap->read(frame)) {
+    if (!cap->read(frame))
+    {
         // Erreur: la lecture de la frame a échoué
         cap->release();
         emit calibrationError(1);
@@ -36,7 +39,8 @@ void TrackingManager::onStratCalibration(int width, int height) {
     transformMatrix = sd.getTransformationMatrix(err);
 
     // always check error before using the transformatrix
-    if(err.hasError()){
+    if(err.hasError())
+    {
         cout << err.getErrorTitle() << ":\n" << err.getErrorMessage() << endl;
         cap->release();
         emit calibrationError(1);
@@ -44,7 +48,7 @@ void TrackingManager::onStratCalibration(int width, int height) {
         return;
     }
 
-   emit calibrationSuccess();
+    emit calibrationSuccess();
 }
 
 void TrackingManager::onStartStylusCalibration()
@@ -56,18 +60,21 @@ void TrackingManager::onStartStylusCalibration()
     ledTracker->setObjectType(LedTracker::STYLUS);
     ledTracker->setMode(LedTracker::CALIBRATION);
 
-    if(!cap->isOpened()){
+    if(!cap->isOpened())
+    {
         cerr << "Cannot open the camera" << endl;
         return;
     }
 
     Mat frame;
-    while(!ledTracker->isModelReady()){
+    while(!ledTracker->isModelReady())
+    {
 
-        if(!cap->read(frame)){
+        if(!cap->read(frame))
+        {
             // TODO send error to the Main Window (frame cannot be read from the webcam)
-           cerr << "frame cannot be read from the webcam" << endl;
-           return;
+            cerr << "frame cannot be read from the webcam" << endl;
+            return;
         }
 
         ledTracker->setFrame(frame);
@@ -81,7 +88,8 @@ void TrackingManager::onStartStylusCalibration()
 }
 
 // Boucle principal du thread
-void TrackingManager::mainLoop() {
+void TrackingManager::mainLoop()
+{
 
     Controller ctrl;
     ctrl.start();
@@ -93,39 +101,46 @@ void TrackingManager::mainLoop() {
 
     qDebug() << "Start tracking" << endl;
     Point stylusPoint;
-    forever {
+    forever
+    {
         Mat frame;
 
-        if(!cap->read(frame)) {
+        if(!cap->read(frame))
+        {
             // TODO send error to the Main Window (frame cannot be read from the webcam)
             cerr << "frame cannot be read from the webcam" << endl;
             return;
         }
 
         // Tracking de la led
-       ledTracker->setFrame(frame);
-       stylusPoint = ledTracker->findObjectPosition(LedTracker::FAST);
+        ledTracker->setFrame(frame);
+        stylusPoint = ledTracker->findObjectPosition(LedTracker::FAST);
 
         cout << stylusPoint << endl;
 
-       // Envoie les coordonnées du stylet afin de bouger la souris
-       if(stylusPoint.x > 0 && stylusPoint.y > 0 && stylusPoint.x < 1440 && stylusPoint.y < 800){
+        // Envoie les coordonnées du stylet afin de bouger la souris
+        if(stylusPoint.x > 0 && stylusPoint.y > 0 && stylusPoint.x < 1440 && stylusPoint.y < 800)
+        {
 
-           stylusPoint = ScreenDetector::transformPoint(stylusPoint, transformMatrix);
-           cout << stylusPoint << endl;
-           ctrl.mouseMove(stylusPoint.x, stylusPoint.y);
-           if(!click){
-               ctrl.mousePressed();
-               release = false;
-           }
+            stylusPoint = ScreenDetector::transformPoint(stylusPoint, transformMatrix);
+            cout << stylusPoint << endl;
+            ctrl.mouseMove(stylusPoint.x, stylusPoint.y);
+            if(!click)
+            {
+                ctrl.mousePressed();
+                release = false;
+            }
 
-       } else {
-           click = false;
-           if(!release){
-               ctrl.mouseReleased();
-               release = true;
-           }
-       }
+        }
+        else
+        {
+            click = false;
+            if(!release)
+            {
+                ctrl.mouseReleased();
+                release = true;
+            }
+        }
 
     }
 }

@@ -6,7 +6,8 @@
 #include <QFrame>
 #include <QScrollBar>
 
-OpenFileDialog::OpenFileDialog(QWidget *parent) : QDialog(parent) {
+OpenFileDialog::OpenFileDialog(QWidget *parent) : QDialog(parent)
+{
 
     /* layouts */
 
@@ -95,26 +96,33 @@ OpenFileDialog::OpenFileDialog(QWidget *parent) : QDialog(parent) {
     showFullScreen();
 }
 
-void OpenFileDialog::onViewClicked(QModelIndex index) {
+void OpenFileDialog::onViewClicked(QModelIndex index)
+{
     path->setText(model->fileInfo(index).absoluteFilePath());
-    if (model->fileInfo(index).isDir()) {
+    if (model->fileInfo(index).isDir())
+    {
         view->setRootIndex(model->setRootPath(path->text()));
-    } else if (model->fileInfo(index).isFile()) {
+    }
+    else if (model->fileInfo(index).isFile())
+    {
         input->setText(model->fileInfo(index).fileName());
     }
 }
 
-void OpenFileDialog::onOpenClicked() {
+void OpenFileDialog::onOpenClicked()
+{
     SystemFileDialog::fileName = path->text();
     close();
 }
 
-void OpenFileDialog::onCancelClicked() {
+void OpenFileDialog::onCancelClicked()
+{
     SystemFileDialog::fileName = "";
     close();
 }
 
-void OpenFileDialog::onDriveClicked() {
+void OpenFileDialog::onDriveClicked()
+{
     path->setText("");
     view->setRootIndex(model->setRootPath(path->text()));
 }

@@ -12,7 +12,8 @@
  *
  * Plese refer the the AbstractToolController documentation to see functions' usage.
  */
-class PenController : public AbstractToolController {
+class PenController : public AbstractToolController
+{
 
 public:
     virtual ~PenController();

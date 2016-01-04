@@ -1,6 +1,7 @@
 #include "menu.h"
 
-Menu::Menu(MainWindow* parent) : QDialog(parent) {
+Menu::Menu(MainWindow* parent) : QDialog(parent)
+{
     _new = new Menu::MenuItem(":/menu/icons/new_on.png", ":/menu/icons/new_off.png", this);
     connect(_new, SIGNAL(clicked(bool)), this, SLOT(onNewClicked()));
 
@@ -30,41 +31,48 @@ Menu::Menu(MainWindow* parent) : QDialog(parent) {
     setWindowFlags(Qt::FramelessWindowHint | Qt::Popup);
 }
 
-Menu::~Menu() {
+Menu::~Menu()
+{
 
 }
 
-void Menu::onNewClicked() {
+void Menu::onNewClicked()
+{
     MainWindow* window = dynamic_cast<MainWindow*>(parent());
     window->onNewTriggered();
     close();
 }
 
-void Menu::onOpenClicked() {
+void Menu::onOpenClicked()
+{
     MainWindow* window = dynamic_cast<MainWindow*>(parent());
     window->onOpenTriggered();
     close();
 }
 
-void Menu::onSaveClicked() {
+void Menu::onSaveClicked()
+{
     MainWindow* window = dynamic_cast<MainWindow*>(parent());
     window->onSaveTriggered();
     close();
 }
 
-void Menu::onPrintClicked() {
+void Menu::onPrintClicked()
+{
     MainWindow* window = dynamic_cast<MainWindow*>(parent());
     window->onPrintTriggered();
     close();
 }
 
-void Menu::onQuitClicked() {
+void Menu::onQuitClicked()
+{
     MainWindow* window = dynamic_cast<MainWindow*>(parent());
     window->onQuitTriggered();
     close();
 }
 
-Menu::MenuItem::MenuItem(QString pictureOn, QString pictureOff, QWidget *parent) : QPushButton(parent) {
+Menu::MenuItem::MenuItem(QString pictureOn, QString pictureOff, QWidget *parent) : QPushButton(parent)
+{
     setFixedSize(QSize(128, 128));
     setStyleSheet("QPushButton{ border-image: url(" + pictureOff + ") 0 0 0 0 stretch stretch; } QPushButton:hover{ border-image: url(" + pictureOn + ") 0 0 0 0 stretch stretch; }");
 }

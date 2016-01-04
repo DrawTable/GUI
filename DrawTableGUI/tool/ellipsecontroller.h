@@ -12,7 +12,8 @@
  *
  * Plese refer the the AbstractToolController documentation to see functions' usage.
  */
-class EllipseController : public AbstractToolController {
+class EllipseController : public AbstractToolController
+{
 
 public:
     virtual ~EllipseController();

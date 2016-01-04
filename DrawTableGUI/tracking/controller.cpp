@@ -1,6 +1,7 @@
 #include "controller.h"
 
-Controller::Controller(){
+Controller::Controller()
+{
     Worker* worker = new Worker;
     worker->moveToThread(&thread);
 
@@ -13,6 +14,7 @@ Controller::Controller(){
     connect(this, SIGNAL(mouseReleased()), worker, SLOT(mouseReleased()));
 }
 
-void Controller::start(){
+void Controller::start()
+{
     thread.start();
 }

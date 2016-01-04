@@ -6,7 +6,8 @@
 /**
  * @brief A button for the VirtualKeyboard
  */
-class KeyboardButton : public QPushButton {
+class KeyboardButton : public QPushButton
+{
 
 public:
     KeyboardButton();
