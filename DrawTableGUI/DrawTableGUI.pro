@@ -14,8 +14,8 @@ TARGET = DrawTableGUI
 TEMPLATE = app
 
 win32 {
-  INCLUDEPATH += C:\opencv-mingw\install\include
-  LIBS += -L"C:\opencv-mingw\bin" -lopencv_calib3d300 -lopencv_core300 -lopencv_features2d300 -lopencv_flann300 -lopencv_highgui300 -lopencv_imgcodecs300 -lopencv_imgproc300 -lopencv_ml300 -lopencv_objdetect300 -lopencv_photo300 -lopencv_shape300 -lopencv_stitching300 -lopencv_superres300 -lopencv_video300 -lopencv_videoio300 -lopencv_videostab300
+  INCLUDEPATH += C:\opencv\release\install\include
+  LIBS += -L"C:\opencv\release\bin" -lopencv_calib3d300 -lopencv_core300 -lopencv_features2d300 -lopencv_flann300 -lopencv_highgui300 -lopencv_imgcodecs300 -lopencv_imgproc300 -lopencv_ml300 -lopencv_objdetect300 -lopencv_photo300 -lopencv_shape300 -lopencv_stitching300 -lopencv_superres300 -lopencv_video300 -lopencv_videoio300 -lopencv_videostab300
 }
 unix {
   INCLUDEPATH += /usr/local/include/

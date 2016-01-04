@@ -249,6 +249,8 @@ void MainWindow::onOpenTriggered() {
         msgBox.setInformativeText("Do you want to save your changes?");
         msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Save);
+        msgBox.setStyleSheet("QMessageBox { background: black; border: 2px solid #35322f; } QMessageBox QLabel {color: white; font: 18pt;} QMessageBox QPushButton{background: #35322f; color: white; height: 48px; width: 100px; font: 14pt;} QMessageBox QPushButton::hover{border: 2px solid white;}");
+        msgBox.setWindowFlags(Qt::FramelessWindowHint);
         int ret = msgBox.exec();
 
         switch (ret) {
@@ -278,6 +280,8 @@ void MainWindow::onNewTriggered() {
         msgBox.setInformativeText("Do you want to save your changes?");
         msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Save);
+        msgBox.setStyleSheet("QMessageBox { background: black; border: 2px solid #35322f; } QMessageBox QLabel {color: white; font: 18pt;} QMessageBox QPushButton{background: #35322f; color: white; height: 48px; width: 100px; font: 14pt;} QMessageBox QPushButton::hover{border: 2px solid white;}");
+        msgBox.setWindowFlags(Qt::FramelessWindowHint);
         int ret = msgBox.exec();
 
         switch (ret) {
@@ -336,6 +340,8 @@ void MainWindow::onQuitTriggered()
         msgBox.setInformativeText("Do you want to save your changes?");
         msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Save);
+        msgBox.setStyleSheet("QMessageBox { background: black; border: 2px solid #35322f; } QMessageBox QLabel {color: white; font: 18pt;} QMessageBox QPushButton{background: #35322f; color: white; height: 48px; width: 100px; font: 14pt;} QMessageBox QPushButton::hover{border: 2px solid white;}");
+        msgBox.setWindowFlags(Qt::FramelessWindowHint);
         int ret = msgBox.exec();
 
         switch (ret) {
