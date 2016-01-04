@@ -39,7 +39,7 @@ VirtualKeyboard::VirtualKeyboard(Input *input, QWidget *parent) : QWidget(parent
 
     addModelToRow(fourthRow, KeyboardModel::FOURTH_ROW);
 
-    alphanum = new KeyButton(KeyModel("ABC", "12#"));
+    alphanum = new KeyButton(KeyModel("12#", "ABC"));
     alphanum->setFixedHeight(height() / 5);
     connect(alphanum, SIGNAL(clicked(bool)), this, SLOT(onAlphanumClicked()));
     fourthRow->addWidget(alphanum);

@@ -98,7 +98,7 @@ ToolBar::ToolBar(MainWindow* parent) : QToolBar(parent) {
 
     setFloatable(false);
     setMovable(false);
-    setStyleSheet("QToolBar{ background: rgb(46,46,46); border: 0px; }");
+    setStyleSheet("QToolBar{ background: rgb(46,46,46); border: 0px; opacity: 0.2; }");
 }
 
 void ToolBar::onThicknessChanged() {

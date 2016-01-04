@@ -4,6 +4,7 @@
 #include <QHBoxLayout>
 #include <QDir>
 #include <QFrame>
+#include <QScrollBar>
 
 SaveFileDialog::SaveFileDialog(QWidget *parent) : QDialog(parent) {
 
@@ -50,6 +51,7 @@ SaveFileDialog::SaveFileDialog(QWidget *parent) : QDialog(parent) {
     view->setModel(model);
     view->setRootIndex(model->setRootPath(path->text()));
     view->setStyleSheet("QListView{border: 2px solid white; } QListView::item{color: white; height: 50px;} QListView::item:hover{border: 2px solid white; } QListView::item:selected{border: 2px solid white;}");
+    view->verticalScrollBar()->setStyleSheet("QScrollBar:vertical { width: 45px; }");
 
     connect(view, SIGNAL(clicked(QModelIndex)), this, SLOT(onViewClicked(QModelIndex)));
 
