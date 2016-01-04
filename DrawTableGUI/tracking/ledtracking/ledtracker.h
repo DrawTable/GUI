@@ -80,7 +80,7 @@ private:
               v_hist_model;
 
         unsigned long nbSampleInModel = 0;
-        const int nbSampleRequired = 100;
+        const int nbSampleRequired = 50;
 
         MatND h_hist_buffer,
               s_hist_buffer,
@@ -138,8 +138,12 @@ private:
             orig_hist_images.resize(NUM_CHANNELS_HIST);
         }
 
-        bool isModelReady(){
-            return nbSampleInModel == nbSampleRequired;
+        int getNbSampleRequired(){
+            return nbSampleRequired;
+        }
+
+        int getNbSampleInModel(){
+            return nbSampleInModel;
         }
 
         void calcHistograms(Mat hsv_img, Mat mask = Mat(), bool cumulate_in_model = false){
@@ -229,7 +233,8 @@ private:
              if(h_hist->empty() || s_hist->empty() || v_hist->empty()) return;
 
             Vec2i acceptable_hue_range, acceptable_sat_range, acceptable_val_range;
-            Vec2f probability_range_hue(0.2,0.9), probability_range_sat(0.08, -1), probability_range_val(0.08, -1);
+//            Vec2f probability_range_hue(0.2,0.9), probability_range_sat(0.08, -1), probability_range_val(0.08, -1);
+            Vec2f probability_range_hue(0.2,0.9), probability_range_sat(0.15,0.9), probability_range_val(0.2,0.9);
 
             normalizeSum(h_hist, h_hist_cumul, acceptable_hue_range, probability_range_hue, Range(0,6));
             normalizeSum(s_hist, s_hist_cumul, acceptable_sat_range, probability_range_sat, Range(0,4));
@@ -557,11 +562,10 @@ public:
             imshow("threshold", masked);
             ledModel.drawLines();
         }
-
-
     }
 
     Point findObjectPosition(TRACKING_METHOD method){
+        processThreshold();
 
         Point pos(-1,-1);
         switch(method){
@@ -666,7 +670,7 @@ public:
 
     void processLedAnalysis(){
 
-        if(ledModel.isModelReady()){
+        if(isModelReady()){
             current_mode = TRACKING;
         }
 
@@ -680,10 +684,7 @@ public:
                 showMaskRoi();
                 break;
             case CALIBRATION:
-                if(!processForeground())
-                    break;                  // foreground empty nothing todo
-                ledModel.calcHistograms(mask_roi, mask_hist, true);
-                showMaskRoi();
+                 calibrate();
                 break;
             case TRACKING:
                 processThreshold();
@@ -694,6 +695,25 @@ public:
         }
 
         showMainImages();
+    }
+
+    void calibrate(){
+        if(!processForeground())
+            return;                 // foreground empty nothing todo
+        ledModel.calcHistograms(mask_roi, mask_hist, true);
+        showMaskRoi();
+    }
+
+    int getNbCalibrationSteps(){
+        return ledModel.getNbSampleRequired();
+    }
+
+    int getCurrentCalibrationStep(){
+        return ledModel.getNbSampleInModel();
+    }
+
+    bool isModelReady(){
+        return getNbCalibrationSteps() == getCurrentCalibrationStep();
     }
 
     bool processForeground(){

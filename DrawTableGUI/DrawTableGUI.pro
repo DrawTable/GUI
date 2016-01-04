@@ -34,7 +34,6 @@ SOURCES += main.cpp \
     tracking/screendetector.cpp \
     tracking/controller.cpp \
     tracking/worker.cpp \
-    tracking/LedDetection/leddetector.cpp \
     camera/cameramanager.cpp \
     camera/cameramanagerupdater.cpp \
     keyboard/input.cpp \
@@ -49,8 +48,7 @@ SOURCES += main.cpp \
     drawing/drawingcontroller.cpp \
     core/toolbar.cpp \
     error/errormanager.cpp \
-    tracking/ledtracking/ledtracker.cpp \
-    tracking/ledtracking/main.cpp
+    tracking/ledtracking/ledtracker.cpp
 
 HEADERS += core/mainwindow.h \
     core/menu.h \
@@ -64,7 +62,6 @@ HEADERS += core/mainwindow.h \
     tracking/screendetector.h \
     tracking/controller.h \
     tracking/worker.h \
-    tracking/LedDetection/leddetector.h \
     camera/cameramanager.h \
     camera/cameramanagerupdater.h \
     keyboard/input.h \
@@ -80,8 +77,6 @@ HEADERS += core/mainwindow.h \
     drawing/drawingcontroller.h \
     core/toolbar.h \
     error/errormanager.h \
-    tracking/ledtracking/ledtracker.h \
-    tracking/ledtracking/threadcapture.h
-
+    tracking/ledtracking/ledtracker.h
 RESOURCES += \
     icons.qrc

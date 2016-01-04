@@ -13,7 +13,7 @@
  */
 
 #include "mainwindow.h"
-
+#include "tracking/ledtracking/ledtracker.h"
 #include "../tool/pencontroller.h"
 #include "../tool/dashcontroller.h"
 #include "../tool/rectanglecontroller.h"
@@ -134,13 +134,13 @@ void MainWindow::startTrackingManager(int cameraId) {
 
 void MainWindow::onStylusCalibrationSuccess(){
     qDebug()  << "[MainWindow] stylus calibration Success";
+
 }
 void MainWindow::onStylusCalibrationError(int errorCode){
     qDebug()  << "[MainWindow] stylus calibration Error: " << errorCode;
 }
 
 void MainWindow::onStylusCalibrationProgress(int value){
-    qDebug() << value << " progress";
     stylusCalibrationProgress->setValue(value);
 }
 
@@ -185,12 +185,11 @@ void MainWindow::onCalibrationSuccess() {
     controller->enable();
 
     QMessageBox::information(this, tr("Stylus Calibration"),
-                             tr("...."));
+                             tr("Please move your stylus within the window during few secondes."));
 
-    stylusCalibrationProgress = new QProgressDialog("Please draw something with your stylus", "cancel", 0, 10, this);
+    stylusCalibrationProgress = new QProgressDialog("Please draw something with your stylus to", "cancel", 0, LedTracker::getInstance()->getNbCalibrationSteps(), this);
     stylusCalibrationProgress->setAutoClose(true);
     QTimer::singleShot(0, worker, SLOT(onStartStylusCalibration()));
-    stylusCalibrationProgress->show();
 }
 
 // Quand la calibration a échouée

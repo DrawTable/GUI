@@ -1,5 +1,5 @@
 #include "trackingmanager.h"
-#include "LedDetection/leddetector.h"
+#include "tracking/ledtracking/ledtracker.h"
 #include "controller.h"
 
 TrackingManager::TrackingManager(int cameraId, QObject *parent) : QObject(parent)
@@ -49,17 +49,34 @@ void TrackingManager::onStratCalibration(int width, int height) {
 
 void TrackingManager::onStartStylusCalibration()
 {
-    qDebug() << "Start Calibration" << endl;
-    for(int i=0; i <= 10; i++){
-        QThread::sleep(1);
-        emit stylusCalibrationProgress(i);
-        qDebug() << "step" << i << endl;
+    qDebug() << "[TrackingManager] Start Calibration" << endl;
+
+    LedTracker* ledTracker = LedTracker::getInstance();
+    ledTracker->activateDebugAnalysis();
+    ledTracker->setObjectType(LedTracker::POINTER);
+    ledTracker->setMode(LedTracker::CALIBRATION);
+
+    if(!cap->isOpened()){
+        cerr << "Cannot open the camera" << endl;
+        return;
     }
 
-    qDebug() << "Calibration Finished" << endl;
+    Mat frame;
+    while(!ledTracker->isModelReady()){
 
-    bool success = true;
-    emit stylusCalibrationSuccess();
+        if(!cap->read(frame)){
+            // TODO send error to the Main Window (frame cannot be read from the webcam)
+           cerr << "frame cannot be read from the webcam" << endl;
+           return;
+        }
+
+        ledTracker->setFrame(frame);
+        ledTracker->calibrate();
+
+        emit stylusCalibrationProgress(ledTracker->getCurrentCalibrationStep());
+    }
+
+    qDebug() << "calibration finished";
     mainLoop();
 }
 
@@ -70,7 +87,11 @@ void TrackingManager::mainLoop() {
     ctrl.start();
     bool click = false;
     bool release = false;
-    // ledTracker
+    LedTracker* ledTracker = LedTracker::getInstance();
+
+    ledTracker->setMode(LedTracker::TRACKING);
+
+    qDebug() << "Start tracking" << endl;
     Point stylusPoint;
     forever {
         Mat frame;
@@ -82,8 +103,10 @@ void TrackingManager::mainLoop() {
         }
 
         // Tracking de la led
-       ledDetector->setImage(frame);
-       // process get point
+       ledTracker->setFrame(frame);
+       stylusPoint = ledTracker->findObjectPosition(LedTracker::FAST);
+
+        cout << stylusPoint << endl;
 
        // Envoie les coordonnées du stylet afin de bouger la souris
        if(stylusPoint.x > 0 && stylusPoint.y > 0 && stylusPoint.x < 1440 && stylusPoint.y < 800){
