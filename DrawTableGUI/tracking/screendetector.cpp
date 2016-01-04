@@ -108,7 +108,7 @@ Mat ScreenDetector::transformImage(std::vector<Point> rect)
     if(DEBUG){
         Mat warped;
         namedWindow("warped", WINDOW_KEEPRATIO);
-        warpPerspective(img, warped, transformMatrix, Size(width, height));
+        warpPerspective(img, warped, transformMatrix, Size(interfaceWidth, interfaceHeight));
         imshow("warped", warped);
     }
 
