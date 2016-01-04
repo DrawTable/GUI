@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     toolBar = new ToolBar(this);
     connect(toolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(updateToolBarActions(QAction*)));
     addToolBar(Qt::BottomToolBarArea, toolBar);
+    toolBar->setIconSize(QSize(48, 48));
 
     /* drawing */
 
@@ -176,7 +177,6 @@ void MainWindow::onCalibrationError(int errorCode) {
 
     // TODO implementation
     toolBar->show();
-    //menuBar()->show();
 
     QBrush bgColor(Qt::black);
     drawing->setBackgroundBrush(bgColor);
