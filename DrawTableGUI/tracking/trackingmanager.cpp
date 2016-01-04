@@ -53,7 +53,7 @@ void TrackingManager::onStartStylusCalibration()
 
     LedTracker* ledTracker = LedTracker::getInstance();
     ledTracker->activateDebugAnalysis();
-    ledTracker->setObjectType(LedTracker::POINTER);
+    ledTracker->setObjectType(LedTracker::STYLUS);
     ledTracker->setMode(LedTracker::CALIBRATION);
 
     if(!cap->isOpened()){

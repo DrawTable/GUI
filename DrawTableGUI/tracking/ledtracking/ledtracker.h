@@ -4,8 +4,8 @@
 #include <opencv2/opencv.hpp>
 #include <QDebug>
 
-#define DEBUG_MAIN true  // show original and foreground
-#define DEBUG true       // show histograms, threshold, etc..
+#define DEBUG_MAIN false  // show original and foreground
+#define DEBUG false       // show histograms, threshold, etc..
 
 #define NUM_CHANNELS_HIST 3
 #define RANGE_BIN_SIZE 2

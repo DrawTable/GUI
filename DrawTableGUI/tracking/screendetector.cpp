@@ -3,7 +3,7 @@
 ScreenDetector::ScreenDetector(Mat img, int width, int height)
     :img(img)
 {
-    hsvMin = Scalar(41,100,50);
+    hsvMin = Scalar(41,95,50);
     hsvMax = Scalar(90,255,255);
     this->interfaceWidth = width;
     this->interfaceHeight = height;
