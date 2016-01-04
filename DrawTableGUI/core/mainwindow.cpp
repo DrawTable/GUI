@@ -255,6 +255,13 @@ void MainWindow::onMenuTriggered() {
 
 void MainWindow::onSaveTriggered() {
     QString fileName = SystemFileDialog::getSaveFileName();
+    QString suffix = QFileInfo(fileName).suffix().toLower();
+
+    // Ajout du suffix .png si celui précisé par l'utilisateur n'est pas géré
+    if (suffix != QString("png") && suffix != QString("jpg") && suffix != QString("bmp")) {
+        fileName += QString(".png");
+    }
+
     // creation du conteneur
     QPixmap pixmap(drawing->width(), drawing->height());
     // creation du painter allant servir à effectuer notre rendu
