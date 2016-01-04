@@ -42,6 +42,7 @@ void DrawingController::redo() {
 void DrawingController::resetUndoHistory() {
     lastActions.clear();
     nextActions.clear();
+    modifToSave = false;
 }
 
 void DrawingController::mouseDoubleClickEvent(QMouseEvent* event) {

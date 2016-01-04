@@ -6,10 +6,11 @@
 #include <QPainterPath>
 
 /**
- * @brief The PenController class
+ * @brief Controller to draw a free line with the pen.
  *
- * Contrôleur gérant le dessin à main levée, hérite de AbstractToolController
+ * This controller inherits from AbstractToolController.
  *
+ * Plese refer the the AbstractToolController documentation to see functions' usage.
  */
 class PenController : public AbstractToolController {
 

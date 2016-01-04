@@ -7,13 +7,25 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <QObject>
 
-#include <QDebug>
-
+/**
+ * @brief This class is design to be launched as a thread by the CameraManager.
+ *
+ */
 class CameraManagerUpdater : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * Start the updater.
+     *
+     * @param captures List of captures created by the CameraManager.
+     *
+     */
     CameraManagerUpdater(std::vector<cv::VideoCapture*> captures);
+
+    /**
+     * Stop updating live views.
+     */
     void stopUpdater();
 
 private:

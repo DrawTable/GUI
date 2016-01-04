@@ -6,6 +6,19 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 
+/**
+ * @brief Menu of the application
+ *
+ * This is the main menu of the application. It allows the user to:
+ *  - Create a new drawing
+ *  - Open an existing drawing
+ *  - Save a drawing
+ *  - Print the drawing
+ *  - Quit the application
+ *
+ * The Menu is created once by the MainWindow.
+ *
+ */
 class Menu : public QDialog {
     Q_OBJECT
 

@@ -3,6 +3,9 @@
 
 #include <QString>
 
+/**
+ * @brief The model of a button for the VirtualKeyboard
+ */
 struct KeyModel {
     QString letter;
     QString symbol;

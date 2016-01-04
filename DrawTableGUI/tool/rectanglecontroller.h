@@ -5,12 +5,12 @@
 #include <QPoint>
 #include <QGraphicsRectItem>
 
-
 /**
- * @brief The RectangleController class
+ * @brief Controller to draw a rectangle.
  *
- * Contrôleur gérant le dessin de rectangles, hérite de AbstractToolController
+ * This controller inherits from AbstractToolController.
  *
+ * Plese refer the the AbstractToolController documentation to see functions' usage.
  */
 class RectangleController : public AbstractToolController {
 

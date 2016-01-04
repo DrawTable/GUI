@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     toolBar = new ToolBar(this);
     connect(toolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(updateToolBarActions(QAction*)));
     addToolBar(Qt::BottomToolBarArea, toolBar);
+    toolBar->setIconSize(QSize(48, 48));
 
     /* drawing */
 
@@ -70,10 +71,18 @@ MainWindow::MainWindow(QWidget * parent) : QMainWindow(parent) {
     cm = CameraManager::getInstance();
     connect(cm, SIGNAL(cameraChoosen(int)), this, SLOT(onCameraChoosen(int)));
 
+    launchMouseHandler();
+
     tryCameraMode();
 }
 
 MainWindow::~MainWindow() {
+}
+
+void MainWindow::launchMouseHandler() {
+    QProcess* process = new QProcess;
+    process->start("java Server");
+    process->waitForStarted();
 }
 
 void MainWindow::tryCameraMode() {
@@ -96,7 +105,6 @@ To choose a camera, click on the chosen camera's screen into it's window."));
 
 // Lance le Tracking Manager une fois que l'utilisateur a choisi la caméra à utiliser
 void MainWindow::onCameraChoosen(int cameraId) {
-    qDebug() << "ON CAMERA CHOSEN";
     QMessageBox::information(this, tr("Camera chosen"),
                              QString("You chose the camera #") +
                              QString::fromStdString(std::to_string(cameraId)) +
@@ -146,8 +154,6 @@ void MainWindow::onStylusCalibrationProgress(int value){
 
 // Affiche un écran vert pour le calibrage
 void MainWindow::onShowGreenScreen() {
-    qDebug() << "MW::onShowGreenScreen";
-
     // afficher un écran vert pour le calibrage
     toolBar->hide();
     menuBar()->hide();
@@ -198,7 +204,6 @@ void MainWindow::onCalibrationError(int errorCode) {
 
     // TODO implementation
     toolBar->show();
-    //menuBar()->show();
 
     QBrush bgColor(Qt::black);
     drawing->setBackgroundBrush(bgColor);
@@ -271,6 +276,8 @@ void MainWindow::onOpenTriggered() {
         msgBox.setInformativeText("Do you want to save your changes?");
         msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Save);
+        msgBox.setStyleSheet("QMessageBox { background: black; border: 2px solid #35322f; } QMessageBox QLabel {color: white; font: 18pt;} QMessageBox QPushButton{background: #35322f; color: white; height: 48px; width: 100px; font: 14pt;} QMessageBox QPushButton::hover{border: 2px solid white;}");
+        msgBox.setWindowFlags(Qt::FramelessWindowHint);
         int ret = msgBox.exec();
 
         switch (ret) {
@@ -300,6 +307,8 @@ void MainWindow::onNewTriggered() {
         msgBox.setInformativeText("Do you want to save your changes?");
         msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Save);
+        msgBox.setStyleSheet("QMessageBox { background: black; border: 2px solid #35322f; } QMessageBox QLabel {color: white; font: 18pt;} QMessageBox QPushButton{background: #35322f; color: white; height: 48px; width: 100px; font: 14pt;} QMessageBox QPushButton::hover{border: 2px solid white;}");
+        msgBox.setWindowFlags(Qt::FramelessWindowHint);
         int ret = msgBox.exec();
 
         switch (ret) {
@@ -358,6 +367,8 @@ void MainWindow::onQuitTriggered()
         msgBox.setInformativeText("Do you want to save your changes?");
         msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::Save);
+        msgBox.setStyleSheet("QMessageBox { background: black; border: 2px solid #35322f; } QMessageBox QLabel {color: white; font: 18pt;} QMessageBox QPushButton{background: #35322f; color: white; height: 48px; width: 100px; font: 14pt;} QMessageBox QPushButton::hover{border: 2px solid white;}");
+        msgBox.setWindowFlags(Qt::FramelessWindowHint);
         int ret = msgBox.exec();
 
         switch (ret) {

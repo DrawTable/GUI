@@ -5,10 +5,21 @@
 #include <opencv2/opencv.hpp>
 #include "screendetector.h"
 
+/**
+ * @brief Tracking Manager
+ *
+ * This is the main manager for all the tracking part.
+ * It starts with the screen detection and once it's done, it reads frames from the camera,
+ * find the position of the stylus using the LedDetector and mouve the mouse accordingly.
+ */
 class TrackingManager : public QObject
 {
     Q_OBJECT
 public:
+    /**
+     * @brief Create the Tracking Manager
+     * @param cameraId ID of the camera the user wants to use.
+     */
     explicit TrackingManager(int cameraId, QObject *parent = 0);
 
 private:

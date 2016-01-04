@@ -4,6 +4,9 @@
 #include <QList>
 #include "keymodel.h"
 
+/**
+ * @brief A model describing the view for the VirtualKeyboard
+ */
 class KeyboardModel {
 
 public:

@@ -3,6 +3,9 @@
 
 #include <QPushButton>
 
+/**
+ * @brief A button for the VirtualKeyboard
+ */
 class KeyboardButton : public QPushButton {
 
 public:

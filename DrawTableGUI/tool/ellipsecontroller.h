@@ -6,9 +6,11 @@
 #include <QGraphicsEllipseItem>
 
 /**
- * @brief The EllipseController class
+ * @brief Controller to draw an ellipse.
  *
- * Contrôleur gérant le dessin d'élipse, hérite de AbstractToolController
+ * This controller inherits from AbstractToolController.
+ *
+ * Plese refer the the AbstractToolController documentation to see functions' usage.
  */
 class EllipseController : public AbstractToolController {
 

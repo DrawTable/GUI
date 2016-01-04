@@ -8,6 +8,23 @@
 
 class MainWindow;
 
+/**
+ * @brief Toolbar of the application
+ *
+ * This is toolbar of the application. It allows the user to:
+ *  - Select the pen tool
+ *  - Select the eraser tool
+ *  - Select the dash tool
+ *  - Select the ellipse tool
+ *  - Select the rectangle tool
+ *  - Select the dash tool
+ *  - Change the thickness of the line
+ *  - Change the color of the line
+ *  - Undo / Redo
+ *
+ * The ToolBar is created once by the MainWindow.
+ *
+ */
 class ToolBar : public QToolBar {
     Q_OBJECT
 
