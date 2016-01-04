@@ -291,8 +291,11 @@ void MainWindow::onOpenTriggered() {
           case QMessageBox::Save:
               onSaveTriggered();
               openFile();
+              controller->resetUndoHistory();
+              break;
           case QMessageBox::Discard:
               openFile();
+              controller->resetUndoHistory();
               break;
           case QMessageBox::Cancel:
               // Nothing Happend
@@ -323,6 +326,7 @@ void MainWindow::onNewTriggered() {
               onSaveTriggered();
               drawing->scene()->clear();
               controller->resetUndoHistory();
+              break;
           case QMessageBox::Discard:
               drawing->scene()->clear();
               controller->resetUndoHistory();
